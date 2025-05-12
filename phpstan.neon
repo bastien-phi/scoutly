@@ -12,6 +12,9 @@ parameters:
   ignoreErrors:
     - identifier: staticMethod.dynamicCall
 
+  scanFiles:
+    - ide_helper/models.php
+
   # Larastan
   checkUnusedViews: false
 
