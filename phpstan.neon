@@ -1,0 +1,40 @@
+includes:
+  - ./phpstan-baseline.neon
+
+parameters:
+  paths:
+    - app
+    - config
+    - database
+
+  level: 8
+
+  ignoreErrors:
+    - identifier: staticMethod.dynamicCall
+
+  # Larastan
+  checkUnusedViews: false
+
+  # PHPStan strict
+  polluteScopeWithLoopInitialAssignments: false
+  polluteScopeWithAlwaysIterableForeach: false
+  checkDynamicProperties: false
+  checkExplicitMixedMissingReturn: true
+  checkFunctionNameCase: true
+  checkInternalClassCaseSensitivity: true
+  reportMaybesInMethodSignatures: true
+  reportStaticMethodSignatures: true
+  reportMaybesInPropertyPhpDocTypes: false
+  reportWrongPhpDocTypeInVarTag: true
+
+  strictRules:
+    disallowedLooseComparison: true
+    booleansInConditions: true
+    uselessCast: true
+    requireParentConstructorCall: true
+    overwriteVariablesWithLoop: true
+    closureUsesThis: true
+    matchingInheritedMethodNames: true
+    numericOperandsInArithmeticOperators: true
+    switchConditionsMatchingType: true
+    noVariableVariables: true

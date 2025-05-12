@@ -22,16 +22,11 @@ class NewPasswordController extends Controller
     public function create(Request $request): Response
     {
         return Inertia::render('auth/reset-password', [
-            'email' => $request->email,
+            'email' => $request->input('email'),
             'token' => $request->route('token'),
         ]);
     }
 
-    /**
-     * Handle an incoming new password request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -58,7 +53,7 @@ class NewPasswordController extends Controller
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        if ($status == Password::PasswordReset) {
+        if ($status === Password::PasswordReset) {
             return to_route('login')->with('status', __($status));
         }
 
