@@ -75,7 +75,12 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
-        "analyse": "./vendor/bin/phpstan analyse"
+        "analyse": "./vendor/bin/phpstan analyse",
+        "all": [
+            "@cs",
+            "@test",
+            "@analyse"
+        ]
     },
     "extra": {
         "laravel": {

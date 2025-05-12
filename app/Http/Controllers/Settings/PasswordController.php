@@ -2,32 +2,25 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\UpdatePasswordRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PasswordController extends Controller
+class PasswordController
 {
     public function edit(): Response
     {
         return Inertia::render('settings/password');
     }
 
-    public function update(Request $request, #[CurrentUser] User $user): RedirectResponse
+    public function update(UpdatePasswordRequest $request, #[CurrentUser] User $user): RedirectResponse
     {
-        $validated = $request->validate([
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
-
         $user->update([
-            'password' => Hash::make($validated['password']),
+            'password' => Hash::make($request->validated(['password'])),
         ]);
 
         return back();

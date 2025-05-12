@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\DeleteProfileRequest;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -35,12 +36,8 @@ class ProfileController extends Controller
         return to_route('profile.edit');
     }
 
-    public function destroy(Request $request, #[CurrentUser] User $user): RedirectResponse
+    public function destroy(DeleteProfileRequest $request, #[CurrentUser] User $user): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         Auth::logout();
 
         $user->delete();

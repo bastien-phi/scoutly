@@ -10,7 +10,7 @@ parameters:
   level: 8
 
   ignoreErrors:
-    - identifier: staticMethod.dynamicCall
+    #- identifier: staticMethod.dynamicCall
 
   scanFiles:
     - ide_helper/models.php

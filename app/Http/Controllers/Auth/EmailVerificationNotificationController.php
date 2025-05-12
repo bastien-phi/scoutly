@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 
-class EmailVerificationNotificationController extends Controller
+class EmailVerificationNotificationController
 {
     public function store(#[CurrentUser] User $user): RedirectResponse
     {
