@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace {
     class App extends \Illuminate\Support\Facades\App {}
 

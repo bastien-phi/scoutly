@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -13,6 +20,14 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->beforeEach(function () {
+        $this->withoutExceptionHandling([
+            AuthenticationException::class,
+            AuthorizationException::class,
+            HttpException::class,
+            ValidationException::class,
+        ]);
+    })
     ->in('Feature');
 
 /*
