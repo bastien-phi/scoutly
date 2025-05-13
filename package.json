@@ -5,10 +5,11 @@
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vite",
-        "format": "prettier --write resources/",
-        "format:check": "prettier --check resources/",
+        "format": "prettier --write resources/ --cache --cache-location=.prettier.cache",
+        "format:check": "prettier --check resources/ --cache --cache-location=.prettier.cache",
         "lint": "eslint . --fix",
-        "types": "tsc --noEmit"
+        "types": "tsc --noEmit",
+        "all": "pnpm run format && pnpm run lint && pnpm run types"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",

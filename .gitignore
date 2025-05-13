@@ -12,6 +12,7 @@
 .env.production
 .phpactor.json
 .phpunit.result.cache
+.prettier.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
