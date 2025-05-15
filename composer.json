@@ -73,7 +73,7 @@
         "cs": "./vendor/bin/pint --ansi",
         "test": [
             "@php artisan config:clear --ansi",
-            "@php artisan test"
+            "@php artisan test --parallel"
         ],
         "analyse": "./vendor/bin/phpstan analyse",
         "all": [
