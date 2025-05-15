@@ -6,7 +6,7 @@ namespace IdeHelper\App\Models
 {
     /**
      * @property int $id
-     * @property string $name
+     * @property string $username
      * @property string $email
      * @property \Carbon\CarbonImmutable|null $email_verified_at
      * @property string $password
@@ -23,7 +23,7 @@ namespace IdeHelper\App\Models
 
     /**
      * @method $this whereId(int|string $value)
-     * @method $this whereName(string $value)
+     * @method $this whereUsername(string $value)
      * @method $this whereEmail(string $value)
      * @method $this whereEmailVerifiedAt(\Carbon\CarbonImmutable|string|null $value)
      * @method $this wherePassword(string $value)

@@ -23,8 +23,7 @@ class RegisteredUserController
     public function store(RegisterUserRequest $request): RedirectResponse
     {
         $user = User::create([
-            'name' => $request->validated('name'),
-            'email' => $request->validated('email'),
+            ...$request->validated(),
             'password' => Hash::make($request->validated('password')),
         ]);
 
