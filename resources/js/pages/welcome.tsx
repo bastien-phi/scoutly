@@ -1,7 +1,6 @@
+import AppLogo from '@/components/app-logo';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import ScoutlyBanner from '@assets/scoutly-banner.svg?react';
-import AppLogo from '@/components/app-logo';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -40,10 +39,10 @@ export default function Welcome() {
                         )}
                     </nav>
                 </header>
-                <div className="flex w-full items-center  justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <main className="flex flex-col w-full lg:max-w-4xl items-center">
+                <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
+                    <main className="flex w-full flex-col items-center lg:max-w-4xl">
                         <AppLogo />
-                        <p className="text-4xl text-primary tracking-tight">Your tech watch companion</p>
+                        <p className="text-primary text-4xl tracking-tight">Your tech watch companion</p>
                     </main>
                 </div>
             </div>
