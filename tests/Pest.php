@@ -27,6 +27,8 @@ pest()->extend(Tests\TestCase::class)
             HttpException::class,
             ValidationException::class,
         ]);
+
+        $this->withoutVite();
     })
     ->in('Feature');
 
