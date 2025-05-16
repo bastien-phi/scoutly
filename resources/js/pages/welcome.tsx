@@ -42,7 +42,7 @@ export default function Welcome() {
                 <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                     <main className="flex w-full flex-col items-center lg:max-w-4xl">
                         <AppLogo />
-                        <p className="text-primary text-4xl tracking-tight">Your tech watch companion</p>
+                        <p className="text-primary text-4xl tracking-tight">Your tech intelligence companion</p>
                     </main>
                 </div>
             </div>
