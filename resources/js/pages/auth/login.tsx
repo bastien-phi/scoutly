@@ -1,7 +1,8 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
+import LoginLink from '@/../../vendor/spatie/laravel-login-link/resources/ts/LoginLink';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import type { SharedData } from '@/types';
 
 type LoginForm = {
     email: string;
@@ -28,6 +30,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         remember: false,
     });
 
+    const { environment } = usePage<SharedData>().props;
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('login'), {
@@ -38,6 +42,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
             <Head title="Log in" />
+
+            {environment === 'local' && (
+                <LoginLink
+                    label="Login as test@example.com"
+                    className="text-foreground cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                    redirectUrl={route('dashboard')}
+                />
+            )}
 
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
