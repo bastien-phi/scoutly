@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,6 +14,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::controller(LinkController::class)
+        ->prefix('links')
+        ->name('links.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+        });
 });
 
 require __DIR__.'/settings.php';
