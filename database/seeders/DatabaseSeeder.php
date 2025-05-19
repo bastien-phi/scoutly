@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()
-            ->hasLinks(10)
+            ->hasLinks(20)
             ->create([
                 'name' => 'Test User',
                 'username' => 'testuser',

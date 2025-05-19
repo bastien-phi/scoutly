@@ -1,7 +1,10 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Paginated, type BreadcrumbItem } from '@/types';
+import { Head, Link, WhenVisible } from '@inertiajs/react';
+import { ArrowUpRight, Eye, PencilLine } from 'lucide-react';
+import { useState } from 'react';
+import LinkData = App.Data.LinkData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,26 +13,61 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Links() {
+export default function Links({ links }: { links: Paginated<LinkData> }) {
+    const [page, setPage] = useState<number>(links.current_page);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
+            <div className="flex flex-col items-center py-4">
+                <div className="w-full space-y-4 xl:w-1/2">
+                    {links.data.map((link: LinkData) => (
+                        <LinkCard key={link.id} link={link} />
+                    ))}
                 </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
+                {page < links.last_page && (
+                    <WhenVisible
+                        data=""
+                        always
+                        fallback={<div>Loading... </div>}
+                        params={{
+                            data: { page: page + 1 },
+                            onSuccess: () => setPage((page: number) => page + 1),
+                            preserveUrl: true,
+                            only: ['links'],
+                        }}
+                    >
+                        <p className="text-center text-gray-500">Loading more...</p>
+                    </WhenVisible>
+                )}
             </div>
         </AppLayout>
+    );
+}
+
+function LinkCard({ link }: { link: LinkData }) {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>{link.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p>{link.description}</p>
+                {link.author && (
+                    <div className="mt-3 flex gap-x-3">
+                        <PencilLine></PencilLine>
+                        {link.author.name}
+                    </div>
+                )}
+            </CardContent>
+            <CardFooter className="flex justify-end space-x-4">
+                <Link href={route('links.show', link.id)}>
+                    <Eye></Eye>
+                </Link>
+                <a href={link.url} target="_blank">
+                    <ArrowUpRight></ArrowUpRight>
+                </a>
+            </CardFooter>
+        </Card>
     );
 }
