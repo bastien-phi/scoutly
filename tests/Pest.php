@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use Soyhuce\Testing\Concerns\MocksActions;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /*
@@ -19,7 +20,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 */
 
 pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(
+        Illuminate\Foundation\Testing\RefreshDatabase::class,
+        MocksActions::class
+    )
     ->beforeEach(function () {
         $this->withoutExceptionHandling([
             AuthenticationException::class,
@@ -30,7 +34,7 @@ pest()->extend(Tests\TestCase::class)
 
         $this->withoutVite();
     })
-    ->in('Feature');
+    ->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

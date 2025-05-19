@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\Author;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,5 +30,19 @@ class LinkFactory extends Factory
             'description' => fake()->paragraph(),
             'published_at' => fake()->optional(0.8)->dateTime(),
         ];
+    }
+
+    public function published(?CarbonImmutable $publishedAt = null): static
+    {
+        return $this->state([
+            'published_at' => $publishedAt ?? fake()->dateTime(),
+        ]);
+    }
+
+    public function draft(): static
+    {
+        return $this->state([
+            'published_at' => null,
+        ]);
     }
 }
