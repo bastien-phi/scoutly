@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91fa518743b55f9b64d66c62cc2b11c5",
+    "content-hash": "0187a857e174ba439cb02b6e8c72dc5a",
     "packages": [
         {
             "name": "amphp/amp",
@@ -10837,6 +10837,86 @@
             "time": "2024-10-09T05:16:32+00:00"
         },
         {
+            "name": "soyhuce/laravel-testing",
+            "version": "2.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Soyhuce/laravel-testing.git",
+                "reference": "c76f046e7f3cae4828abe3e8045783bbad9f377a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Soyhuce/laravel-testing/zipball/c76f046e7f3cae4828abe3e8045783bbad9f377a",
+                "reference": "c76f046e7f3cae4828abe3e8045783bbad9f377a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "illuminate/testing": "^11.0|^12.0",
+                "php": "^8.3",
+                "phpunit/phpunit": "^11.0",
+                "spatie/invade": "^2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.6",
+                "larastan/larastan": "^3.0",
+                "nunomaduro/collision": "^8.0",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "spatie/laravel-data": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Soyhuce\\Testing\\TestingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Soyhuce\\Testing\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bastien Philippe",
+                    "email": "bastien.philippe@soyhuce.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Helpers for Laravel tests",
+            "homepage": "https://github.com/soyhuce/laravel-testing",
+            "keywords": [
+                "laravel",
+                "soyhuce",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/Soyhuce/laravel-testing/issues",
+                "source": "https://github.com/Soyhuce/laravel-testing/tree/2.13.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/soyhuce",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-24T10:30:15+00:00"
+        },
+        {
             "name": "soyhuce/next-ide-helper",
             "version": "2.1.1",
             "source": {
@@ -10914,6 +10994,65 @@
                 }
             ],
             "time": "2025-04-11T12:16:26+00:00"
+        },
+        {
+            "name": "spatie/invade",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/invade.git",
+                "reference": "b920f6411d21df4e8610a138e2e87ae4957d7f63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/invade/zipball/b920f6411d21df4e8610a138e2e87ae4957d7f63",
+                "reference": "b920f6411d21df4e8610a138e2e87ae4957d7f63",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.20",
+                "phpstan/phpstan": "^1.4",
+                "spatie/ray": "^1.28"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Spatie\\Invade\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP function to work with private properties and methods",
+            "homepage": "https://github.com/spatie/invade",
+            "keywords": [
+                "invade",
+                "spatie"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/invade/tree/2.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-05-17T09:06:10+00:00"
         },
         {
             "name": "staabm/side-effects-detector",

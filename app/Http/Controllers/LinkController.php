@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\GetUserLinks;
 use App\Data\LinkData;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -12,16 +13,14 @@ use Inertia\Response;
 
 class LinkController
 {
-    public function index(#[CurrentUser] User $user): Response
-    {
+    public function index(
+        #[CurrentUser] User $user,
+        GetUserLinks $getUserLinks
+    ): Response {
         return Inertia::render('links/index', [
             'links' => Inertia::deepMerge(
                 LinkData::collect(
-                    $user->links()
-                        ->with('author')
-                        ->latest('published_at')
-                        ->latest('created_at')
-                        ->paginate()
+                    $getUserLinks->execute($user)
                 )
             ),
         ]);

@@ -30,6 +30,7 @@
         "pestphp/pest-plugin-laravel": "^3.2",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-strict-rules": "^2.0",
+        "soyhuce/laravel-testing": "^2.13",
         "soyhuce/next-ide-helper": "^2.1"
     },
     "autoload": {
