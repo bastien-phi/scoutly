@@ -51,5 +51,8 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           pnpm install
 
+      - name: Generate typescript types
+        run: php artisan typescript:transform
+
       - name: Run tsc
         run: pnpm run types
