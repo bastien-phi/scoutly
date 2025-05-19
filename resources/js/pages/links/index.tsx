@@ -51,22 +51,25 @@ function LinkCard({ link }: { link: LinkData }) {
             <CardHeader>
                 <CardTitle>{link.title}</CardTitle>
             </CardHeader>
-            <CardContent>
-                <p>{link.description}</p>
+            <CardContent className="space-y-4">
+                {link.description && <p>{link.description}</p>}
                 {link.author && (
-                    <div className="mt-3 flex gap-x-3">
+                    <div className="flex gap-x-4">
                         <PencilLine></PencilLine>
                         {link.author.name}
                     </div>
                 )}
             </CardContent>
-            <CardFooter className="flex justify-end space-x-4">
-                <Link href={route('links.show', link.id)}>
-                    <Eye></Eye>
-                </Link>
-                <a href={link.url} target="_blank">
-                    <ArrowUpRight></ArrowUpRight>
-                </a>
+            <CardFooter className="flex justify-between">
+                <div>{link.published_at ? new Date(link.published_at).toLocaleDateString() : ''}</div>
+                <div className="flex space-x-4">
+                    <Link href={route('links.show', link.id)}>
+                        <Eye></Eye>
+                    </Link>
+                    <a href={link.url} target="_blank">
+                        <ArrowUpRight></ArrowUpRight>
+                    </a>
+                </div>
             </CardFooter>
         </Card>
     );

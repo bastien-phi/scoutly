@@ -20,6 +20,7 @@ class LinkController
                     $user->links()
                         ->with('author')
                         ->latest('published_at')
+                        ->latest('created_at')
                         ->paginate()
                 )
             ),
