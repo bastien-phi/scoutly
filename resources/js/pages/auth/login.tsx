@@ -1,4 +1,4 @@
-import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
@@ -41,28 +41,20 @@ export default function Login({ status }: LoginProps) {
         });
     };
 
-    const submitLoginLink: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        router.post(loginLinkLogin.url(), {
-            email: 'test@example.com',
-            redirect_url: welcome().url,
-        });
-    };
-
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
             <Head title="Log in" />
 
             {environment === 'local' && (
-                <form onSubmit={submitLoginLink}>
-                    <button
-                        className="text-foreground cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                        type="submit"
-                    >
-                        Login as test@example.com
-                    </button>
-                </form>
+                <TextLink
+                    href={loginLinkLogin()}
+                    data={{
+                        email: 'test@example.com',
+                        redirect_url: welcome().url,
+                    }}
+                >
+                    Login as test@example.com
+                </TextLink>
             )}
 
             <form className="flex flex-col gap-6" onSubmit={submitForm}>
