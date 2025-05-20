@@ -62,7 +62,7 @@ function LinkCard({ link }: { link: LinkData }) {
                 )}
             </CardContent>
             <CardFooter className="flex justify-between">
-                <div>{link.published_at ? <Datetime datetime={new Date(link.published_at)} /> : ''}</div>
+                {link.published_at && <Datetime datetime={new Date(link.published_at)} />}
                 <div className="flex space-x-4">
                     <Link href={route('links.show', link.id)}>
                         <Eye></Eye>
