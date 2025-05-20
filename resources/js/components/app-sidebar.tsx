@@ -2,20 +2,22 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import linksRoute from '@routes/links';
 import { GitPullRequest, LayoutGrid, Link as LinkIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: route('dashboard'),
+        href: dashboard().url,
         icon: LayoutGrid,
     },
     {
         title: 'My links',
-        href: route('links.index'),
+        href: linksRoute.index().url,
         icon: LinkIcon,
     },
 ];
@@ -35,7 +37,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={route('dashboard')} prefetch>
+                            <Link href={dashboard().url} prefetch>
                                 <AppLogo className="h-12! w-auto!" />
                             </Link>
                         </SidebarMenuButton>

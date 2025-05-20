@@ -4,6 +4,7 @@ import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import svgr from "vite-plugin-svgr";
+import { wayfinder } from '@laravel/vite-plugin-wayfinder';
 
 export default defineConfig({
     plugins: [
@@ -15,14 +16,15 @@ export default defineConfig({
         react(),
         tailwindcss(),
         svgr(),
+        wayfinder(),
     ],
     esbuild: {
         jsx: 'automatic',
     },
     resolve: {
         alias: {
-            'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
             '@assets': resolve(__dirname, './resources/assets'),
+            '@routes': resolve(__dirname, './resources/js/routes'),
         },
     },
 });

@@ -3,17 +3,18 @@ import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+import linksRoutes from '@routes/links';
 import { PencilLine } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Links',
-            href: route('links.index'),
+            href: linksRoutes.index().url,
         },
         {
             title: link.title || 'Draft',
-            href: route('links.show', link.id),
+            href: linksRoutes.show(link.id).url,
         },
     ];
 

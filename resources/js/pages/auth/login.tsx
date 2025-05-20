@@ -1,8 +1,7 @@
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import LoginLink from '@/../../vendor/spatie/laravel-login-link/resources/ts/LoginLink';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { loginLinkLogin, register, welcome } from '@/routes';
 import type { SharedData } from '@/types';
+import loginRoutes from '@routes/login';
+import passwordRoutes from '@routes/password';
 
 type LoginForm = {
     email: string;
@@ -20,11 +22,10 @@ type LoginForm = {
 
 interface LoginProps {
     status?: string;
-    canResetPassword: boolean;
 }
 
-export default function Login({ status, canResetPassword }: LoginProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
+export default function Login({ status }: LoginProps) {
+    const { data, setData, processing, errors, reset, submit } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
         remember: false,
@@ -32,10 +33,20 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     const { environment } = usePage<SharedData>().props;
 
-    const submit: FormEventHandler = (e) => {
+    const submitForm: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('login'), {
+
+        submit(loginRoutes.submit(), {
             onFinish: () => reset('password'),
+        });
+    };
+
+    const submitLoginLink: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        router.post(loginLinkLogin.url(), {
+            email: 'test@example.com',
+            redirect_url: welcome().url,
         });
     };
 
@@ -44,14 +55,17 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             <Head title="Log in" />
 
             {environment === 'local' && (
-                <LoginLink
-                    label="Login as test@example.com"
-                    className="text-foreground cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                    redirectUrl={route('dashboard')}
-                />
+                <form onSubmit={submitLoginLink}>
+                    <button
+                        className="text-foreground cursor-pointer underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                        type="submit"
+                    >
+                        Login as test@example.com
+                    </button>
+                </form>
             )}
 
-            <form className="flex flex-col gap-6" onSubmit={submit}>
+            <form className="flex flex-col gap-6" onSubmit={submitForm}>
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email address</Label>
@@ -72,11 +86,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <div className="grid gap-2">
                         <div className="flex items-center">
                             <Label htmlFor="password">Password</Label>
-                            {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
-                                    Forgot password?
-                                </TextLink>
-                            )}
+                            <TextLink href={passwordRoutes.request()} className="ml-auto text-sm" tabIndex={5}>
+                                Forgot password?
+                            </TextLink>
                         </div>
                         <Input
                             id="password"
@@ -110,7 +122,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                 <div className="text-muted-foreground text-center text-sm">
                     Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
+                    <TextLink href={register()} tabIndex={5}>
                         Sign up
                     </TextLink>
                 </div>

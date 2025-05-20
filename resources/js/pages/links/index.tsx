@@ -3,6 +3,7 @@ import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
+import linksRoute from '@routes/links';
 import { ArrowUpRight, Eye, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
@@ -10,7 +11,7 @@ import LinkData = App.Data.LinkData;
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Links',
-        href: route('links.index'),
+        href: linksRoute.index().url,
     },
 ];
 
@@ -64,7 +65,7 @@ function LinkCard({ link }: { link: LinkData }) {
             <CardFooter className="flex justify-between">
                 {link.published_at && <Datetime datetime={new Date(link.published_at)} />}
                 <div className="flex space-x-4">
-                    <Link href={route('links.show', link.id)}>
+                    <Link href={linksRoute.show(link.id)}>
                         <Eye></Eye>
                     </Link>
                     <a href={link.url} target="_blank">
