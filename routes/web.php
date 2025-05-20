@@ -20,7 +20,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('links.')
         ->group(function (): void {
             Route::get('/', 'index')->name('index');
-            Route::get('{link}', 'show')->name('show');
+            Route::get('{link}', 'show')
+                ->name('show')
+                ->can('view', 'link');
         });
 });
 

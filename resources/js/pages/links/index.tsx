@@ -1,4 +1,5 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
@@ -13,13 +14,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Links({ links }: { links: Paginated<LinkData> }) {
+export default function Index({ links }: { links: Paginated<LinkData> }) {
     const [page, setPage] = useState<number>(links.current_page);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
-            <div className="flex flex-col items-center py-4">
+            <div className="flex flex-col items-center py-8">
                 <div className="w-full space-y-4 xl:w-1/2">
                     {links.data.map((link: LinkData) => (
                         <LinkCard key={link.id} link={link} />
@@ -61,7 +62,7 @@ function LinkCard({ link }: { link: LinkData }) {
                 )}
             </CardContent>
             <CardFooter className="flex justify-between">
-                <div>{link.published_at ? new Date(link.published_at).toLocaleDateString() : ''}</div>
+                <div>{link.published_at ? <Datetime datetime={new Date(link.published_at)} /> : ''}</div>
                 <div className="flex space-x-4">
                     <Link href={route('links.show', link.id)}>
                         <Eye></Eye>

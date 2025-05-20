@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUserLinks;
 use App\Data\LinkData;
+use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
@@ -23,6 +24,15 @@ class LinkController
                     $getUserLinks->execute($user)
                 )
             ),
+        ]);
+    }
+
+    public function show(Link $link): Response
+    {
+        $link->load('author');
+
+        return Inertia::render('links/show', [
+            'link' => LinkData::from($link),
         ]);
     }
 }

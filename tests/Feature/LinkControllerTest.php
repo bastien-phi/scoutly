@@ -41,3 +41,29 @@ describe('index', function (): void {
             ->assertRedirectToRoute('login');
     });
 });
+
+describe('show', function (): void {
+    it('returns link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        $this->actingAs($user)
+            ->get(route('links.show', $link))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('links/show')
+                    ->has('link')
+                    ->where('link.id', $link->id)
+            );
+    });
+
+    it('returns not found if user is not allowed to view link guest to login', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->published()->createOne();
+
+        $this->actingAs($user)
+            ->get(route('links.show', $link))
+            ->assertNotFound();
+    });
+});
