@@ -10,9 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 import { loginLinkLogin, register, welcome } from '@/routes';
+import loginRoutes from '@/routes/login';
+import passwordRoutes from '@/routes/password';
 import type { SharedData } from '@/types';
-import loginRoutes from '@routes/login';
-import passwordRoutes from '@routes/password';
 
 type LoginForm = {
     email: string;

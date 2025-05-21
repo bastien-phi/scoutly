@@ -1,9 +1,9 @@
 import LinkData = App.Data.LinkData;
 import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
+import linksRoutes from '@/routes/links';
 import type { BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import linksRoutes from '@routes/links';
 import { PencilLine } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {

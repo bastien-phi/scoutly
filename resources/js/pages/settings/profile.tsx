@@ -11,8 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import profileRoutes from '@routes/profile';
-import verification from '@routes/verification';
+import profileRoutes from '@/routes/profile';
+import verification from '@/routes/verification';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

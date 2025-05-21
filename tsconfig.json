@@ -110,8 +110,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": ["./resources/js/*"],
-            "@assets/*": ["./resources/assets/*"],
-            "@routes/*": ["./resources/js/routes/*"]
+            "@assets/*": ["./resources/assets/*"]
         },
         "jsx": "react-jsx"
     },

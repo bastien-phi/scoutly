@@ -23,8 +23,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@assets': resolve(__dirname, './resources/assets'),
-            '@routes': resolve(__dirname, './resources/js/routes'),
+            '@assets': resolve(__dirname, './resources/assets')
         },
     },
 });

@@ -1,9 +1,9 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
+import linksRoute from '@/routes/links';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
-import linksRoute from '@routes/links';
 import { ArrowUpRight, Eye, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;

@@ -7,7 +7,7 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import AuthLayout from '@/layouts/auth-layout';
 import { logout } from '@/routes';
-import verification from '@routes/verification';
+import verification from '@/routes/verification';
 
 export default function VerifyEmail({ status }: { status?: string }) {
     const { processing, submit } = useForm({});

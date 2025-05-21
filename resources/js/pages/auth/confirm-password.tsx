@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-import passwordRoutes from '@routes/password';
+import passwordRoutes from '@/routes/password';
 
 export default function ConfirmPassword() {
     const { data, setData, processing, errors, reset, submit } = useForm<Required<{ password: string }>>({
