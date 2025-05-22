@@ -138,6 +138,9 @@ importers:
       vite-plugin-svgr:
         specifier: ^4.3.0
         version: 4.3.0(rollup@4.40.2)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(lightningcss@1.29.2))
+      vite-plugin-typescript-transformer:
+        specifier: ./vite/vite-plugin-typescript-transformer
+        version: link:vite/vite-plugin-typescript-transformer
     optionalDependencies:
       '@rollup/rollup-linux-x64-gnu':
         specifier: 4.9.5
