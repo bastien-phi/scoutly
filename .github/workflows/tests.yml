@@ -59,8 +59,5 @@ jobs:
           composer install --no-interaction --prefer-dist --optimize-autoloader
           pnpm install
 
-      - name: Generate typescript types
-        run: php artisan typescript:transform
-
       - name: Build frontend
         run: pnpm run build
