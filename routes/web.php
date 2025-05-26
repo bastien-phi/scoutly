@@ -20,6 +20,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('links.')
         ->group(function (): void {
             Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::get('create', 'create')->name('create');
             Route::get('{link}', 'show')
                 ->name('show')
                 ->can('view', 'link');
