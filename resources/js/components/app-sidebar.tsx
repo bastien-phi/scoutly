@@ -1,24 +1,22 @@
 import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuAction,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import { routeMatches } from '@/lib/utils';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { GitPullRequest, LayoutGrid, Link as LinkIcon } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { GitPullRequest, LayoutGrid, Link as LinkIcon, Plus } from 'lucide-react';
 import AppLogo from './app-logo';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: route('dashboard'),
-        icon: LayoutGrid,
-    },
-    {
-        title: 'My links',
-        href: route('links.index'),
-        icon: LinkIcon,
-    },
-];
 
 const footerNavItems: NavItem[] = [
     {
@@ -29,6 +27,8 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const page = usePage();
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -44,7 +44,36 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarMenu>
+                        <SidebarMenuItem key="Dashboard">
+                            <SidebarMenuButton asChild isActive={routeMatches(page, 'dashboard')} tooltip={{ children: 'Dashboard' }}>
+                                <Link href={route('dashboard')} prefetch>
+                                    <LayoutGrid />
+                                    <span>Dashboard</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarGroupLabel>Links</SidebarGroupLabel>
+                    <SidebarMenu>
+                        <SidebarMenuItem key="My links">
+                            <SidebarMenuButton asChild isActive={routeMatches(page, 'links.index')} tooltip={{ children: 'My links' }}>
+                                <Link href={route('links.index')} prefetch>
+                                    <LinkIcon />
+                                    <span>My links</span>
+                                </Link>
+                            </SidebarMenuButton>
+                            <SidebarMenuAction>
+                                <Link href={route('links.create')} prefetch>
+                                    <Plus size={18} />
+                                </Link>
+                            </SidebarMenuAction>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
             </SidebarContent>
 
             <SidebarFooter>
