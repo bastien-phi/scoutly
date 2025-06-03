@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUserLinks;
 use App\Data\LinkData;
+use App\Models\Author;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -24,6 +25,15 @@ class LinkController
                     $getUserLinks->execute($user)
                 )
             ),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('links/create', [
+            'authors' => Author::query()
+                ->orderBy('name')
+                ->pluck('name'),
         ]);
     }
 

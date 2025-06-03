@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use App\Actions\GetUserLinks;
+use App\Models\Author;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia;
 
 describe('index', function (): void {
@@ -65,5 +67,24 @@ describe('show', function (): void {
         $this->actingAs($user)
             ->get(route('links.show', $link))
             ->assertNotFound();
+    });
+});
+
+describe('create', function (): void {
+    it('shows creation page', function (): void {
+        $user = User::factory()->createOne();
+        Author::factory()->createMany([
+            ['name' => 'John Doe'],
+            ['name' => 'Jane Smith'],
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('links.create'))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('links/create')
+                    ->where('authors', fn(Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
+            );
     });
 });
