@@ -20,7 +20,7 @@ export default function Show({ link }: { link: LinkData }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={link.title || 'Draft'} />
-            <div className="flex flex-col items-center py-8">
+            <div className="flex flex-col items-center px-4 py-8">
                 <div className="w-full space-y-4 xl:w-1/2">
                     <h1 className="text-2xl font-bold">{link.title || 'Draft'}</h1>
                     <a

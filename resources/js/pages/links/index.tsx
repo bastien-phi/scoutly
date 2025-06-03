@@ -20,7 +20,7 @@ export default function Index({ links }: { links: Paginated<LinkData> }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
-            <div className="flex flex-col items-center py-8">
+            <div className="flex flex-col items-center px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
                     {links.data.map((link: LinkData) => (
                         <LinkCard key={link.id} link={link} />
