@@ -60,6 +60,15 @@ class Link extends Model
      * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
      */
     #[Scope]
+    protected function whereDraft(Builder $query): void
+    {
+        $query->whereNull('published_at');
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     */
+    #[Scope]
     protected function wherePublished(Builder $query): void
     {
         $query->whereNotNull('published_at');

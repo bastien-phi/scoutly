@@ -39,7 +39,7 @@ export default function Show({ link }: { link: LinkData }) {
                             {link.author.name}
                         </div>
                     )}
-                    <div>
+                    <div className="text-muted-foreground text-sm">
                         {link.published_at ? (
                             <div>
                                 Published : <Datetime datetime={new Date(link.published_at)} />
