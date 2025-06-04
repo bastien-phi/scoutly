@@ -33,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('{link}', 'update')
                 ->name('update')
                 ->can('update', 'link');
+            Route::delete('{link}', 'destroy')
+                ->name('destroy')
+                ->can('delete', 'link');
         });
 
     Route::controller(DraftController::class)

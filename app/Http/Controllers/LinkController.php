@@ -76,4 +76,15 @@ class LinkController
 
         return Inertia::location(route('links.show', $link));
     }
+
+    public function destroy(Link $link): FoundationResponse
+    {
+        $link->delete();
+
+        return to_route(
+            $link->published_at === null ?
+            'drafts.index' :
+            'links.index'
+        );
+    }
 }
