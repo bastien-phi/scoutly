@@ -15,7 +15,7 @@ import {
 import { routeMatches } from '@/lib/utils';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { GitPullRequest, LayoutGrid, Link as LinkIcon, Plus } from 'lucide-react';
+import { GitPullRequest, LayoutGrid, Link as LinkIcon, Plus, SquarePen } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const footerNavItems: NavItem[] = [
@@ -71,6 +71,14 @@ export function AppSidebar() {
                                     <Plus size={18} />
                                 </Link>
                             </SidebarMenuAction>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem key="My drafts">
+                            <SidebarMenuButton asChild isActive={routeMatches(page, 'drafts.index')} tooltip={{ children: 'My drafts' }}>
+                                <Link href={route('drafts.index')} prefetch>
+                                    <SquarePen />
+                                    <span>My drafts</span>
+                                </Link>
+                            </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>

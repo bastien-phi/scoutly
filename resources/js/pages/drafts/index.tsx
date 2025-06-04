@@ -1,32 +1,32 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Eye, PencilLine } from 'lucide-react';
+import { ArrowUpRight, Pen, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Links',
-        href: route('links.index'),
+        title: 'Drafts',
+        href: route('drafts.index'),
     },
 ];
 
-export default function Index({ links }: { links: Paginated<LinkData> }) {
-    const [page, setPage] = useState<number>(links.current_page);
+export default function Index({ drafts }: { drafts: Paginated<LinkData> }) {
+    const [page, setPage] = useState<number>(drafts.current_page);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Links" />
+            <Head title="Drafts" />
             <div className="flex flex-col items-center px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
-                    {links.data.map((link: LinkData) => (
-                        <LinkCard key={link.id} link={link} />
+                    {drafts.data.map((link: LinkData) => (
+                        <DraftCard key={link.id} link={link} />
                     ))}
                 </div>
-                {page < links.last_page && (
+                {page < drafts.last_page && (
                     <WhenVisible
                         data=""
                         always
@@ -35,7 +35,7 @@ export default function Index({ links }: { links: Paginated<LinkData> }) {
                             data: { page: page + 1 },
                             onSuccess: () => setPage((page: number) => page + 1),
                             preserveUrl: true,
-                            only: ['links'],
+                            only: ['drafts'],
                         }}
                     >
                         <p className="text-center text-gray-500">Loading more...</p>
@@ -46,11 +46,12 @@ export default function Index({ links }: { links: Paginated<LinkData> }) {
     );
 }
 
-function LinkCard({ link }: { link: LinkData }) {
+function DraftCard({ link }: { link: LinkData }) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{link.title}</CardTitle>
+                <CardTitle>{link.url}</CardTitle>
+                {link.description && <CardDescription>{link.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">
                 {link.description && <p>{link.description}</p>}
@@ -62,14 +63,12 @@ function LinkCard({ link }: { link: LinkData }) {
                 )}
             </CardContent>
             <CardFooter className="flex justify-between">
-                {link.published_at && (
-                    <div className="text-muted-foreground text-sm">
-                        Published : <Datetime datetime={new Date(link.published_at)} />
-                    </div>
-                )}
+                <div className="text-muted-foreground text-sm">
+                    Created : <Datetime datetime={new Date(link.created_at)} />
+                </div>
                 <div className="flex space-x-4">
-                    <Link href={route('links.show', link.id)}>
-                        <Eye></Eye>
+                    <Link href={route('drafts.index')}>
+                        <Pen></Pen>
                     </Link>
                     <a href={link.url} target="_blank">
                         <ArrowUpRight></ArrowUpRight>
