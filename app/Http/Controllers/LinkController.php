@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\GetUserLinks;
+use App\Actions\StoreLink;
 use App\Data\LinkData;
+use App\Data\LinkFormData;
+use App\Http\Requests\StoreLinkRequest;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 
 class LinkController
 {
@@ -35,6 +39,16 @@ class LinkController
                 ->orderBy('name')
                 ->pluck('name'),
         ]);
+    }
+
+    public function store(StoreLinkRequest $request, #[CurrentUser] User $user, StoreLink $storeLink): FoundationResponse
+    {
+        $link = $storeLink->execute(
+            $user,
+            LinkFormData::from($request->validated())
+        );
+
+        return Inertia::location(route('links.show', $link));
     }
 
     public function show(Link $link): Response

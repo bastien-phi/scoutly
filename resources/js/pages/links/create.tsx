@@ -10,13 +10,7 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { ChangeEvent, FormEventHandler } from 'react';
-
-type LinkForm = {
-    url: string;
-    title: string;
-    description: string;
-    author: string;
-};
+import LinkFormData = App.Data.LinkFormData;
 
 export default function Create({ authors }: { authors: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -30,7 +24,7 @@ export default function Create({ authors }: { authors: string[] }) {
         },
     ];
 
-    const { data, setData, post, processing, errors } = useForm<Required<LinkForm>>({
+    const { data, setData, post, processing, errors } = useForm<Required<LinkFormData>>({
         url: '',
         title: '',
         description: '',
@@ -47,10 +41,7 @@ export default function Create({ authors }: { authors: string[] }) {
 
     const submitLink: FormEventHandler = (e) => {
         e.preventDefault();
-        console.log('Submitting link', data);
-        // post(route('links.store'), {
-        //     onFinish: (e) => console.log(e),
-        // });
+        post(route('links.store'));
     };
 
     const isValid = data.url && data.title;
@@ -132,8 +123,8 @@ export default function Create({ authors }: { authors: string[] }) {
                                     {!processing && <>Save draft</>}
                                 </Button>
 
-                                {isValid && !processing && (
-                                    <Button className="w-full" tabIndex={7} name="link" onClick={submitLink}>
+                                {!processing && (
+                                    <Button className="w-full" tabIndex={7} name="link" onClick={submitLink} disabled={!isValid}>
                                         Save link
                                     </Button>
                                 )}
