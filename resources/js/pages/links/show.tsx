@@ -1,4 +1,5 @@
 import LinkData = App.Data.LinkData;
+import Heading from '@/components/heading';
 import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
@@ -21,8 +22,8 @@ export default function Show({ link }: { link: LinkData }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={link.title || 'Draft'} />
             <div className="flex flex-col items-center px-4 py-8">
-                <div className="w-full space-y-4 xl:w-1/2">
-                    <h1 className="text-2xl font-bold">{link.title || 'Draft'}</h1>
+                <div className="grid w-full gap-4 xl:w-1/2">
+                    <Heading title={link.title || 'Draft'} />
                     <a
                         href={link.url}
                         target="_blank"
@@ -31,7 +32,7 @@ export default function Show({ link }: { link: LinkData }) {
                     >
                         {link.url}
                     </a>
-                    {link.description && <div className="mt-4">{link.description}</div>}
+                    {link.description && <div>{link.description}</div>}
                     {link.author && (
                         <div className="flex gap-x-4">
                             <PencilLine></PencilLine>
