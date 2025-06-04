@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\PublishDraftController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,6 +48,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('update')
                 ->can('update-draft', 'draft');
         });
+
+    Route::put('drafts/{draft}/publish', PublishDraftController::class)
+        ->name('drafts.publish')
+        ->can('update-draft', 'draft');
 });
 
 require __DIR__.'/settings.php';
