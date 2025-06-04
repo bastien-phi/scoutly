@@ -73,7 +73,7 @@ return [
      */
     'normalizers' => [
         Spatie\LaravelData\Normalizers\ModelNormalizer::class,
-        // Spatie\LaravelData\Normalizers\FormRequestNormalizer::class,
+        Spatie\LaravelData\Normalizers\FormRequestNormalizer::class,
         Spatie\LaravelData\Normalizers\ArrayableNormalizer::class,
         Spatie\LaravelData\Normalizers\ObjectNormalizer::class,
         Spatie\LaravelData\Normalizers\ArrayNormalizer::class,
@@ -126,7 +126,7 @@ return [
      * method. By default, only when a request is passed the data is being validated. This
      * behaviour can be changed to always validate or to completely disable validation.
      */
-    'validation_strategy' => \Spatie\LaravelData\Support\Creation\ValidationStrategy::OnlyRequests->value,
+    'validation_strategy' => \Spatie\LaravelData\Support\Creation\ValidationStrategy::Disabled->value,
 
     /*
      * A data object can map the names of its properties when transforming (output) or when
