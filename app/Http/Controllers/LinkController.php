@@ -46,7 +46,7 @@ class LinkController
     {
         $link = $storeLink->execute($user, LinkFormData::from($request));
 
-        return Inertia::location(route('links.show', $link));
+        return to_route('links.show', $link);
     }
 
     public function show(Link $link): Response
