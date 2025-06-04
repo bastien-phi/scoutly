@@ -40,6 +40,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function (): void {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
+            Route::get('{draft}/edit', 'edit')
+                ->name('edit')
+                ->can('update-draft', 'draft');
+            Route::put('{draft}', 'update')
+                ->name('update')
+                ->can('update-draft', 'draft');
         });
 });
 

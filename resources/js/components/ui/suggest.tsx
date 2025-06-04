@@ -9,7 +9,7 @@ function Suggest({className, onSuggestionSelected, suggestions, ...props }: Reac
     value: string|undefined
 }) {
     const [forceOpen, setForceOpen] = React.useState(false);
-    const [forceClose, setForceClose] = React.useState(false);
+    const [forceClose, setForceClose] = React.useState(true);
 
     const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event: KeyboardEvent<HTMLInputElement>)=> {
         if(event.key === "Escape" || event.key === "Enter") {
