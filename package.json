@@ -22,6 +22,7 @@
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-tailwindcss": "^0.6.11",
         "typescript-eslint": "^8.23.0",
+        "vite-plugin-run": "^0.6.1",
         "vite-plugin-svgr": "^4.3.0",
         "vite-plugin-typescript-transformer": "./vite/vite-plugin-typescript-transformer"
     },
