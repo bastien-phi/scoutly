@@ -178,3 +178,27 @@ describe('update', function (): void {
             ->assertRedirectToRoute('links.show', $link);
     });
 });
+
+describe('destroy', function (): void {
+    it('destroy the link and redirects to link index', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        $this->actingAs($user)
+            ->delete(route('links.destroy', $link))
+            ->assertRedirectToRoute('links.index');
+
+        $this->assertModelMissing($link);
+    });
+
+    it('destroy the draft and redirects to drafts index', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->draft()->createOne();
+
+        $this->actingAs($user)
+            ->delete(route('links.destroy', $link))
+            ->assertRedirectToRoute('drafts.index');
+
+        $this->assertModelMissing($link);
+    });
+});

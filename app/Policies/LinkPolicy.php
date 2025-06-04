@@ -59,8 +59,12 @@ class LinkPolicy
         return Response::allow();
     }
 
-    public function delete(User $user, Link $link): bool
+    public function delete(User $user, Link $link): Response
     {
-        return false;
+        if ($user->id !== $link->user_id) {
+            return Response::denyAsNotFound();
+        }
+
+        return Response::allow();
     }
 }
