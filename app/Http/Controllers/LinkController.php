@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
+use App\Actions\UpdateLink;
 use App\Data\LinkData;
 use App\Data\LinkFormData;
 use App\Http\Requests\StoreLinkRequest;
@@ -55,5 +56,24 @@ class LinkController
         return Inertia::render('links/show', [
             'link' => LinkData::from($link),
         ]);
+    }
+
+    public function edit(Link $link): Response
+    {
+        $link->load('author');
+
+        return Inertia::render('links/edit', [
+            'link' => LinkData::from($link),
+            'authors' => Author::query()
+                ->orderBy('name')
+                ->pluck('name'),
+        ]);
+    }
+
+    public function update(StoreLinkRequest $request, Link $link, UpdateLink $updateLink): FoundationResponse
+    {
+        $updateLink->execute($link, LinkFormData::from($request));
+
+        return Inertia::location(route('links.show', $link));
     }
 }
