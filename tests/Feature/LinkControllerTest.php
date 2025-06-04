@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Actions\GetUserLinks;
+use App\Actions\StoreLink;
+use App\Data\LinkFormData;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\User;
@@ -84,7 +86,35 @@ describe('create', function (): void {
             ->assertInertia(
                 fn (AssertableInertia $page) => $page
                     ->component('links/create')
-                    ->where('authors', fn(Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
+                    ->where('authors', fn (Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
             );
+    });
+});
+
+describe('store', function (): void {
+    it('stores the link', function (): void {
+        $user = User::factory()->createOne();
+
+        $this->mockAction(StoreLink::class)
+            ->with(
+                $user,
+                new LinkFormData(
+                    url: 'https://example.com',
+                    title: 'Example Title',
+                    description: 'Example Description',
+                    author: 'John Doe',
+                )
+            )
+            ->returns(fn () => Link::factory()->for($user)->createOne())
+            ->in($link);
+
+        $this->actingAs($user)
+            ->post(route('links.store'), [
+                'url' => 'https://example.com',
+                'title' => 'Example Title',
+                'description' => 'Example Description',
+                'author' => 'John Doe',
+            ])
+            ->assertRedirectToRoute('links.show', $link);
     });
 });
