@@ -43,10 +43,7 @@ class LinkController
 
     public function store(StoreLinkRequest $request, #[CurrentUser] User $user, StoreLink $storeLink): FoundationResponse
     {
-        $link = $storeLink->execute(
-            $user,
-            LinkFormData::from($request->validated())
-        );
+        $link = $storeLink->execute($user, LinkFormData::from($request));
 
         return Inertia::location(route('links.show', $link));
     }
