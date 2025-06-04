@@ -84,6 +84,58 @@ namespace Illuminate\Testing
      * @method mixed inertiaPage()
      *
      * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L26
+     *
+     * @method self assertValidContract(int $status)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/ContractAssertions.php L18
+     *
+     * @method self assertData($expect)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L14
+     *
+     * @method self assertDataPath(string $key, $expect)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L23
+     *
+     * @method self assertDataPathCanonicalizing(string $key, array $expect)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L32
+     *
+     * @method self assertDataPaths(array $expectations)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L44
+     *
+     * @method self assertDataPathsCanonicalizing(array $expectations)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L58
+     *
+     * @method self assertDataMissing($item)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L69
+     *
+     * @method self assertDataPathMissing(string $path, $item)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/DataAssertions.php L78
+     *
+     * @method self assertJsonPathMissing(string $path, $item)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/JsonAssertions.php L15
+     *
+     * @method self assertJsonMessage(string $message)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/JsonAssertions.php L24
+     *
+     * @method self assertSimplePaginated()
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/JsonAssertions.php L33
+     *
+     * @method self assertPaginated()
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/JsonAssertions.php L45
+     *
+     * @method self assertViewHasNull(string $key)
+     *
+     * @see project://vendor/soyhuce/laravel-testing/src/TestResponse/ViewAssertions.php L16
      */
     class TestResponse
     {
