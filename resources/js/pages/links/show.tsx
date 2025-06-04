@@ -43,7 +43,7 @@ export default function Show({ link }: { link: LinkData }) {
                     >
                         {link.url}
                     </a>
-                    {link.description && <div>{link.description}</div>}
+                    {link.description && <pre className="font-sans whitespace-pre-wrap">{link.description}</pre>}
                     {link.author && (
                         <div className="flex gap-x-4">
                             <PencilLine></PencilLine>
