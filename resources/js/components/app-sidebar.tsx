@@ -9,11 +9,12 @@ import {
     SidebarHeader,
     SidebarMenu,
     SidebarMenuAction,
+    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { routeMatches } from '@/lib/utils';
-import { type NavItem } from '@/types';
+import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { GitPullRequest, LayoutGrid, Link as LinkIcon, Plus, SquarePen } from 'lucide-react';
 import AppLogo from './app-logo';
@@ -27,7 +28,7 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-    const page = usePage();
+    const page = usePage<SharedData>();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -79,6 +80,7 @@ export function AppSidebar() {
                                     <span>My drafts</span>
                                 </Link>
                             </SidebarMenuButton>
+                            {page.props.draftCount && <SidebarMenuBadge>{page.props.draftCount}</SidebarMenuBadge>}
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>
