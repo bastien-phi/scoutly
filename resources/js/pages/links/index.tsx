@@ -53,7 +53,11 @@ function LinkCard({ link }: { link: LinkData }) {
                 <CardTitle>{link.title}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {link.description && <p>{link.description}</p>}
+                {link.description && (
+                    <pre className="font-sans whitespace-pre-wrap">
+                        {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
+                    </pre>
+                )}
                 {link.author && (
                     <div className="flex gap-x-4">
                         <PencilLine></PencilLine>
