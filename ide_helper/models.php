@@ -81,9 +81,13 @@ namespace IdeHelper\App\Models
      * @method $this wherePublishedAt(\Carbon\CarbonImmutable|string|null $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
-     * @method $this wherePublished()
+     * @method $this whereDraft()
      *
      * @see project://app/Models/Link.php L63
+     *
+     * @method $this wherePublished()
+     *
+     * @see project://app/Models/Link.php L72
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
