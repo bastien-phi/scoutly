@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,6 +26,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('{link}', 'show')
                 ->name('show')
                 ->can('view', 'link');
+        });
+
+    Route::controller(DraftController::class)
+        ->prefix('drafts')
+        ->name('drafts.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
         });
 });
 

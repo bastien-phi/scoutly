@@ -11,6 +11,7 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { ChangeEvent, FormEventHandler } from 'react';
 import LinkFormData = App.Data.LinkFormData;
+import DraftFormData = App.Data.DraftFormData;
 
 export default function Create({ authors }: { authors: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -24,7 +25,7 @@ export default function Create({ authors }: { authors: string[] }) {
         },
     ];
 
-    const { data, setData, post, processing, errors } = useForm<Required<LinkFormData>>({
+    const { data, setData, post, processing, errors } = useForm<Required<LinkFormData & DraftFormData>>({
         url: '',
         title: '',
         description: '',
@@ -33,10 +34,7 @@ export default function Create({ authors }: { authors: string[] }) {
 
     const submitDraft: FormEventHandler = (e) => {
         e.preventDefault();
-        console.log('Submitting draft', data);
-        // post(route('links.store'), {
-        //     onFinish: (e) => console.log(e),
-        // });
+        post(route('drafts.store'));
     };
 
     const submitLink: FormEventHandler = (e) => {
