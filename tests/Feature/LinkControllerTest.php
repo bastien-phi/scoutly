@@ -123,7 +123,8 @@ describe('store', function (): void {
 describe('edit', function (): void {
     it('returns link', function (): void {
         $user = User::factory()->createOne();
-        $link = Link::factory()->for($user)->published()
+        $link = Link::factory()->for($user)
+            ->published()
             ->forAuthor(['name' => 'John Doe'])
             ->createOne();
 
@@ -152,7 +153,7 @@ describe('edit', function (): void {
 });
 
 describe('update', function (): void {
-    it('stores the link', function (): void {
+    it('updates the link', function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->for($user)->published()->createOne();
 

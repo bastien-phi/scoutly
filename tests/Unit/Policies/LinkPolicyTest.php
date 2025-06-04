@@ -27,3 +27,49 @@ describe('view', function (): void {
         expect($user->can('view', $link))->toBeFalse();
     });
 });
+
+describe('update', function (): void {
+    it('allows user to update owns link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        expect($user->can('update', $link))->toBeTrue();
+    });
+
+    it('denies user to update draft link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->draft()->createOne();
+
+        expect($user->can('update', $link))->toBeFalse();
+    });
+
+    it('denies user to update other\'s link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->published()->createOne();
+
+        expect($user->can('update', $link))->toBeFalse();
+    });
+});
+
+describe('updateDraft', function (): void {
+    it('allows user to update owns draft link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->draft()->createOne();
+
+        expect($user->can('update-draft', $link))->toBeTrue();
+    });
+
+    it('denies user to update published link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        expect($user->can('update-draft', $link))->toBeFalse();
+    });
+
+    it('denies user to update other\'s link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->draft()->createOne();
+
+        expect($user->can('update-draft', $link))->toBeFalse();
+    });
+});

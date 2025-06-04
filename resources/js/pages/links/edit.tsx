@@ -44,7 +44,7 @@ export default function Edit({ link, authors }: { link: LinkData; authors: strin
             <Head title="Edit link" />
             <div className="flex flex-col items-center px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
-                    <Heading title="New link" />
+                    <Heading title="Edit link" />
 
                     <form className="flex flex-col gap-6" onSubmit={submitLink}>
                         <div className="grid gap-6">

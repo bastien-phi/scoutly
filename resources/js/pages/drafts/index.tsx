@@ -67,7 +67,7 @@ function DraftCard({ link }: { link: LinkData }) {
                     Created : <Datetime datetime={new Date(link.created_at)} />
                 </div>
                 <div className="flex space-x-4">
-                    <Link href={route('drafts.index')}>
+                    <Link href={route('drafts.edit', link.id)}>
                         <Pen></Pen>
                     </Link>
                     <a href={link.url} target="_blank">
