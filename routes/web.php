@@ -26,6 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('{link}', 'show')
                 ->name('show')
                 ->can('view', 'link');
+            Route::get('{link}/edit', 'edit')
+                ->name('edit')
+                ->can('update', 'link');
+            Route::put('{link}', 'update')
+                ->name('update')
+                ->can('update', 'link');
         });
 
     Route::controller(DraftController::class)

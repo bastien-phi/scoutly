@@ -3,8 +3,8 @@ import Heading from '@/components/heading';
 import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { Pencil, PencilLine } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -39,19 +39,26 @@ export default function Show({ link }: { link: LinkData }) {
                             {link.author.name}
                         </div>
                     )}
-                    <div className="text-muted-foreground text-sm">
-                        {link.published_at ? (
+                    <div className="flex items-center justify-between">
+                        <div className="text-muted-foreground text-sm">
+                            {link.published_at ? (
+                                <div>
+                                    Published : <Datetime datetime={new Date(link.published_at)} />
+                                </div>
+                            ) : (
+                                <div>Draft</div>
+                            )}
                             <div>
-                                Published : <Datetime datetime={new Date(link.published_at)} />
+                                Created : <Datetime datetime={new Date(link.created_at)} />
                             </div>
-                        ) : (
-                            <div>Draft</div>
-                        )}
-                        <div>
-                            Created : <Datetime datetime={new Date(link.created_at)} />
+                            <div>
+                                Updated : <Datetime datetime={new Date(link.updated_at)} />
+                            </div>
                         </div>
-                        <div>
-                            Updated : <Datetime datetime={new Date(link.updated_at)} />
+                        <div className="flex gap-x-2">
+                            <Link href={route('links.edit', link.id)}>
+                                <Pencil></Pencil>
+                            </Link>
                         </div>
                     </div>
                 </div>

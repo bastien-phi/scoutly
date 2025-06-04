@@ -33,9 +33,17 @@ class LinkPolicy
         return false;
     }
 
-    public function update(User $user, Link $link): bool
+    public function update(User $user, Link $link): Response
     {
-        return false;
+        if ($link->published_at === null) {
+            return Response::denyAsNotFound();
+        }
+
+        if ($user->id !== $link->user_id) {
+            return Response::denyAsNotFound();
+        }
+
+        return Response::allow();
     }
 
     public function delete(User $user, Link $link): bool

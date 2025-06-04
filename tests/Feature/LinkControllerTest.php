@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
+use App\Actions\UpdateLink;
 use App\Data\LinkFormData;
 use App\Models\Author;
 use App\Models\Link;
@@ -62,7 +63,7 @@ describe('show', function (): void {
             );
     });
 
-    it('returns not found if user is not allowed to view link guest to login', function (): void {
+    it('returns not found if user is not allowed to view link', function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->published()->createOne();
 
@@ -110,6 +111,64 @@ describe('store', function (): void {
 
         $this->actingAs($user)
             ->post(route('links.store'), [
+                'url' => 'https://example.com',
+                'title' => 'Example Title',
+                'description' => 'Example Description',
+                'author' => 'John Doe',
+            ])
+            ->assertRedirectToRoute('links.show', $link);
+    });
+});
+
+describe('edit', function (): void {
+    it('returns link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()
+            ->forAuthor(['name' => 'John Doe'])
+            ->createOne();
+
+        Author::factory()->createOne(['name' => 'Jane Smith']);
+
+        $this->actingAs($user)
+            ->get(route('links.edit', $link))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('links/edit')
+                    ->has('link')
+                    ->where('link.id', $link->id)
+                    ->where('authors', fn (Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
+            );
+    });
+
+    it('returns not found if user is not allowed to view link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->published()->createOne();
+
+        $this->actingAs($user)
+            ->get(route('links.edit', $link))
+            ->assertNotFound();
+    });
+});
+
+describe('update', function (): void {
+    it('stores the link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        $this->mockAction(UpdateLink::class)
+            ->with(
+                $link,
+                new LinkFormData(
+                    url: 'https://example.com',
+                    title: 'Example Title',
+                    description: 'Example Description',
+                    author: 'John Doe',
+                )
+            );
+
+        $this->actingAs($user)
+            ->put(route('links.update', $link), [
                 'url' => 'https://example.com',
                 'title' => 'Example Title',
                 'description' => 'Example Description',
