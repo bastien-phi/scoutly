@@ -37,7 +37,7 @@ class DraftController
     {
         $draft = $storeDraft->execute($user, DraftFormData::from($request));
 
-        return Inertia::location(route('drafts.edit', $draft));
+        return to_route('drafts.edit', $draft);
     }
 
     public function edit(Link $draft): Response
@@ -56,6 +56,6 @@ class DraftController
     {
         $updateDraft->execute($draft, DraftFormData::from($request));
 
-        return Inertia::location(route('drafts.edit', $draft));
+        return to_route('drafts.edit', $draft);
     }
 }
