@@ -4,7 +4,7 @@ import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import svgr from "vite-plugin-svgr";
-import { typescriptTransformer } from 'vite-plugin-typescript-transformer';
+import run from 'vite-plugin-run';
 
 export default defineConfig({
     plugins: [
@@ -16,9 +16,13 @@ export default defineConfig({
         react(),
         tailwindcss(),
         svgr(),
-        typescriptTransformer({
-            patterns: ['app/Data/**/*.php']
-        })
+        run([
+            {
+              name: 'typescript transform',
+              run: ['php', 'artisan', 'typescript:transform'],
+              pattern: ['app/**/*Data.php', 'app/**/Enums/**/*.php'],
+            }
+        ]),
     ],
     esbuild: {
         jsx: 'automatic',
