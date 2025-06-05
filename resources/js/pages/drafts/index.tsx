@@ -14,7 +14,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Pen, PencilLine, Trash } from 'lucide-react';
+import { ArrowUpRight, Trash, User } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
@@ -61,55 +61,60 @@ function DraftCard({ link }: { link: LinkData }) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{link.url}</CardTitle>
+                <div className="flex items-baseline justify-between">
+                    <Link href={route('drafts.edit', link.id)}>
+                        <CardTitle>{link.url}</CardTitle>
+                    </Link>
+                    <div className="flex space-x-2">
+                        <a href={link.url} target="_blank">
+                            <ArrowUpRight></ArrowUpRight>
+                        </a>
+                        <DeleteButton link={link} />
+                    </div>
+                </div>
                 {link.description && <CardDescription>{link.title}</CardDescription>}
             </CardHeader>
-            <CardContent className="space-y-4">
-                {link.description && <p>{link.description}</p>}
+            <CardContent className="space-y-4">{link.description && <p>{link.description}</p>}</CardContent>
+            <CardFooter className="flex justify-between">
                 {link.author && (
                     <div className="flex gap-x-4">
-                        <PencilLine></PencilLine>
+                        <User />
                         {link.author.name}
                     </div>
                 )}
-            </CardContent>
-            <CardFooter className="flex justify-between">
                 <div className="text-muted-foreground text-sm">
                     Created : <Datetime datetime={new Date(link.created_at)} />
                 </div>
-                <div className="flex space-x-4">
-                    <Link href={route('drafts.edit', link.id)}>
-                        <Pen></Pen>
-                    </Link>
-                    <a href={link.url} target="_blank">
-                        <ArrowUpRight></ArrowUpRight>
-                    </a>
-                    <Dialog>
-                        <DialogTrigger>
-                            <Trash className="cursor-pointer"></Trash>
-                        </DialogTrigger>
-                        <DialogPortal>
-                            <DialogOverlay></DialogOverlay>
-                            <DialogContent>
-                                <DialogTitle>Delete link</DialogTitle>
-                                <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
-                                <div className="flex justify-between">
-                                    <DialogClose>
-                                        <Button variant="link" className="cursor-pointer">
-                                            Cancel
-                                        </Button>
-                                    </DialogClose>
-                                    <Link href={route('links.destroy', link.id)} method="delete">
-                                        <Button variant="destructive" className="cursor-pointer">
-                                            Delete
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </DialogContent>
-                        </DialogPortal>
-                    </Dialog>
-                </div>
             </CardFooter>
         </Card>
+    );
+}
+
+function DeleteButton({ link }: { link: LinkData }) {
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <Trash className="cursor-pointer"></Trash>
+            </DialogTrigger>
+            <DialogPortal>
+                <DialogOverlay></DialogOverlay>
+                <DialogContent>
+                    <DialogTitle>Delete link</DialogTitle>
+                    <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
+                    <div className="flex justify-between">
+                        <DialogClose>
+                            <Button variant="link" className="cursor-pointer">
+                                Cancel
+                            </Button>
+                        </DialogClose>
+                        <Link href={route('links.destroy', link.id)} method="delete">
+                            <Button variant="destructive" className="cursor-pointer">
+                                Delete
+                            </Button>
+                        </Link>
+                    </div>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }
