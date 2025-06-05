@@ -3,6 +3,8 @@ import * as React from "react"
 import { KeyboardEventHandler, KeyboardEvent, useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 
+const SUGGESTION_ITEM_HEIGHT = 40;
+
 function Suggest({className, suggestions, onSuggestionSelected, ...props }: React.ComponentProps<"input"> & {
     suggestions: string[]
     onSuggestionSelected: (value: string) => void
@@ -13,6 +15,7 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
     const [scrollIndex, setScrollIndex] = useState<number>(-1);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(suggestions);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         if (props.value) {
@@ -50,7 +53,7 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
     useEffect(() => {
         if(dropdownRef.current) {
             dropdownRef.current.scroll({
-                top: scrollIndex * 40,
+                top: scrollIndex * SUGGESTION_ITEM_HEIGHT,
             })
         }
     }, [scrollIndex]);
@@ -87,7 +90,13 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
                 className={className}
                 onKeyDown={handleKeyDown}
                 onFocus={() => props.value && setShowDropdown(filteredSuggestions.length > 0)}
-                onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+                onBlur={() => {
+                    if (blurTimeoutRef.current) {
+                        clearTimeout(blurTimeoutRef.current);
+                    }
+
+                    blurTimeoutRef.current = setTimeout(() => setShowDropdown(false), 200)
+                }}
             />
             {showDropdown && (
                 <div
