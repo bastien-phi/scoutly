@@ -49,7 +49,7 @@ jobs:
 
       - name: Setup environment
         run: |
-          cat > .env <<EOF
+          cat >> .env <<EOF
           DB_HOST=localhost
           DB_PORT=5432
           DB_DATABASE=postgres
