@@ -47,7 +47,7 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo <<EOF  >> .env
+          cat > .env <<EOF
           DB_HOST=postgres
           DB_PORT=5432
           DB_DATABASE=postgres
