@@ -15,7 +15,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Pencil, PencilLine, Trash } from 'lucide-react';
+import { Pencil, Trash, User } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -34,7 +34,15 @@ export default function Show({ link }: { link: LinkData }) {
             <Head title={link.title || 'Draft'} />
             <div className="flex flex-col items-center px-4 py-8">
                 <div className="grid w-full gap-4 xl:w-1/2">
-                    <Heading title={link.title || 'Draft'} />
+                    <div className="flex items-baseline justify-between">
+                        <Heading title={link.title || 'Draft'} />
+                        <div className="flex space-x-2">
+                            <Link href={route('links.edit', link.id)}>
+                                <Pencil />
+                            </Link>
+                            <DeleteButton link={link} />
+                        </div>
+                    </div>
                     <a
                         href={link.url}
                         target="_blank"
@@ -44,13 +52,14 @@ export default function Show({ link }: { link: LinkData }) {
                         {link.url}
                     </a>
                     {link.description && <pre className="font-sans whitespace-pre-wrap">{link.description}</pre>}
-                    {link.author && (
-                        <div className="flex gap-x-4">
-                            <PencilLine></PencilLine>
-                            {link.author.name}
-                        </div>
-                    )}
+
                     <div className="flex items-center justify-between">
+                        {link.author && (
+                            <div className="flex gap-x-4">
+                                <User />
+                                {link.author.name}
+                            </div>
+                        )}
                         <div className="text-muted-foreground text-sm">
                             {link.published_at ? (
                                 <div>
@@ -66,40 +75,38 @@ export default function Show({ link }: { link: LinkData }) {
                                 Updated : <Datetime datetime={new Date(link.updated_at)} />
                             </div>
                         </div>
-                        <div className="flex gap-x-2">
-                            <Link href={route('links.edit', link.id)}>
-                                <Pencil></Pencil>
-                            </Link>
-                            <Dialog>
-                                <DialogTrigger>
-                                    <Trash className="cursor-pointer"></Trash>
-                                </DialogTrigger>
-                                <DialogPortal>
-                                    <DialogOverlay></DialogOverlay>
-                                    <DialogContent>
-                                        <DialogTitle>Delete link</DialogTitle>
-                                        <DialogDescription>
-                                            Are you sure you want to delete this link? This action cannot be undone.
-                                        </DialogDescription>
-                                        <div className="flex justify-between">
-                                            <DialogClose>
-                                                <Button variant="link" className="cursor-pointer">
-                                                    Cancel
-                                                </Button>
-                                            </DialogClose>
-                                            <Link href={route('links.destroy', link.id)} method="delete">
-                                                <Button variant="destructive" className="cursor-pointer">
-                                                    Delete
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </DialogContent>
-                                </DialogPortal>
-                            </Dialog>
-                        </div>
                     </div>
                 </div>
             </div>
         </AppLayout>
+    );
+}
+
+function DeleteButton({ link }: { link: LinkData }) {
+    return (
+        <Dialog>
+            <DialogTrigger>
+                <Trash className="cursor-pointer"></Trash>
+            </DialogTrigger>
+            <DialogPortal>
+                <DialogOverlay></DialogOverlay>
+                <DialogContent>
+                    <DialogTitle>Delete link</DialogTitle>
+                    <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
+                    <div className="flex justify-between">
+                        <DialogClose>
+                            <Button variant="link" className="cursor-pointer">
+                                Cancel
+                            </Button>
+                        </DialogClose>
+                        <Link href={route('links.destroy', link.id)} method="delete">
+                            <Button variant="destructive" className="cursor-pointer">
+                                Delete
+                            </Button>
+                        </Link>
+                    </div>
+                </DialogContent>
+            </DialogPortal>
+        </Dialog>
     );
 }

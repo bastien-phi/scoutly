@@ -3,7 +3,7 @@ import { Datetime } from '@/components/ui/datetime';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Eye, PencilLine } from 'lucide-react';
+import { ArrowUpRight, User } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
@@ -49,8 +49,13 @@ export default function Index({ links }: { links: Paginated<LinkData> }) {
 function LinkCard({ link }: { link: LinkData }) {
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>{link.title}</CardTitle>
+            <CardHeader className="flex-row items-baseline justify-between">
+                <Link href={route('links.show', link.id)}>
+                    <CardTitle>{link.title}</CardTitle>
+                </Link>
+                <a href={link.url} target="_blank">
+                    <ArrowUpRight></ArrowUpRight>
+                </a>
             </CardHeader>
             <CardContent className="space-y-4">
                 {link.description && (
@@ -58,27 +63,18 @@ function LinkCard({ link }: { link: LinkData }) {
                         {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
                     </pre>
                 )}
-                {link.author && (
-                    <div className="flex gap-x-4">
-                        <PencilLine></PencilLine>
-                        {link.author.name}
-                    </div>
-                )}
             </CardContent>
             <CardFooter className="flex justify-between">
+                {link.author && (
+                    <div className="flex gap-x-4">
+                        <User /> {link.author.name}
+                    </div>
+                )}
                 {link.published_at && (
                     <div className="text-muted-foreground text-sm">
                         Published : <Datetime datetime={new Date(link.published_at)} />
                     </div>
                 )}
-                <div className="flex space-x-4">
-                    <Link href={route('links.show', link.id)}>
-                        <Eye></Eye>
-                    </Link>
-                    <a href={link.url} target="_blank">
-                        <ArrowUpRight></ArrowUpRight>
-                    </a>
-                </div>
             </CardFooter>
         </Card>
     );
