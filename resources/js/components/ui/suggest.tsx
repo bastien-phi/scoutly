@@ -1,109 +1,114 @@
 import * as React from "react"
 
-import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { KeyboardEventHandler, KeyboardEvent } from 'react';
+import { KeyboardEventHandler, KeyboardEvent, useState, useEffect, useRef } from 'react';
+import { Input } from '@/components/ui/input';
 
-function Suggest({className, onSuggestionSelected, suggestions, ...props }: React.ComponentProps<"input"> & {
+function Suggest({className, suggestions, onSuggestionSelected, ...props }: React.ComponentProps<"input"> & {
     suggestions: string[]
     onSuggestionSelected: (value: string) => void
     value: string|undefined
 }) {
-    const [forceOpen, setForceOpen] = React.useState(false);
-    const [forceClose, setForceClose] = React.useState(true);
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+    const [scrollIndex, setScrollIndex] = useState<number>(-1);
+    const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(suggestions);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event: KeyboardEvent<HTMLInputElement>)=> {
-        if(event.key === "Escape" || event.key === "Enter") {
-            setForceClose(true);
-            setForceOpen(false);
-            return;
+    useEffect(() => {
+        if (props.value) {
+            const filtered = suggestions.filter(suggestion =>
+                suggestion.toLowerCase().includes(props.value?.toLowerCase() ?? '')
+            );
+            setFilteredSuggestions(filtered);
+            if(filtered.length > 1) {
+                setShowDropdown(true);
+            } else if (filtered.length === 1 && filtered[0] !== props.value) {
+                setShowDropdown(true);
+            } else {
+                setShowDropdown(false);
+            }
+        } else {
+            setFilteredSuggestions(suggestions);
+            setShowDropdown(false);
         }
+        setFocusedIndex(-1);
+    }, [props.value, setFilteredSuggestions, suggestions]);
 
-        setForceClose(false);
-        if(event.key === "ArrowDown") {
-            setForceOpen(true);
+    useEffect(() => {
+        setScrollIndex((prev) => {
+            if(prev < focusedIndex - 5) {
+                return focusedIndex - 5;
+            }
+            if(prev > focusedIndex) {
+                return focusedIndex;
+            }
+            return prev;
+        })
+
+    }, [focusedIndex]);
+
+    useEffect(() => {
+        if(dropdownRef.current) {
+            dropdownRef.current.scroll({
+                top: scrollIndex * 40,
+            })
         }
-    }
+    }, [scrollIndex]);
+
+    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setFocusedIndex(prev => Math.min(filteredSuggestions.length - 1, prev +1));
+            setShowDropdown(true);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setFocusedIndex(prev => Math.max(0, prev -1));
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (focusedIndex >= 0 && filteredSuggestions[focusedIndex]) {
+                handleSuggestionSelect(filteredSuggestions[focusedIndex]);
+            }
+        } else if (e.key === 'Escape') {
+            setShowDropdown(false);
+            setFocusedIndex(-1);
+        }
+    };
+
+    const handleSuggestionSelect = (suggestion: string) => {
+        onSuggestionSelected(suggestion);
+        setShowDropdown(false);
+        setFocusedIndex(-1);
+    };
 
     return (
-        <Command value={props.value} onChange={props.onChange}>
-            <CommandInput {...props} onKeyDown={handleKeyDown} className={className}></CommandInput>
-            { (props.value || forceOpen) && !forceClose && (
-                <CommandList>
-                    <CommandGroup>
-                        {suggestions.map((suggestion) => (
-                            <CommandItem key={suggestion} onSelect={() => {
-                                onSuggestionSelected(suggestion);
-                                setForceClose(true)
-                            }}>
-                                {suggestion}
-                            </CommandItem>
-                        ))}
-                    </CommandGroup>
-                </CommandList>
+        <div className="relative">
+            <Input
+                {...props}
+                className={className}
+                onKeyDown={handleKeyDown}
+                onFocus={() => props.value && setShowDropdown(filteredSuggestions.length > 0)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
+            />
+            {showDropdown && (
+                <div
+                    ref={dropdownRef}
+                    className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                >
+                    {filteredSuggestions.map((suggestion, index) => (
+                        <button
+                            key={suggestion}
+                            onClick={() => handleSuggestionSelect(suggestion)}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 ${
+                                index === focusedIndex ? 'bg-primary/5 text-primary' : 'text-gray-700'
+                            }`}
+                        >
+                            {suggestion}
+                        </button>
+                    ))}
+                </div>
             )}
-        </Command>
-    );
-
-    /*
-
-    return (
-        <div>
-        <input
-            ref={inputRef}
-            type={type}
-            data-slot="input"
-            className={cn(
-                "border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-                "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-                "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-                className
-            )}
-            {...props}
-            // onFocus={() => setOpen(true)}
-            // onBlur={() => {
-            //     setOpen(false)
-            // }}
-            onKeyDown={(e) => {
-                if (e.key === "ArrowDown") {
-                    setOpen(true);
-                }
-                if(e.key === "Escape") {
-                    setOpen(false);
-                }
-            }}
-        />
-                <Select open={open} onValueChange={(value) => {
-                    fillFromSuggestion(value);
-                    setOpen(false);
-
-                }}>
-                    <div className="w-0 h-0 overflow-hidden">
-                    <SelectTrigger className="w-0 h-0">
-                        <SelectValue>Select</SelectValue>
-                    </SelectTrigger>
-                    </div>
-                    <SelectContent className="mt-[-22px]">
-                        { suggestions.map((suggestion) => (
-                            <SelectItem value={suggestion} key={suggestion}>{ suggestion }</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-
-
         </div>
-    )
-
-     */
+    );
 }
 
 export { Suggest }
-
-
-//     <div onMouseDown={(e) => {
-//         fillFromSuggestion('Prout')
-//         setOpen(false);
-//         e.preventDefault()
-//     }}>
-//     Suggestions !
-// </div>
-// )}
