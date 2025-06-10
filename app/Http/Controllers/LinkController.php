@@ -7,8 +7,11 @@ namespace App\Http\Controllers;
 use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
+use App\Data\AuthorData;
 use App\Data\LinkData;
 use App\Data\LinkFormData;
+use App\Data\SearchLinkFormData;
+use App\Http\Requests\GetUserLinksRequest;
 use App\Http\Requests\StoreLinkRequest;
 use App\Models\Author;
 use App\Models\Link;
@@ -21,15 +24,17 @@ use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 class LinkController
 {
     public function index(
+        GetUserLinksRequest $request,
         #[CurrentUser] User $user,
         GetUserLinks $getUserLinks
     ): Response {
+        $data = SearchLinkFormData::from($request);
+        $links = LinkData::collect($getUserLinks->execute($user, $data));
+
         return Inertia::render('links/index', [
-            'links' => Inertia::deepMerge(
-                LinkData::collect(
-                    $getUserLinks->execute($user)
-                )
-            ),
+            'request' => $data->onlyNotNull(),
+            'links' => $links->currentPage() === 1 ? $links : Inertia::deepMerge($links),
+            'authors' => fn () => AuthorData::collect(Author::query()->orderBy('name')->get()),
         ]);
     }
 
