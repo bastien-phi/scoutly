@@ -1,6 +1,18 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Parameter \#1 \$query of static method App\\Models\\Link\:\:search\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Actions/GetUserLinks.php
+
+		-
+			message: '#^Parameter \#2 \$where \(array\<string, mixed\>\) of method App\\Services\\Database\\PostgresGrammar\:\:whereFullText\(\) should be contravariant with parameter \$where \(array\) of method Illuminate\\Database\\Query\\Grammars\\PostgresGrammar\:\:whereFullText\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: app/Services/Database/PostgresGrammar.php
+
+		-
 			message: '#^Call to function array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics\.$#'
 			identifier: arrayFilter.strict
 			count: 1

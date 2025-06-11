@@ -31,6 +31,10 @@ return new class extends Migration
             $table->dateTime('published_at')->nullable();
 
             $table->timestamps();
+
+            $table->fullText('title');
+            $table->fullText('url');
+            $table->fullText('description');
         });
     }
 

@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "bastien-phi/scoutly",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": [
@@ -9,29 +9,30 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "inertiajs/inertia-laravel": "^2.0",
-        "laravel/framework": "^12.0",
+        "php": "^8.4",
+        "inertiajs/inertia-laravel": "^2.0.2",
+        "laravel/framework": "^12.18",
+        "laravel/scout": "^10.15",
         "laravel/tinker": "^2.10.1",
-        "spatie/laravel-data": "^4.15",
-        "spatie/laravel-login-link": "^1.6",
-        "spatie/laravel-typescript-transformer": "^2.5",
-        "tightenco/ziggy": "^2.4"
+        "spatie/laravel-data": "^4.15.1",
+        "spatie/laravel-login-link": "^1.6.3",
+        "spatie/laravel-typescript-transformer": "^2.5.2",
+        "tightenco/ziggy": "^2.5.3"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23",
-        "larastan/larastan": "^3.4",
-        "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.18",
-        "laravel/sail": "^1.41",
-        "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.6",
-        "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.2",
-        "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-strict-rules": "^2.0",
+        "fakerphp/faker": "^1.24.1",
+        "larastan/larastan": "^3.4.2",
+        "laravel/pail": "^1.2.3",
+        "laravel/pint": "^1.22.1",
+        "laravel/sail": "^1.43.1",
+        "mockery/mockery": "^1.6.12",
+        "nunomaduro/collision": "^8.8.1",
+        "pestphp/pest": "^3.8.2",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan-strict-rules": "^2.0.4",
         "soyhuce/laravel-testing": "^2.13",
-        "soyhuce/next-ide-helper": "^2.1"
+        "soyhuce/pest-plugin-laravel": "^1.0",
+        "soyhuce/next-ide-helper": "^2.2"
     },
     "autoload": {
         "psr-4": {
