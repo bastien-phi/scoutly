@@ -6,6 +6,7 @@ use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
 use App\Data\LinkFormData;
+use App\Data\SearchLinkFormData;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\User;
@@ -18,7 +19,7 @@ describe('index', function (): void {
         $user = User::factory()->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user)
+            ->with($user, new SearchLinkFormData(search: null, author_id: null))
             ->returns(fn () => new LengthAwarePaginator(
                 Link::factory(2)->for($user)->create(),
                 total: 2,
@@ -35,6 +36,40 @@ describe('index', function (): void {
                     ->has('links.data', 2)
                     ->where('links.data.0.id', $links->first()->id)
                     ->where('links.data.1.id', $links->last()->id)
+                    ->where('request', [])
+            );
+    });
+
+    it('returns links with search', function (): void {
+        $user = User::factory()->createOne();
+
+        $author = Author::factory()->createOne();
+
+        $this->mockAction(GetUserLinks::class)
+            ->with($user, new SearchLinkFormData(search: 'Hello world', author_id: $author->id))
+            ->returns(fn () => new LengthAwarePaginator(
+                Link::factory(2)->for($user)->create(),
+                total: 2,
+                perPage: 15
+            ))
+            ->in($links);
+
+        $this->actingAs($user)
+            ->get(route('links.index', [
+                'search' => 'Hello world',
+                'author_id' => $author->id,
+            ]))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('links/index')
+                    ->has('links.data', 2)
+                    ->where('links.data.0.id', $links->first()->id)
+                    ->where('links.data.1.id', $links->last()->id)
+                    ->where('request', [
+                        'search' => 'Hello world',
+                        'author_id' => $author->id,
+                    ])
             );
     });
 

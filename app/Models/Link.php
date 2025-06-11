@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Attributes\SearchUsingFullText;
+use Laravel\Scout\Searchable;
 
 /**
  * @property int $id
@@ -30,6 +32,8 @@ class Link extends Model
     /** @use HasFactory<\Database\Factories\LinkFactory> */
     use HasFactory;
 
+    use Searchable;
+
     /**
      * @return array<string, string>
      */
@@ -37,6 +41,22 @@ class Link extends Model
     {
         return [
             'published_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    #[SearchUsingFullText(
+        ['title', 'description', 'url'],
+        ['language' => 'english', 'mode' => 'fuzzy_websearch']
+    )]
+    public function toSearchableArray(): array
+    {
+        return [
+            'title' => $this->title,
+            'description' => $this->description,
+            'url' => $this->url,
         ];
     }
 

@@ -29,11 +29,11 @@ class LinkController
         GetUserLinks $getUserLinks
     ): Response {
         $data = SearchLinkFormData::from($request);
-        $links = LinkData::collect($getUserLinks->execute($user, $data));
+        $links = $getUserLinks->execute($user, $data);
 
         return Inertia::render('links/index', [
             'request' => $data->onlyNotNull(),
-            'links' => $links->currentPage() === 1 ? $links : Inertia::deepMerge($links),
+            'links' => $links->currentPage() === 1 ? LinkData::collect($links) : Inertia::deepMerge(LinkData::collect($links)),
             'authors' => fn () => AuthorData::collect(Author::query()->orderBy('name')->get()),
         ]);
     }
