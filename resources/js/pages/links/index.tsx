@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { cn, debounce } from '@/lib/utils';
+import { clearFormData, cn, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
 import { ArrowUpRight, Check, ChevronsUpDown, Filter, Search, User, X } from 'lucide-react';
@@ -28,18 +28,19 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
 
-    const { data, setData } = useForm<SearchLinkFormData>(request);
+    const { data, setData } = useForm<Required<SearchLinkFormData>>({
+        search: request.search ?? '',
+        author_id: request.author_id ?? -1,
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedFetchLinks = useCallback(
-        debounce(
-            (newData: SearchLinkFormData) =>
-                router.get(route('links.index'), newData, {
-                    only: ['links'],
-                    preserveState: true,
-                }),
-            300,
-        ),
+        debounce((newData: Required<SearchLinkFormData>) => {
+            router.get(route('links.index'), clearFormData(newData), {
+                only: ['links'],
+                preserveState: true,
+            });
+        }, 300),
         [],
     );
 
@@ -63,9 +64,13 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
                             <Input
                                 type="text"
                                 value={data.search}
-                                onChange={(e) => setData('search', e.target.value === '' ? undefined : e.target.value)}
+                                onChange={(e) => setData('search', e.target.value)}
                                 placeholder="Search links..."
-                                className="pl-12"
+                                className="pr-12 pl-12"
+                            />
+                            <X
+                                className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer"
+                                onMouseDown={() => setData('search', '')}
                             />
                         </div>
                         <Button variant="ghost" onClick={() => setShowFilters((prev) => !prev)}>
@@ -77,11 +82,7 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
                         <div>
                             <div className="grid gap-2">
                                 <Label>Author</Label>
-                                <AuthorSelect
-                                    authors={authors}
-                                    value={data.author_id}
-                                    onChange={(value: number | undefined) => setData('author_id', value)}
-                                />
+                                <AuthorSelect authors={authors} value={data.author_id} onChange={(value: number) => setData('author_id', value)} />
                             </div>
                         </div>
                     )}
@@ -147,15 +148,7 @@ function LinkCard({ link }: { link: LinkData }) {
     );
 }
 
-function AuthorSelect({
-    authors,
-    value,
-    onChange,
-}: {
-    authors: AuthorData[];
-    value: number | undefined;
-    onChange: (value: number | undefined) => void;
-}) {
+function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: number | undefined; onChange: (value: number) => void }) {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
@@ -163,11 +156,11 @@ function AuthorSelect({
             <div className="flex gap-2">
                 <PopoverTrigger asChild>
                     <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        {value ? authors.find((author) => author.id === value)?.name : 'Any author'}
+                        {value !== -1 ? authors.find((author) => author.id === value)?.name : 'Any author'}
                         <ChevronsUpDown className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <Button variant="ghost" onClick={() => onChange(undefined)}>
+                <Button variant="ghost" onClick={() => onChange(-1)}>
                     <X />
                 </Button>
             </div>
@@ -182,7 +175,7 @@ function AuthorSelect({
                                     key={author.id}
                                     value={author.name}
                                     onSelect={() => {
-                                        onChange(author.id === value ? undefined : author.id);
+                                        onChange(author.id === value ? -1 : author.id);
                                         setOpen(false);
                                     }}
                                 >
