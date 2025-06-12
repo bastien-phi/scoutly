@@ -11,7 +11,7 @@ import { cn, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
 import { ArrowUpRight, Check, ChevronsUpDown, Filter, Search, User, X } from 'lucide-react';
-import {  useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import LinkData = App.Data.LinkData;
 import SearchLinkFormData = App.Data.SearchLinkFormData;
 import AuthorData = App.Data.AuthorData;
@@ -30,17 +30,27 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
 
     const { data, setData } = useForm<SearchLinkFormData>(request);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedFetchLinks = useCallback(
+        debounce(
+            (newData: SearchLinkFormData) =>
+                router.get(route('links.index'), newData, {
+                    only: ['links'],
+                    preserveState: true,
+                }),
+            300,
+        ),
+        [],
+    );
+
     useEffect(() => {
         if (firstRender.current) {
             firstRender.current = false;
             return;
         }
 
-        router.get(route('links.index'), data, {
-            only: ['links'],
-            preserveState: true,
-        });
-    }, [data]);
+        debouncedFetchLinks(data);
+    }, [debouncedFetchLinks, data]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
