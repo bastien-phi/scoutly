@@ -31,7 +31,7 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
 
     const { data, setData } = useForm<Required<SearchLinkFormData>>({
         search: request.search ?? '',
-        author_id: request.author_id ?? -1,
+        author_id: request.author_id ?? 0,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,11 +159,11 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
             <div className="flex gap-2">
                 <PopoverTrigger asChild>
                     <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        {value !== -1 ? authors.find((author) => author.id === value)?.name : 'Any author'}
+                        {value !== 0 ? authors.find((author) => author.id === value)?.name : 'Any author'}
                         <ChevronsUpDown className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <Button variant="ghost" onClick={() => onChange(-1)}>
+                <Button variant="ghost" onClick={() => onChange(0)}>
                     <X />
                 </Button>
             </div>
@@ -178,7 +178,7 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                                     key={author.id}
                                     value={author.name}
                                     onSelect={() => {
-                                        onChange(author.id === value ? -1 : author.id);
+                                        onChange(author.id === value ? 0 : author.id);
                                         setOpen(false);
                                     }}
                                 >
