@@ -21,16 +21,15 @@ export function debounce<F extends (...params: any[]) => ReturnType<F>>(fn: F, d
     } as F;
 }
 
-export function clearFormData<T>(input: Required<T>): T {
-    // @ts-expect-error - TypeScript doesn't know that T is an object
-    const result: T = {};
+export function clearFormData<T extends Record<string, unknown>>(input: Required<T>, sentinelValues: unknown[] = [null, '', 0]): T {
+    const result = {} as T;
     for (const key in input) {
         const value = input[key];
 
-        if (value !== undefined && value !== null && value !== '' && value !== -1) {
+        if (value !== undefined && !sentinelValues.includes(value)) {
             result[key] = value;
         }
     }
 
-    return result as T;
+    return result;
 }
