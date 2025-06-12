@@ -20,3 +20,17 @@ export function debounce<F extends (...params: any[]) => ReturnType<F>>(fn: F, d
         timeoutID = setTimeout(() => fn.apply(this, args), delay);
     } as F;
 }
+
+export function clearFormData<T>(input: Required<T>): T {
+    // @ts-expect-error - TypeScript doesn't know that T is an object
+    const result: T = {};
+    for (const key in input) {
+        const value = input[key];
+
+        if (value !== undefined && value !== null && value !== '' && value !== -1) {
+            result[key] = value;
+        }
+    }
+
+    return result as T;
+}
