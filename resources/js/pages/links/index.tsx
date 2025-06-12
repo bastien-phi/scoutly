@@ -71,10 +71,7 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
                         <div className="relative flex-1">
                             <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
                             <Input type="text" value={search} onChange={handleSearchChange} placeholder="Search links..." className="pr-12 pl-12" />
-                            <X
-                                className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer"
-                                onMouseDown={resetSearch}
-                            />
+                            <X className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer" onClick={resetSearch} />
                         </div>
                         <Button variant="ghost" onClick={() => setShowFilters((prev) => !prev)}>
                             <Filter />
@@ -151,7 +148,7 @@ function LinkCard({ link }: { link: LinkData }) {
     );
 }
 
-function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: number | undefined; onChange: (value: number) => void }) {
+function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: number; onChange: (value: number) => void }) {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
