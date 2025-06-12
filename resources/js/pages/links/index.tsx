@@ -11,7 +11,7 @@ import { clearFormData, cn, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
 import { ArrowUpRight, Check, ChevronsUpDown, Filter, Search, User, X } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import LinkData = App.Data.LinkData;
 import SearchLinkFormData = App.Data.SearchLinkFormData;
 import AuthorData = App.Data.AuthorData;
@@ -27,6 +27,7 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
+    const [search, setSearch] = useState<string>(request.search ?? '');
 
     const { data, setData } = useForm<Required<SearchLinkFormData>>({
         search: request.search ?? '',
@@ -34,15 +35,20 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedFetchLinks = useCallback(
-        debounce((newData: Required<SearchLinkFormData>) => {
-            router.get(route('links.index'), clearFormData(newData), {
-                only: ['links'],
-                preserveState: true,
-            });
-        }, 300),
+    const debouncedSetSearchData = useCallback(
+        debounce((value: string) => setData('search', value), 300),
         [],
     );
+
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+        debouncedSetSearchData(e.target.value);
+    };
+
+    const resetSearch = () => {
+        setSearch('');
+        setData('search', '');
+    };
 
     useEffect(() => {
         if (firstRender.current) {
@@ -50,8 +56,11 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
             return;
         }
 
-        debouncedFetchLinks(data);
-    }, [debouncedFetchLinks, data]);
+        router.get(route('links.index'), clearFormData(data), {
+            only: ['links'],
+            preserveState: true,
+        });
+    }, [data]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -61,16 +70,10 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
                     <div className="flex gap-2">
                         <div className="relative flex-1">
                             <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
-                            <Input
-                                type="text"
-                                value={data.search}
-                                onChange={(e) => setData('search', e.target.value)}
-                                placeholder="Search links..."
-                                className="pr-12 pl-12"
-                            />
+                            <Input type="text" value={search} onChange={handleSearchChange} placeholder="Search links..." className="pr-12 pl-12" />
                             <X
                                 className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer"
-                                onMouseDown={() => setData('search', '')}
+                                onMouseDown={resetSearch}
                             />
                         </div>
                         <Button variant="ghost" onClick={() => setShowFilters((prev) => !prev)}>
