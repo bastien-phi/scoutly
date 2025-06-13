@@ -64,15 +64,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function fakeMailbox(array $messages = []): FakeMailbox
+function something()
 {
-    return new FakeMailbox(
-        config: [],
-        folders: [
-            new FakeFolder(
-                path: 'inbox',
-                messages: $messages
-            ),
-        ]
-    );
+    // ..
 }
