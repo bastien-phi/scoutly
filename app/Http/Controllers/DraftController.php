@@ -30,6 +30,7 @@ class DraftController
                     $getUserDrafts->execute($user)
                 )
             ),
+            'draftEmail' => config('imap.mailboxes.default.username'),
         ]);
     }
 
