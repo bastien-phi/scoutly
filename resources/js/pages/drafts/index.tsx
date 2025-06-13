@@ -62,7 +62,7 @@ function DraftCard({ link }: { link: LinkData }) {
                         <DeleteLinkButton link={link} />
                     </div>
                 </div>
-                {link.description && <CardDescription>{link.title}</CardDescription>}
+                {link.title && <CardDescription>{link.title}</CardDescription>}
             </CardHeader>
             <CardContent className="space-y-4">{link.description && <p>{link.description}</p>}</CardContent>
             <CardFooter className="flex justify-between">
