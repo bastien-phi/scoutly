@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Actions\IngestDraftMessage;
+use App\Actions\StoreDraft;
+use App\Data\DraftFormData;
+use App\Models\Link;
+use App\Models\User;
+use DirectoryTree\ImapEngine\Message;
+
+it('ingests a draft message', function (): void {
+    $user = User::factory()->createOne();
+
+    $message = mock(Message::class);
+    $message->shouldReceive('text')
+        ->andReturn('I found a great app ! Check https://github.com/bastien-phi/scoutly !')
+        ->once();
+    $message->shouldReceive('subject')
+        ->andReturn('Test draft')
+        ->once();
+    $message->shouldReceive('markSeen')
+        ->once();
+    $message->shouldReceive('delete')
+        ->with(true)
+        ->once();
+
+    $this->mockAction(StoreDraft::class)
+        ->with(
+            $user,
+            new DraftFormData(
+                url: 'https://github.com/bastien-phi/scoutly',
+                title: 'Test draft',
+                description: null,
+                author: null,
+            )
+        )
+        ->returns(fn () => Link::factory()->createOne());
+
+    app(IngestDraftMessage::class)->execute($user, $message);
+});
+
+it('does not ingest incomplete messages', function (?string $body): void {
+    $user = User::factory()->createOne();
+
+    $message = mock(Message::class);
+    $message->shouldReceive('text')
+        ->andReturn($body)
+        ->once();
+    $message->shouldReceive('subject')
+        ->andReturn('Test draft')
+        ->once();
+    $message->shouldReceive('markSeen')
+        ->once();
+    $message->shouldReceive('delete')
+        ->with(true)
+        ->once();
+
+    $this->mockAction(StoreDraft::class)
+        ->neverCalled();
+
+    app(IngestDraftMessage::class)->execute($user, $message);
+})->with([
+    'no url' => 'I found a great app but I cannot remember where...',
+    'empty body' => null,
+]);
