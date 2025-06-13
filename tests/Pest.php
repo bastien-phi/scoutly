@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use DirectoryTree\ImapEngine\Testing\FakeFolder;
-use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
