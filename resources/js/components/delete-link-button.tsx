@@ -26,14 +26,10 @@ export default function DeleteLinkButton({ link }: { link: LinkData }) {
                     <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
                     <div className="flex justify-between">
                         <DialogClose>
-                            <Button variant="link" className="cursor-pointer">
-                                Cancel
-                            </Button>
+                            <Button variant="link">Cancel</Button>
                         </DialogClose>
                         <Link href={route('links.destroy', link.id)} method="delete">
-                            <Button variant="destructive" className="cursor-pointer">
-                                Delete
-                            </Button>
+                            <Button variant="destructive">Delete</Button>
                         </Link>
                     </div>
                 </DialogContent>
