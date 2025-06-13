@@ -17,11 +17,11 @@ class CheckDraftInboxController
         #[CurrentUser] User $user,
         CheckDraftInbox $checkDraftInbox,
     ): RedirectResponse {
-        $newDrafts = $checkDraftInbox->execute($user);
+        $newDraftCount = $checkDraftInbox->execute($user);
 
-        $toast = $newDrafts === 0
+        $toast = $newDraftCount === 0
             ? ToastData::info('No new drafts found.')
-            : ToastData::success('Successfully imported '.$newDrafts.' new '.Str::plural('draft', $newDrafts).'.');
+            : ToastData::success('Successfully imported '.$newDraftCount.' new '.Str::plural('draft', $newDraftCount).'.');
 
         return redirect()
             ->back()
