@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+import ToastData = App.Data.ToastData;
 
 export interface Auth {
     user: User;
@@ -29,6 +30,7 @@ export interface SharedData {
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
     draftCount: number;
+    toast: ToastData | null;
     [key: string]: unknown;
 }
 
