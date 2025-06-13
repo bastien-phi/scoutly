@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use DirectoryTree\ImapEngine\Testing\FakeFolder;
+use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
@@ -62,7 +64,15 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function fakeMailbox(array $messages = []): FakeMailbox
 {
-    // ..
+    return new FakeMailbox(
+        config: [],
+        folders: [
+            new FakeFolder(
+                path: 'inbox',
+                messages: $messages
+            ),
+        ]
+    );
 }

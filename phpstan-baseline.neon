@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Call to an undefined method DirectoryTree\\ImapEngine\\Connection\\ImapQueryBuilder\:\:each\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Actions/CheckDraftInbox.php
+
+		-
 			message: '#^Parameter \#1 \$query of static method App\\Models\\Link\:\:search\(\) expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
