@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\CheckDraftInboxController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PublishDraftController;
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('update')
                 ->can('update-draft', 'draft');
         });
+
+    Route::post('drafts/check-inbox', CheckDraftInboxController::class)
+        ->name('drafts.check-inbox');
 
     Route::put('drafts/{draft}/publish', PublishDraftController::class)
         ->name('drafts.publish')

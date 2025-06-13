@@ -1,10 +1,14 @@
 import DeleteLinkButton from '@/components/delete-link-button';
+import HeadingSmall from '@/components/heading-small';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
-import { Head, Link, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, User } from 'lucide-react';
+import { Head, Link, router, WhenVisible } from '@inertiajs/react';
+import { ArrowUpRight, Info, Lightbulb, LoaderCircle, MailQuestion, User } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
@@ -15,14 +19,70 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ drafts }: { drafts: Paginated<LinkData> }) {
+export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkData>; draftEmail: string }) {
     const [page, setPage] = useState<number>(drafts.current_page);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const checkInbox = () => {
+        setLoading(true);
+
+        router.post(
+            route('drafts.check-inbox'),
+            {},
+            {
+                preserveState: true,
+                onFinish: () => setLoading(false),
+            },
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Drafts" />
             <div className="flex flex-col items-center px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
+                    <div className="flex items-center justify-center gap-4">
+                        <Button variant="secondary" onClick={checkInbox} disabled={loading}>
+                            {!loading && (
+                                <>
+                                    <MailQuestion />
+                                    Check draft inbox
+                                </>
+                            )}
+                            {loading && (
+                                <>
+                                    <LoaderCircle className="animate-spin" />
+                                    Checking draft inbox ...
+                                </>
+                            )}
+                        </Button>
+                        <Popover>
+                            <PopoverTrigger className="cursor-pointer">
+                                <Info className="text-muted-foreground" />
+                            </PopoverTrigger>
+                            <PopoverContent className="w-150 space-y-4">
+                                <HeadingSmall title="How to email drafts ?" />
+                                <ul className="list-disc pl-5">
+                                    <li>
+                                        Email{' '}
+                                        <a href={'mailto:' + draftEmail} className="underline">
+                                            {draftEmail}
+                                        </a>{' '}
+                                        from the same email address associated with your Scoutly account.
+                                    </li>
+                                    <li>Provide the URL you want to save in the main body of your email.</li>
+                                    <li>Optionally, use the email subject line to give your draft a custom title.</li>
+                                </ul>
+                                <div className="flex items-center gap-2">
+                                    <Lightbulb />
+                                    <p>Check your draft inbox regularly to review and organize your submitted content in Scoutly.</p>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
+
+                    <Separator />
+
                     {drafts.data.map((link: LinkData) => (
                         <DraftCard key={link.id} link={link} />
                     ))}

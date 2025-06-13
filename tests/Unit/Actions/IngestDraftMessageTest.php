@@ -35,9 +35,12 @@ it('ingests a draft message', function (): void {
                 author: null,
             )
         )
-        ->returns(fn () => Link::factory()->createOne());
+        ->returns(fn () => Link::factory()->createOne())
+        ->in($createdLink);
 
-    app(IngestDraftMessage::class)->execute($user, $message);
+    $link = app(IngestDraftMessage::class)->execute($user, $message);
+
+    expect($link)->toBeModel($createdLink);
 });
 
 it('does not ingest incomplete messages', function (?string $body): void {
@@ -59,7 +62,9 @@ it('does not ingest incomplete messages', function (?string $body): void {
     $this->mockAction(StoreDraft::class)
         ->neverCalled();
 
-    app(IngestDraftMessage::class)->execute($user, $message);
+    $link = app(IngestDraftMessage::class)->execute($user, $message);
+
+    expect($link)->toBeNull();
 })->with([
     'no url' => 'I found a great app but I cannot remember where...',
     'empty body' => null,

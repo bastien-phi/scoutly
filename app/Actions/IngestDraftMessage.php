@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\DraftFormData;
+use App\Models\Link;
 use App\Models\User;
 use DirectoryTree\ImapEngine\Message;
 use Illuminate\Support\Facades\Validator;
@@ -16,15 +17,17 @@ class IngestDraftMessage
         private StoreDraft $storeDraft
     ) {}
 
-    public function execute(User $user, Message $message): void
+    public function execute(User $user, Message $message): ?Link
     {
-        $this->handleMessage($user, $message);
+        $link = $this->handleMessage($user, $message);
 
         $message->markSeen();
         $message->delete(expunge: true);
+
+        return $link;
     }
 
-    private function handleMessage(User $user, Message $message): void
+    private function handleMessage(User $user, Message $message): ?Link
     {
         $validator = Validator::make(
             [
@@ -38,10 +41,10 @@ class IngestDraftMessage
         );
 
         if ($validator->fails()) {
-            return;
+            return null;
         }
 
-        $this->storeDraft->execute(
+        return $this->storeDraft->execute(
             $user,
             DraftFormData::from($validator->validated())
         );

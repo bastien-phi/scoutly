@@ -7,6 +7,7 @@ namespace App\Actions;
 use App\Models\User;
 use DirectoryTree\ImapEngine\Laravel\Facades\Imap;
 use DirectoryTree\ImapEngine\Message;
+use Illuminate\Support\Collection;
 
 class CheckDraftInbox
 {
@@ -14,8 +15,10 @@ class CheckDraftInbox
         private IngestDraftMessage $ingestDraftMessage
     ) {}
 
-    public function execute(User $user): void
+    public function execute(User $user): int
     {
+        $drafts = new Collection;
+
         Imap::mailbox('default')
             ->inbox()
             ->messages()
@@ -23,8 +26,10 @@ class CheckDraftInbox
             ->withFlags()
             ->withBody()
             ->from($user->email)
-            ->each(function (Message $message) use ($user): void {
-                $this->ingestDraftMessage->execute($user, $message);
+            ->each(function (Message $message) use ($user, $drafts): void {
+                $drafts->push($this->ingestDraftMessage->execute($user, $message));
             });
+
+        return $drafts->filter()->count();
     }
 }
