@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Attributes\SearchUsingFullText;
 use Laravel\Scout\Searchable;
 
@@ -23,6 +24,7 @@ use Laravel\Scout\Searchable;
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
  * @property-read \App\Models\Author|null $author
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read \App\Models\User $user
  *
  * @mixin \IdeHelper\App\Models\__Link
@@ -66,6 +68,14 @@ class Link extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class);
+    }
+
+    /**
+     * @return BelongsToMany<Tag, $this>
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
     /**
