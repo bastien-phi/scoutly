@@ -59,6 +59,7 @@ namespace IdeHelper\App\Models
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
      * @property-read \App\Models\Author|null $author
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
      * @property-read \App\Models\User $user
      *
      * @method static \Database\Factories\LinkFactory factory($count = 1, $state = [])
@@ -67,6 +68,7 @@ namespace IdeHelper\App\Models
      * @mixin \IdeHelper\App\Models\__LinkQuery
      *
      * @method \IdeHelper\App\Models\Link\__Author author()
+     * @method \IdeHelper\App\Models\Link\__Tags tags()
      * @method \IdeHelper\App\Models\Link\__User user()
      */
     class __Link {}
@@ -83,11 +85,11 @@ namespace IdeHelper\App\Models
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L63
+     * @see project://app/Models/Link.php L92
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L72
+     * @see project://app/Models/Link.php L101
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
@@ -111,6 +113,50 @@ namespace IdeHelper\App\Models
      * @extends \Illuminate\Database\Eloquent\Builder<TModelClass>
      */
     class __LinkQuery extends \Illuminate\Database\Eloquent\Builder {}
+
+    /**
+     * @property int $id
+     * @property string $label
+     * @property \Carbon\CarbonImmutable $created_at
+     * @property \Carbon\CarbonImmutable $updated_at
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
+     *
+     * @method static \Database\Factories\TagFactory factory($count = 1, $state = [])
+     * @method static \IdeHelper\App\Models\__TagQuery query()
+     *
+     * @mixin \IdeHelper\App\Models\__TagQuery
+     *
+     * @method \IdeHelper\App\Models\Tag\__Links links()
+     */
+    class __Tag {}
+
+    /**
+     * @method $this whereId(int|string $value)
+     * @method $this whereLabel(string $value)
+     * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method \App\Models\Tag create(array $attributes = [])
+     * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag>|\App\Models\Tag|null find($id, array $columns = ['*'])
+     * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> findMany($id, array $columns = ['*'])
+     * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag>|\App\Models\Tag findOrFail($id, array $columns = ['*'])
+     * @method \App\Models\Tag findOrNew($id, array $columns = ['*'])
+     * @method \App\Models\Tag|null first(array|string $columns = ['*'])
+     * @method \App\Models\Tag firstOrCreate(array $attributes, array $values = [])
+     * @method \App\Models\Tag firstOrFail(array $columns = ['*'])
+     * @method \App\Models\Tag firstOrNew(array $attributes = [], array $values = [])
+     * @method \App\Models\Tag forceCreate(array $attributes = [])
+     * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> get(array|string $columns = ['*'])
+     * @method \App\Models\Tag getModel()
+     * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> getModels(array|string $columns = ['*'])
+     * @method \App\Models\Tag newModelInstance(array $attributes = [])
+     * @method \App\Models\Tag sole(array|string $columns = ['*'])
+     * @method \App\Models\Tag updateOrCreate(array $attributes, array $values = [])
+     *
+     * @template TModelClass of \App\Models\Tag
+     *
+     * @extends \Illuminate\Database\Eloquent\Builder<TModelClass>
+     */
+    class __TagQuery extends \Illuminate\Database\Eloquent\Builder {}
 
     /**
      * @property int $id
@@ -185,10 +231,25 @@ namespace IdeHelper\App\Models\Link
     class __Author {}
 
     /**
+     * @mixin \IdeHelper\App\Models\__TagQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    class __Tags {}
+
+    /**
      * @mixin \IdeHelper\App\Models\__UserQuery
      * @mixin \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     class __User {}
+}
+
+namespace IdeHelper\App\Models\Tag
+{
+    /**
+     * @mixin \IdeHelper\App\Models\__LinkQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    class __Links {}
 }
 
 namespace IdeHelper\App\Models\User

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @method \Database\Factories\LinkFactory forAuthor($attributes = [])
  * @method \Database\Factories\LinkFactory forUser($attributes = [])
+ * @method \Database\Factories\LinkFactory hasTags($count = 1, $attributes = [])
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Link>
  */
