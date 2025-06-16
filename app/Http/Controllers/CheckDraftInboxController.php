@@ -21,7 +21,13 @@ class CheckDraftInboxController
 
         $toast = $newDraftCount === 0
             ? ToastData::info('No new drafts found.')
-            : ToastData::success('Successfully imported '.$newDraftCount.' new '.Str::plural('draft', $newDraftCount).'.');
+            : ToastData::success(strtr(
+                'Successfully imported :count new :draft.',
+                [
+                    ':count' => $newDraftCount,
+                    ':draft' => Str::plural('draft', $newDraftCount),
+                ]
+            ));
 
         return redirect()
             ->back()
