@@ -15,6 +15,7 @@ use App\Http\Requests\GetUserLinksRequest;
 use App\Http\Requests\StoreLinkRequest;
 use App\Models\Author;
 use App\Models\Link;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
@@ -44,6 +45,9 @@ class LinkController
             'authors' => Author::query()
                 ->orderBy('name')
                 ->pluck('name'),
+            'tags' => Tag::query()
+                ->orderBy('label')
+                ->pluck('label'),
         ]);
     }
 
@@ -56,7 +60,7 @@ class LinkController
 
     public function show(Link $link): Response
     {
-        $link->load('author');
+        $link->load(['author', 'tags']);
 
         return Inertia::render('links/show', [
             'link' => LinkData::from($link),
@@ -65,13 +69,16 @@ class LinkController
 
     public function edit(Link $link): Response
     {
-        $link->load('author');
+        $link->load(['author', 'tags']);
 
         return Inertia::render('links/edit', [
             'link' => LinkData::from($link),
             'authors' => Author::query()
                 ->orderBy('name')
                 ->pluck('name'),
+            'tags' => Tag::query()
+                ->orderBy('label')
+                ->pluck('label'),
         ]);
     }
 

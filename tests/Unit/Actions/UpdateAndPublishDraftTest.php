@@ -6,6 +6,7 @@ use App\Actions\UpdateAndPublishDraft;
 use App\Actions\UpdateLink;
 use App\Data\LinkFormData;
 use App\Models\Link;
+use Illuminate\Support\Collection;
 
 it('updates a draft link and publish it', function (): void {
     $link = Link::factory()
@@ -16,6 +17,7 @@ it('updates a draft link and publish it', function (): void {
         title: 'Example Title',
         description: 'Example Description',
         author: 'John Doe',
+        tags: new Collection(['PHP']),
     );
 
     $this->freezeSecond();

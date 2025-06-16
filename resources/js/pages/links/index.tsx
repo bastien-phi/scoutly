@@ -4,6 +4,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Datetime } from '@/components/ui/datetime';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Pill } from '@/components/ui/pill';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
@@ -131,12 +132,21 @@ function LinkCard({ link }: { link: LinkData }) {
                         {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
                     </pre>
                 )}
+                {link.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {link.tags.map((tag) => (
+                            <Pill key={tag.id}>{tag.label}</Pill>
+                        ))}
+                    </div>
+                )}
             </CardContent>
             <CardFooter className="flex justify-between">
-                {link.author && (
+                {link.author ? (
                     <div className="flex gap-x-4">
                         <User /> {link.author.name}
                     </div>
+                ) : (
+                    <div></div>
                 )}
                 {link.published_at && (
                     <div className="text-muted-foreground text-sm">

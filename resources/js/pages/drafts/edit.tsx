@@ -9,7 +9,7 @@ import { FormEventHandler } from 'react';
 import LinkFormData = App.Data.LinkFormData;
 import LinkData = App.Data.LinkData;
 
-export default function Edit({ draft, authors }: { draft: LinkData; authors: string[] }) {
+export default function Edit({ draft, authors, tags }: { draft: LinkData; authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Drafts',
@@ -30,6 +30,7 @@ export default function Edit({ draft, authors }: { draft: LinkData; authors: str
         title: draft.title || '',
         description: draft.description || '',
         author: draft.author?.name || '',
+        tags: draft.tags.map((tag) => tag.label) || [],
     });
 
     const submitDraft: FormEventHandler = (e) => {
@@ -53,7 +54,7 @@ export default function Edit({ draft, authors }: { draft: LinkData; authors: str
 
                     <form className="flex flex-col gap-6" onSubmit={submitLink}>
                         <div className="grid gap-6">
-                            <LinkForm data={data} setData={setData} processing={processing} errors={errors} authors={authors} />
+                            <LinkForm data={data} setData={setData} processing={processing} errors={errors} authors={authors} tags={tags} />
 
                             <div className="grid gap-2">
                                 <Button className="w-full" tabIndex={6} disabled={processing} variant="secondary" name="draft" onClick={submitDraft}>

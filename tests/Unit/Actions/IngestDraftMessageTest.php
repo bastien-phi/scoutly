@@ -8,6 +8,7 @@ use App\Data\DraftFormData;
 use App\Models\Link;
 use App\Models\User;
 use DirectoryTree\ImapEngine\Message;
+use Illuminate\Support\Collection;
 
 it('ingests a draft message', function (): void {
     $user = User::factory()->createOne();
@@ -33,6 +34,7 @@ it('ingests a draft message', function (): void {
                 title: 'Test draft',
                 description: null,
                 author: null,
+                tags: new Collection,
             )
         )
         ->returns(fn () => Link::factory()->createOne())

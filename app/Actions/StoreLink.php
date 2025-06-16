@@ -11,19 +11,25 @@ use App\Models\User;
 class StoreLink
 {
     public function __construct(
-        private FindOrCreateAuthor $findOrCreateAuthor
+        private FindOrCreateAuthor $findOrCreateAuthor,
+        private FindOrCreateTags $findOrCreateTags,
     ) {}
 
     public function execute(User $user, LinkFormData $data): Link
     {
         $author = $this->findOrCreateAuthor->execute($data->author);
+        $tags = $this->findOrCreateTags->execute($data->tags);
 
-        return $user->links()->create([
+        $link = $user->links()->create([
             'url' => $data->url,
             'title' => $data->title,
             'description' => $data->description,
             'author_id' => $author?->id,
             'published_at' => now(),
         ]);
+
+        $link->tags()->sync($tags);
+
+        return $link;
     }
 }

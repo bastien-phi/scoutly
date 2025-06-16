@@ -18,6 +18,8 @@ class StoreDraftRequest extends FormRequest
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'author' => ['nullable', 'string', 'max:255'],
+            'tags' => ['array'],
+            'tags.*' => ['required', 'string', 'max:255'],
         ];
     }
 }

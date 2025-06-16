@@ -35,7 +35,7 @@ class GetUserLinks
             )
             ->latest('published_at')
             ->latest('created_at')
-            ->with('author')
+            ->with(['author', 'tags'])
             ->paginate();
     }
 }
