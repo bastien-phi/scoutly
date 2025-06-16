@@ -9,7 +9,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import { Link } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import { Trash } from 'lucide-react';
 import LinkData = App.Data.LinkData;
 
@@ -25,12 +25,10 @@ export default function DeleteLinkButton({ link }: { link: LinkData }) {
                     <DialogTitle>Delete link</DialogTitle>
                     <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
                     <div className="flex justify-between">
-                        <DialogClose>
-                            <Button variant="link">Cancel</Button>
-                        </DialogClose>
-                        <Link href={route('links.destroy', link.id)} method="delete">
-                            <Button variant="destructive">Delete</Button>
-                        </Link>
+                        <DialogClose>Cancel</DialogClose>
+                        <Button variant="destructive" onClick={() => router.delete(route('links.destroy', link.id))}>
+                            Delete
+                        </Button>
                     </div>
                 </DialogContent>
             </DialogPortal>
