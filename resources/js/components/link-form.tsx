@@ -3,6 +3,7 @@ import DraftFormData = App.Data.DraftFormData;
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { MultiSuggest } from '@/components/ui/multi-suggest';
 import { Suggest } from '@/components/ui/suggest';
 import { Textarea } from '@/components/ui/textarea';
 import { InertiaFormProps } from '@inertiajs/react';
@@ -14,8 +15,10 @@ export default function LinkForm({
     processing,
     errors,
     authors,
+    tags,
 }: Pick<InertiaFormProps<Required<LinkFormData & DraftFormData>>, 'data' | 'setData' | 'processing' | 'errors'> & {
     authors: string[];
+    tags: string[];
 }) {
     return (
         <>
@@ -75,6 +78,21 @@ export default function LinkForm({
                     suggestions={authors}
                 />
                 <InputError message={errors.author} />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="tags">Tags</Label>
+                <MultiSuggest
+                    id="tags"
+                    tabIndex={5}
+                    suggestions={tags}
+                    selectedSuggestions={data.tags}
+                    onValueAdded={(value: string) => setData((prev) => (prev.tags.includes(value) ? prev : { ...prev, tags: [...prev.tags, value] }))}
+                    onValueRemoved={(value: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== value) }))}
+                    disabled={processing}
+                    placeholder="Tag"
+                />
+                <InputError message={errors.tags} />
             </div>
         </>
     );

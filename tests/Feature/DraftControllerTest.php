@@ -8,6 +8,7 @@ use App\Actions\UpdateDraft;
 use App\Data\DraftFormData;
 use App\Models\Author;
 use App\Models\Link;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -20,7 +21,7 @@ describe('index', function (): void {
         $this->mockAction(GetUserDrafts::class)
             ->with($user)
             ->returns(fn () => new LengthAwarePaginator(
-                Link::factory(2)->for($user)->create(),
+                Link::factory(2)->for($user)->create()->load(['author', 'tags']),
                 total: 2,
                 perPage: 15
             ))
@@ -51,6 +52,7 @@ describe('store', function (): void {
                     title: null,
                     description: null,
                     author: null,
+                    tags: new Collection,
                 )
             )
             ->returns(fn () => Link::factory()->for($user)->draft()->createOne())
@@ -62,6 +64,7 @@ describe('store', function (): void {
                 'title' => null,
                 'description' => null,
                 'author' => null,
+                'tags' => [],
             ])
             ->assertRedirectToRoute('drafts.edit', $draft);
     });
@@ -76,6 +79,10 @@ describe('edit', function (): void {
             ->createOne();
 
         Author::factory()->createOne(['name' => 'Jane Smith']);
+        Tag::factory()->createMany([
+            ['label' => 'PHP'],
+            ['label' => 'Laravel'],
+        ]);
 
         $this->actingAs($user)
             ->get(route('drafts.edit', $link))
@@ -86,6 +93,7 @@ describe('edit', function (): void {
                     ->has('draft')
                     ->where('draft.id', $link->id)
                     ->where('authors', fn (Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
+                    ->where('tags', fn (Collection $value) => $value->all() === ['Laravel', 'PHP'])
             );
     });
 
@@ -112,6 +120,7 @@ describe('update', function (): void {
                     title: 'Example Title',
                     description: 'Example Description',
                     author: 'John Doe',
+                    tags: new Collection(['PHP'])
                 )
             );
 
@@ -121,6 +130,7 @@ describe('update', function (): void {
                 'title' => 'Example Title',
                 'description' => 'Example Description',
                 'author' => 'John Doe',
+                'tags' => ['PHP'],
             ])
             ->assertRedirectToRoute('drafts.edit', $link);
     });

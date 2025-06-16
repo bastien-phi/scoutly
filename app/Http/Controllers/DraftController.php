@@ -12,6 +12,7 @@ use App\Data\LinkData;
 use App\Http\Requests\StoreDraftRequest;
 use App\Models\Author;
 use App\Models\Link;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
@@ -43,13 +44,16 @@ class DraftController
 
     public function edit(Link $draft): Response
     {
-        $draft->load('author');
+        $draft->load(['author', 'tags']);
 
         return Inertia::render('drafts/edit', [
             'draft' => LinkData::from($draft),
             'authors' => Author::query()
                 ->orderBy('name')
                 ->pluck('name'),
+            'tags' => Tag::query()
+                ->orderBy('label')
+                ->pluck('label'),
         ]);
     }
 

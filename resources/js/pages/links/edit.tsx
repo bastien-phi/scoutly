@@ -8,8 +8,9 @@ import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 import LinkFormData = App.Data.LinkFormData;
 import LinkData = App.Data.LinkData;
+import TagData = App.Data.TagData;
 
-export default function Edit({ link, authors }: { link: LinkData; authors: string[] }) {
+export default function Edit({ link, authors, tags }: { link: LinkData; authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Links',
@@ -30,6 +31,7 @@ export default function Edit({ link, authors }: { link: LinkData; authors: strin
         title: link.title || '',
         description: link.description || '',
         author: link.author?.name || '',
+        tags: link.tags.map((tag: TagData) => tag.label) || [],
     });
 
     const submitLink: FormEventHandler = (e) => {
@@ -48,7 +50,7 @@ export default function Edit({ link, authors }: { link: LinkData; authors: strin
 
                     <form className="flex flex-col gap-6" onSubmit={submitLink}>
                         <div className="grid gap-6">
-                            <LinkForm data={data} setData={setData} processing={processing} errors={errors} authors={authors} />
+                            <LinkForm data={data} setData={setData} processing={processing} errors={errors} authors={authors} tags={tags} />
 
                             <Button className="w-full" tabIndex={6} disabled={processing || !isValid} onClick={submitLink}>
                                 {processing && (

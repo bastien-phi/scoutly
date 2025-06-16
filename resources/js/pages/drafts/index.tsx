@@ -3,6 +3,7 @@ import HeadingSmall from '@/components/heading-small';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
+import { Pill } from '@/components/ui/pill';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
@@ -124,7 +125,20 @@ function DraftCard({ link }: { link: LinkData }) {
                 </div>
                 {link.title && <CardDescription>{link.title}</CardDescription>}
             </CardHeader>
-            <CardContent className="space-y-4">{link.description && <p>{link.description}</p>}</CardContent>
+            <CardContent className="space-y-4">
+                {link.description && (
+                    <pre className="font-sans whitespace-pre-wrap">
+                        {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
+                    </pre>
+                )}
+                {link.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {link.tags.map((tag) => (
+                            <Pill key={tag.id}>{tag.label}</Pill>
+                        ))}
+                    </div>
+                )}
+            </CardContent>
             <CardFooter className="flex justify-between">
                 {link.author && (
                     <div className="flex gap-x-4">

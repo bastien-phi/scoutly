@@ -2,6 +2,7 @@ import LinkData = App.Data.LinkData;
 import DeleteLinkButton from '@/components/delete-link-button';
 import Heading from '@/components/heading';
 import { Datetime } from '@/components/ui/datetime';
+import { Pill } from '@/components/ui/pill';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
@@ -42,6 +43,14 @@ export default function Show({ link }: { link: LinkData }) {
                         {link.url}
                     </a>
                     {link.description && <pre className="font-sans whitespace-pre-wrap">{link.description}</pre>}
+
+                    {link.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                            {link.tags.map((tag) => (
+                                <Pill key={tag.id}>{tag.label}</Pill>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="flex items-center justify-between">
                         {link.author && (

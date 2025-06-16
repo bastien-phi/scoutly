@@ -17,7 +17,7 @@ class GetUserDrafts
         return $user->links()
             ->whereDraft()
             ->latest('created_at')
-            ->with('author')
+            ->with(['author', 'tags'])
             ->paginate();
     }
 }

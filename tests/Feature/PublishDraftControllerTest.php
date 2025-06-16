@@ -6,6 +6,7 @@ use App\Actions\UpdateAndPublishDraft;
 use App\Data\LinkFormData;
 use App\Models\Link;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 it('updates and publishes a draft link', function (): void {
     $user = User::factory()->createOne();
@@ -22,6 +23,7 @@ it('updates and publishes a draft link', function (): void {
                 title: 'Example Title',
                 description: 'Example Description',
                 author: 'John Doe',
+                tags: new Collection(['PHP']),
             )
         );
 
@@ -31,6 +33,7 @@ it('updates and publishes a draft link', function (): void {
             'title' => 'Example Title',
             'description' => 'Example Description',
             'author' => 'John Doe',
+            'tags' => ['PHP'],
         ])
         ->assertRedirectToRoute('links.show', $link);
 });
