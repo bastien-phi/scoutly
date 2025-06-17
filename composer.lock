@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b281ac167324ad94f27ffe89d2f7ab7f",
+    "content-hash": "f9cd162bce787bcba3798746678fc3ad",
     "packages": [
         {
             "name": "amphp/amp",
@@ -1064,16 +1064,16 @@
         },
         {
             "name": "directorytree/imapengine",
-            "version": "v1.14.0",
+            "version": "v1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DirectoryTree/ImapEngine.git",
-                "reference": "81bf3d1a0d7d63925966a986a4da7efc68468946"
+                "reference": "3b44f7ea3b47cefc909a3dc36aff52ddfd2a6c20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DirectoryTree/ImapEngine/zipball/81bf3d1a0d7d63925966a986a4da7efc68468946",
-                "reference": "81bf3d1a0d7d63925966a986a4da7efc68468946",
+                "url": "https://api.github.com/repos/DirectoryTree/ImapEngine/zipball/3b44f7ea3b47cefc909a3dc36aff52ddfd2a6c20",
+                "reference": "3b44f7ea3b47cefc909a3dc36aff52ddfd2a6c20",
                 "shasum": ""
             },
             "require": {
@@ -1114,9 +1114,9 @@
             ],
             "support": {
                 "issues": "https://github.com/DirectoryTree/ImapEngine/issues",
-                "source": "https://github.com/DirectoryTree/ImapEngine/tree/v1.14.0"
+                "source": "https://github.com/DirectoryTree/ImapEngine/tree/v1.15.0"
             },
-            "time": "2025-06-11T21:55:18+00:00"
+            "time": "2025-06-16T21:47:17+00:00"
         },
         {
             "name": "directorytree/imapengine-laravel",
