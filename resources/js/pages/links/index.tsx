@@ -1,3 +1,4 @@
+import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -161,9 +162,9 @@ function LinkCard({ link }: { link: LinkData }) {
     return (
         <Card>
             <CardHeader className="flex-row items-baseline justify-between">
-                <Link href={route('links.show', link.id)}>
+                <TextLink href={route('links.show', link.id)} variant="ghost">
                     <CardTitle>{link.title}</CardTitle>
-                </Link>
+                </TextLink>
                 <a href={link.url} target="_blank">
                     <ArrowUpRight></ArrowUpRight>
                 </a>
@@ -177,7 +178,9 @@ function LinkCard({ link }: { link: LinkData }) {
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Pill key={tag.id}>{tag.label}</Pill>
+                            <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                                <Pill>{tag.label}</Pill>
+                            </Link>
                         ))}
                     </div>
                 )}
@@ -185,7 +188,10 @@ function LinkCard({ link }: { link: LinkData }) {
             <CardFooter className="flex justify-between">
                 {link.author ? (
                     <div className="flex gap-x-4">
-                        <User /> {link.author.name}
+                        <User />
+                        <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                            {link.author.name}
+                        </TextLink>
                     </div>
                 ) : (
                     <div></div>
