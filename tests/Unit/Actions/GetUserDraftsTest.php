@@ -7,19 +7,19 @@ use App\Models\Link;
 use App\Models\User;
 use Illuminate\Support\Facades\Date;
 
-test('action returns draft links sorted by created_at', function () {
+test('action returns draft links sorted by id', function () {
     $user = User::factory()->createOne();
 
     Date::setTestNow();
 
     $first = Link::factory()->for($user)->draft()->createOne();
-    $second = Link::factory()->for($user)->draft()->createOne(['created_at' => now()->subDays(2)]);
-    $third = Link::factory()->for($user)->draft()->createOne(['created_at' => now()->subDays(1)]);
+    $second = Link::factory()->for($user)->draft()->createOne();
+    $third = Link::factory()->for($user)->draft()->createOne();
 
     $links = app(GetUserDrafts::class)->execute($user);
 
     expect($links->collect())
-        ->toBeCollection([$first, $third, $second]);
+        ->toBeCollection([$third, $second, $first]);
 });
 
 it('returns only user\'s links', function () {
