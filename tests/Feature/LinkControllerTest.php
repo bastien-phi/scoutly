@@ -45,9 +45,10 @@ describe('index', function (): void {
         $user = User::factory()->createOne();
 
         $author = Author::factory()->createOne();
+        $tag = Tag::factory()->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user, new SearchLinkFormData(search: 'Hello world', author_id: $author->id))
+            ->with($user, new SearchLinkFormData(search: 'Hello world', author_id: $author->id, tags: new Collection([$tag->id])))
             ->returns(fn () => new LengthAwarePaginator(
                 Link::factory(2)->for($user)->create()->load(['author', 'tags']),
                 total: 2,
@@ -59,6 +60,7 @@ describe('index', function (): void {
             ->get(route('links.index', [
                 'search' => 'Hello world',
                 'author_id' => $author->id,
+                'tags' => [$tag->id],
             ]))
             ->assertOk()
             ->assertInertia(
@@ -70,6 +72,7 @@ describe('index', function (): void {
                     ->where('request', [
                         'search' => 'Hello world',
                         'author_id' => $author->id,
+                        'tags' => [$tag->id],
                     ])
             );
     });

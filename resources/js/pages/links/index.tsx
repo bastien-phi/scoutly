@@ -16,6 +16,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import LinkData = App.Data.LinkData;
 import SearchLinkFormData = App.Data.SearchLinkFormData;
 import AuthorData = App.Data.AuthorData;
+import TagData = App.Data.TagData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +25,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ links, authors, request }: { links: Paginated<LinkData>; authors: AuthorData[]; request: SearchLinkFormData }) {
+export default function Index({
+    links,
+    authors,
+    tags,
+    request,
+}: {
+    links: Paginated<LinkData>;
+    authors: AuthorData[];
+    tags: TagData[];
+    request: SearchLinkFormData;
+}) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
@@ -33,6 +44,7 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
     const { data, setData } = useForm<Required<SearchLinkFormData>>({
         search: request.search ?? '',
         author_id: request.author_id ?? 0,
+        tags: request.tags ?? [],
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,10 +92,38 @@ export default function Index({ links, authors, request }: { links: Paginated<Li
                     </div>
 
                     {showFilters && (
-                        <div>
+                        <div className="space-y-4">
                             <div className="grid gap-2">
                                 <Label>Author</Label>
                                 <AuthorSelect authors={authors} value={data.author_id} onChange={(value: number) => setData('author_id', value)} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Tags</Label>
+                                {data.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-2">
+                                        {data.tags
+                                            .map((tagId) => tags.find((tag) => tag.id === tagId))
+                                            .filter((tag: TagData | undefined): tag is TagData => tag !== undefined)
+                                            .map((tag: TagData) => (
+                                                <Pill
+                                                    key={tag.id}
+                                                    onClose={() => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag.id) }))}
+                                                >
+                                                    {tag.label}
+                                                </Pill>
+                                            ))}
+                                    </div>
+                                )}
+                                <TagMultiselect
+                                    tags={tags}
+                                    selectedTags={data.tags}
+                                    onValueAdded={(value: number) =>
+                                        setData((prev) => (prev.tags.includes(value) ? prev : { ...prev, tags: [...prev.tags, value] }))
+                                    }
+                                    onValueRemoved={(value: number) =>
+                                        setData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== value) }))
+                                    }
+                                />
                             </div>
                         </div>
                     )}
@@ -191,6 +231,63 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                                 >
                                     {author.name}
                                     <Check className={cn('ml-auto', value === author.id ? 'opacity-100' : 'opacity-0')} />
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function TagMultiselect({
+    tags,
+    selectedTags,
+    onValueAdded,
+    onValueRemoved,
+}: {
+    tags: TagData[];
+    selectedTags: number[];
+    onValueAdded: (tag: number) => void;
+    onValueRemoved: (tag: number) => void;
+}) {
+    const [open, setOpen] = useState<boolean>(false);
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <div className="flex gap-2">
+                <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+                        Select tags
+                        <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                </PopoverTrigger>
+                <Button variant="ghost" onClick={() => selectedTags.forEach((tag) => onValueRemoved(tag))}>
+                    <X />
+                </Button>
+            </div>
+            <PopoverContent className="w-full p-0">
+                <Command className="w-full">
+                    <CommandInput placeholder="Search tag..." className="h-9" />
+                    <CommandList>
+                        <CommandEmpty>No tag found.</CommandEmpty>
+                        <CommandGroup>
+                            {tags.map((tag: TagData) => (
+                                <CommandItem
+                                    key={tag.id}
+                                    value={tag.label}
+                                    onSelect={() => {
+                                        if (selectedTags.includes(tag.id)) {
+                                            onValueRemoved(tag.id);
+                                        } else {
+                                            onValueAdded(tag.id);
+                                        }
+                                        setOpen(false);
+                                    }}
+                                >
+                                    {tag.label}
+                                    <Check className={cn('ml-auto', selectedTags.includes(tag.id) ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
