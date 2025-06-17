@@ -134,9 +134,7 @@ export default function Index({
                         <LinkCard key={link.id} link={link} />
                     ))}
 
-                    {links.data.length === 0 && (
-                        <div className="flex justify-center">Nothing to see there !</div>
-                    )}
+                    {links.data.length === 0 && <div className="flex justify-center">Nothing to see there !</div>}
 
                     {page < links.last_page && (
                         <WhenVisible
