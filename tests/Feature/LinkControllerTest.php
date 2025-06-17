@@ -44,13 +44,13 @@ describe('index', function (): void {
     it('returns links with search', function (): void {
         $user = User::factory()->createOne();
 
-        $author = Author::factory()->createOne();
-        $tag = Tag::factory()->createOne();
+        $author = Author::factory()->for($user)->createOne();
+        $tag = Tag::factory()->for($user)->createOne();
 
         $this->mockAction(GetUserLinks::class)
             ->with($user, new SearchLinkFormData(search: 'Hello world', author_id: $author->id, tags: new Collection([$tag->id])))
             ->returns(fn () => new LengthAwarePaginator(
-                Link::factory(2)->for($user)->create()->load(['author', 'tags']),
+                Link::factory(2)->recycle($user)->create()->load(['author', 'tags']),
                 total: 2,
                 perPage: 15
             ))
@@ -86,41 +86,15 @@ describe('index', function (): void {
     });
 });
 
-describe('show', function (): void {
-    it('returns link', function (): void {
-        $user = User::factory()->createOne();
-        $link = Link::factory()->for($user)->published()->createOne();
-
-        $this->actingAs($user)
-            ->get(route('links.show', $link))
-            ->assertOk()
-            ->assertInertia(
-                fn (AssertableInertia $page) => $page
-                    ->component('links/show')
-                    ->has('link')
-                    ->where('link.id', $link->id)
-            );
-    });
-
-    it('returns not found if user is not allowed to view link', function (): void {
-        $user = User::factory()->createOne();
-        $link = Link::factory()->published()->createOne();
-
-        $this->actingAs($user)
-            ->get(route('links.show', $link))
-            ->assertNotFound();
-    });
-});
-
 describe('create', function (): void {
     it('shows creation page', function (): void {
         $user = User::factory()->createOne();
-        Author::factory()->createMany([
+        Author::factory()->for($user)->createMany([
             ['name' => 'John Doe'],
             ['name' => 'Jane Smith'],
         ]);
 
-        Tag::factory()->createMany([
+        Tag::factory()->for($user)->createMany([
             ['label' => 'PHP'],
             ['label' => 'Laravel'],
         ]);
@@ -167,16 +141,43 @@ describe('store', function (): void {
     });
 });
 
+describe('show', function (): void {
+    it('returns link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->for($user)->published()->createOne();
+
+        $this->actingAs($user)
+            ->get(route('links.show', $link))
+            ->assertOk()
+            ->assertInertia(
+                fn (AssertableInertia $page) => $page
+                    ->component('links/show')
+                    ->has('link')
+                    ->where('link.id', $link->id)
+            );
+    });
+
+    it('returns not found if user is not allowed to view link', function (): void {
+        $user = User::factory()->createOne();
+        $link = Link::factory()->published()->createOne();
+
+        $this->actingAs($user)
+            ->get(route('links.show', $link))
+            ->assertNotFound();
+    });
+});
+
 describe('edit', function (): void {
     it('returns link', function (): void {
         $user = User::factory()->createOne();
-        $link = Link::factory()->for($user)
+        $link = Link::factory()
+            ->recycle($user)
             ->published()
             ->forAuthor(['name' => 'John Doe'])
             ->createOne();
 
-        Author::factory()->createOne(['name' => 'Jane Smith']);
-        Tag::factory()->createMany([
+        Author::factory()->for($user)->createOne(['name' => 'Jane Smith']);
+        Tag::factory()->for($user)->createMany([
             ['label' => 'PHP'],
             ['label' => 'Laravel'],
         ]);

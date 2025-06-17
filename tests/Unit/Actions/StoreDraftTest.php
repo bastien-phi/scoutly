@@ -24,12 +24,12 @@ it('creates a draft link with the given data', function (): void {
     );
 
     $this->mockAction(FindOrCreateAuthor::class)
-        ->with('John Doe')
+        ->with($user, 'John Doe')
         ->returns(fn () => Author::factory()->createOne())
         ->in($author);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with(new Collection(['PHP']))
+        ->with($user, new Collection(['PHP']))
         ->returns(fn () => Tag::factory(1)->create())
         ->in($tags);
 
@@ -62,11 +62,11 @@ it('creates a draft link with minimal data', function (): void {
     );
 
     $this->mockAction(FindOrCreateAuthor::class)
-        ->with(null)
+        ->with($user, null)
         ->returns(fn () => null);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with(new Collection)
+        ->with($user, new Collection)
         ->returns(fn () => new EloquentCollection);
 
     $link = app(StoreDraft::class)->execute($user, $data);

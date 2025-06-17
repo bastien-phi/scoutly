@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Data\DraftFormData;
 use App\Data\LinkFormData;
 use App\Models\Link;
 
@@ -14,10 +15,10 @@ class UpdateLink
         private FindOrCreateTags $findOrCreateTags,
     ) {}
 
-    public function execute(Link $link, LinkFormData $data): void
+    public function execute(Link $link, LinkFormData|DraftFormData $data): void
     {
-        $author = $this->findOrCreateAuthor->execute($data->author);
-        $tags = $this->findOrCreateTags->execute($data->tags);
+        $author = $this->findOrCreateAuthor->execute($link->user, $data->author);
+        $tags = $this->findOrCreateTags->execute($link->user, $data->tags);
 
         $link->update([
             'url' => $data->url,
