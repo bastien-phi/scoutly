@@ -38,7 +38,9 @@ class DraftController
     {
         $draft = $storeDraft->execute($user, DraftFormData::from($request));
 
-        return to_route('drafts.edit', $draft);
+        return to_route('drafts.edit', $draft)->with([
+            'toast' => ToastData::success('Draft saved'),
+        ]);
     }
 
     public function edit(#[CurrentUser] User $user, Link $draft): Response

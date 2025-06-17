@@ -67,7 +67,11 @@ describe('store', function (): void {
                 'author' => null,
                 'tags' => [],
             ])
-            ->assertRedirectToRoute('drafts.edit', $draft);
+            ->assertRedirectToRoute('drafts.edit', $draft)
+            ->assertSessionHas(
+                'toast',
+                ToastData::success('Draft saved')
+            );
     });
 });
 
