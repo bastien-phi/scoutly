@@ -19,7 +19,8 @@ class GetUserLinksRequest extends FormRequest
         return [
             'search' => ['nullable', 'string', 'max:255'],
             'author_id' => ['nullable', 'integer', Rule::exists(Author::class, 'id')],
-            'tags' => ['array', Rule::exists(Tag::class, 'id')],
+            'tags' => ['array'],
+            'tags.*' => ['integer', Rule::exists(Tag::class, 'id')],
         ];
     }
 }
