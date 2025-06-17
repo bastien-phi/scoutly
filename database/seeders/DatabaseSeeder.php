@@ -15,18 +15,18 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $tags = Tag::factory(10)->create();
-
         $user = User::factory()->create([
             'name' => 'Test User',
             'username' => 'testuser',
             'email' => 'test@example.com',
         ]);
 
+        $tags = Tag::factory(10)->for($user)->create();
+
         Collection::times(
             20,
             fn () => Link::factory()
-                ->for($user)
+                ->recycle($user)
                 ->recycle($tags)
                 ->hasAttached(
                     $tags->random(

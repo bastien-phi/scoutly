@@ -6,10 +6,12 @@ namespace IdeHelper\App\Models
 {
     /**
      * @property int $id
+     * @property int $user_id
      * @property string $name
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
+     * @property-read \App\Models\User $user
      *
      * @method static \Database\Factories\AuthorFactory factory($count = 1, $state = [])
      * @method static \IdeHelper\App\Models\__AuthorQuery query()
@@ -17,11 +19,13 @@ namespace IdeHelper\App\Models
      * @mixin \IdeHelper\App\Models\__AuthorQuery
      *
      * @method \IdeHelper\App\Models\Author\__Links links()
+     * @method \IdeHelper\App\Models\Author\__User user()
      */
     class __Author {}
 
     /**
      * @method $this whereId(int|string $value)
+     * @method $this whereUserId(int|string $value)
      * @method $this whereName(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
@@ -85,11 +89,11 @@ namespace IdeHelper\App\Models
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L92
+     * @see project://app/Models/Link.php L93
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L101
+     * @see project://app/Models/Link.php L102
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
@@ -116,10 +120,12 @@ namespace IdeHelper\App\Models
 
     /**
      * @property int $id
+     * @property int $user_id
      * @property string $label
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
+     * @property-read \App\Models\User $user
      *
      * @method static \Database\Factories\TagFactory factory($count = 1, $state = [])
      * @method static \IdeHelper\App\Models\__TagQuery query()
@@ -127,11 +133,13 @@ namespace IdeHelper\App\Models
      * @mixin \IdeHelper\App\Models\__TagQuery
      *
      * @method \IdeHelper\App\Models\Tag\__Links links()
+     * @method \IdeHelper\App\Models\Tag\__User user()
      */
     class __Tag {}
 
     /**
      * @method $this whereId(int|string $value)
+     * @method $this whereUserId(int|string $value)
      * @method $this whereLabel(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
@@ -168,14 +176,18 @@ namespace IdeHelper\App\Models
      * @property string|null $remember_token
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author> $authors
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
      *
      * @method static \Database\Factories\UserFactory factory($count = 1, $state = [])
      * @method static \IdeHelper\App\Models\__UserQuery query()
      *
      * @mixin \IdeHelper\App\Models\__UserQuery
      *
+     * @method \IdeHelper\App\Models\User\__Authors authors()
      * @method \IdeHelper\App\Models\User\__Links links()
+     * @method \IdeHelper\App\Models\User\__Tags tags()
      */
     class __User {}
 
@@ -220,6 +232,12 @@ namespace IdeHelper\App\Models\Author
      * @mixin \Illuminate\Database\Eloquent\Relations\HasMany
      */
     class __Links {}
+
+    /**
+     * @mixin \IdeHelper\App\Models\__UserQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    class __User {}
 }
 
 namespace IdeHelper\App\Models\Link
@@ -250,13 +268,31 @@ namespace IdeHelper\App\Models\Tag
      * @mixin \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     class __Links {}
+
+    /**
+     * @mixin \IdeHelper\App\Models\__UserQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    class __User {}
 }
 
 namespace IdeHelper\App\Models\User
 {
     /**
+     * @mixin \IdeHelper\App\Models\__AuthorQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    class __Authors {}
+
+    /**
      * @mixin \IdeHelper\App\Models\__LinkQuery
      * @mixin \Illuminate\Database\Eloquent\Relations\HasMany
      */
     class __Links {}
+
+    /**
+     * @mixin \IdeHelper\App\Models\__TagQuery
+     * @mixin \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    class __Tags {}
 }

@@ -22,7 +22,7 @@ return new class extends Migration
                 ->index()
                 ->nullable()
                 ->constrained('authors')
-                ->restrictOnDelete();
+                ->nullOnDelete();
 
             $table->string('title')->nullable();
             $table->string('url');

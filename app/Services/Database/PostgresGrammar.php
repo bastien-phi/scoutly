@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Database;
 
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Query\Grammars\PostgresGrammar as IlluminatePostgresGrammar;
 use Illuminate\Support\Collection;
+use Tpetry\PostgresqlEnhanced\Query\Grammar;
 
-class PostgresGrammar extends IlluminatePostgresGrammar
+class PostgresGrammar extends Grammar
 {
     /**
      * @param  array<string, mixed>  $where
@@ -22,7 +22,7 @@ class PostgresGrammar extends IlluminatePostgresGrammar
             $language = 'english';
         }
 
-        $columns = (new Collection($where['columns']))->map(function ($column) use ($language) {
+        $columns = new Collection($where['columns'])->map(function ($column) use ($language) {
             return "to_tsvector('{$language}', {$this->wrap($column)})";
         })->implode(' || ');
 
