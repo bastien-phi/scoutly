@@ -1,5 +1,6 @@
 import DeleteLinkButton from '@/components/delete-link-button';
 import HeadingSmall from '@/components/heading-small';
+import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
@@ -115,9 +116,9 @@ function DraftCard({ link }: { link: LinkData }) {
         <Card>
             <CardHeader>
                 <div className="flex items-baseline justify-between">
-                    <Link href={route('drafts.edit', link.id)}>
+                    <TextLink href={route('drafts.edit', link.id)} variant="ghost">
                         <CardTitle>{link.url}</CardTitle>
-                    </Link>
+                    </TextLink>
                     <div className="flex space-x-2">
                         <a href={link.url} target="_blank">
                             <ArrowUpRight></ArrowUpRight>
@@ -136,7 +137,9 @@ function DraftCard({ link }: { link: LinkData }) {
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Pill key={tag.id}>{tag.label}</Pill>
+                            <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                                <Pill>{tag.label}</Pill>
+                            </Link>
                         ))}
                     </div>
                 )}
@@ -145,7 +148,9 @@ function DraftCard({ link }: { link: LinkData }) {
                 {link.author && (
                     <div className="flex gap-x-4">
                         <User />
-                        {link.author.name}
+                        <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                            {link.author.name}
+                        </TextLink>
                     </div>
                 )}
                 <div className="text-muted-foreground text-sm">

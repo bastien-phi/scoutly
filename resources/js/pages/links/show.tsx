@@ -1,5 +1,6 @@
 import LinkData = App.Data.LinkData;
 import DeleteLinkButton from '@/components/delete-link-button';
+import TextLink from '@/components/text-link';
 import { Datetime } from '@/components/ui/datetime';
 import { Pill } from '@/components/ui/pill';
 import AppLayout from '@/layouts/app-layout';
@@ -46,7 +47,9 @@ export default function Show({ link }: { link: LinkData }) {
                     {link.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                             {link.tags.map((tag) => (
-                                <Pill key={tag.id}>{tag.label}</Pill>
+                                <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                                    <Pill>{tag.label}</Pill>
+                                </Link>
                             ))}
                         </div>
                     )}
@@ -55,7 +58,9 @@ export default function Show({ link }: { link: LinkData }) {
                         {link.author ? (
                             <div className="flex gap-x-4">
                                 <User />
-                                {link.author.name}
+                                <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                                    {link.author.name}
+                                </TextLink>
                             </div>
                         ) : (
                             <div />
