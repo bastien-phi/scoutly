@@ -25,7 +25,7 @@ class LinkData extends Data
         public CarbonImmutable $created_at,
         public CarbonImmutable $updated_at,
         public ?AuthorData $author,
-        #[LiteralTypeScriptType('Array<App.Data.TagData>')]
+        #[LiteralTypeScriptType('App.Data.TagData[]')]
         public Collection $tags,
     ) {}
 }

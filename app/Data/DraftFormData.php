@@ -20,7 +20,7 @@ class DraftFormData extends Data
         public ?string $title,
         public ?string $description,
         public ?string $author,
-        #[LiteralTypeScriptType('Array<string>')]
+        #[LiteralTypeScriptType('string[]')]
         public Collection $tags = new Collection,
     ) {}
 }
