@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Tpetry\PostgresqlEnhanced\Schema\Blueprint;
 
 return new class extends Migration
 {
@@ -13,9 +13,12 @@ return new class extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name')->unique()->index();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('name')->index();
 
             $table->timestamps();
+
+            $table->uniqueIndex(['user_id', 'name']);
         });
     }
 

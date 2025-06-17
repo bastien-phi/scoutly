@@ -25,7 +25,7 @@ class LinkFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'author_id' => Author::factory(),
+            'author_id' => fn (array $attributes) => Author::factory(['user_id' => $attributes['user_id']]),
             'title' => fake()->sentence(),
             'url' => fake()->url(),
             'description' => fake()->paragraph(),

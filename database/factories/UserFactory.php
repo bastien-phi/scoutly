@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
+ * @method \Database\Factories\UserFactory hasAuthors($count = 1, $attributes = [])
  * @method \Database\Factories\UserFactory hasLinks($count = 1, $attributes = [])
+ * @method \Database\Factories\UserFactory hasTags($count = 1, $attributes = [])
  *
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */

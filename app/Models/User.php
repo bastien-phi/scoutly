@@ -20,7 +20,9 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author> $authors
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  *
  * @mixin \IdeHelper\App\Models\__User
  */
@@ -49,10 +51,26 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return HasMany<Author, $this>
+     */
+    public function authors(): HasMany
+    {
+        return $this->hasMany(Author::class);
+    }
+
+    /**
      * @return HasMany<Link, $this>
      */
     public function links(): HasMany
     {
         return $this->hasMany(Link::class);
+    }
+
+    /**
+     * @return HasMany<Tag, $this>
+     */
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
     }
 }
