@@ -6,6 +6,7 @@ use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
 use App\Actions\UpdateLink;
 use App\Data\DraftFormData;
+use App\Data\ToastData;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
@@ -133,6 +134,10 @@ describe('update', function (): void {
                 'author' => 'John Doe',
                 'tags' => ['PHP'],
             ])
-            ->assertRedirectToRoute('drafts.edit', $link);
+            ->assertRedirectToRoute('drafts.edit', $link)
+            ->assertSessionHas(
+                'toast',
+                ToastData::success('Draft saved')
+            );
     });
 });
