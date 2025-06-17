@@ -87,6 +87,11 @@ export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkDa
                     {drafts.data.map((link: LinkData) => (
                         <DraftCard key={link.id} link={link} />
                     ))}
+
+                    {drafts.data.length === 0 && (
+                        <div className="flex justify-center">Nothing to see there !</div>
+                    )}
+
                 </div>
                 {page < drafts.last_page && (
                     <WhenVisible
