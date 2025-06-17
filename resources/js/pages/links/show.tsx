@@ -1,6 +1,5 @@
 import LinkData = App.Data.LinkData;
 import DeleteLinkButton from '@/components/delete-link-button';
-import Heading from '@/components/heading';
 import { Datetime } from '@/components/ui/datetime';
 import { Pill } from '@/components/ui/pill';
 import AppLayout from '@/layouts/app-layout';
@@ -24,9 +23,9 @@ export default function Show({ link }: { link: LinkData }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={link.title || 'Draft'} />
             <div className="flex flex-col items-center px-4 py-8">
-                <div className="grid w-full gap-4 xl:w-1/2">
+                <div className="grid w-full gap-8 xl:w-1/2">
                     <div className="flex items-baseline justify-between">
-                        <Heading title={link.title || 'Draft'} />
+                        <h2 className="text-xl font-semibold tracking-tight">{link.title || 'Draft'} </h2>
                         <div className="flex space-x-2">
                             <Link href={route('links.edit', link.id)}>
                                 <Pencil />
@@ -53,13 +52,15 @@ export default function Show({ link }: { link: LinkData }) {
                     )}
 
                     <div className="flex items-center justify-between">
-                        {link.author && (
+                        {link.author ? (
                             <div className="flex gap-x-4">
                                 <User />
                                 {link.author.name}
                             </div>
+                        ) : (
+                            <div />
                         )}
-                        <div className="text-muted-foreground text-sm">
+                        <div className="text-muted-foreground text-right text-sm">
                             {link.published_at ? (
                                 <div>
                                     Published : <Datetime datetime={new Date(link.published_at)} />
