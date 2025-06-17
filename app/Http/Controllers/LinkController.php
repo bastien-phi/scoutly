@@ -11,6 +11,7 @@ use App\Data\AuthorData;
 use App\Data\LinkData;
 use App\Data\LinkFormData;
 use App\Data\SearchLinkFormData;
+use App\Data\TagData;
 use App\Http\Requests\GetUserLinksRequest;
 use App\Http\Requests\StoreLinkRequest;
 use App\Models\Author;
@@ -36,6 +37,7 @@ class LinkController
             'request' => $data->onlyNotNull(),
             'links' => $links->currentPage() === 1 ? LinkData::collect($links) : Inertia::deepMerge(LinkData::collect($links)),
             'authors' => fn () => AuthorData::collect(Author::query()->orderBy('name')->get()),
+            'tags' => fn () => TagData::collect(Tag::query()->orderBy('label')->get()),
         ]);
     }
 

@@ -7,12 +7,6 @@ parameters:
 			path: app/Actions/CheckDraftInbox.php
 
 		-
-			message: '#^Parameter \#1 \$query of static method App\\Models\\Link\:\:search\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: app/Actions/GetUserLinks.php
-
-		-
 			message: '#^Parameter \#2 \$where \(array\<string, mixed\>\) of method App\\Services\\Database\\PostgresGrammar\:\:whereFullText\(\) should be contravariant with parameter \$where \(array\) of method Illuminate\\Database\\Query\\Grammars\\PostgresGrammar\:\:whereFullText\(\)$#'
 			identifier: method.childParameterType
 			count: 1

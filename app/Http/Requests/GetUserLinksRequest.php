@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests;
 
 use App\Models\Author;
+use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,6 +19,7 @@ class GetUserLinksRequest extends FormRequest
         return [
             'search' => ['nullable', 'string', 'max:255'],
             'author_id' => ['nullable', 'integer', Rule::exists(Author::class, 'id')],
+            'tags' => ['array', Rule::exists(Tag::class, 'id')],
         ];
     }
 }
