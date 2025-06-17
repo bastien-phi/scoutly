@@ -10,7 +10,7 @@ export default function TextLink({ className = '', variant = 'default', children
     return (
         <Link
             className={cn(
-                'text-foreground underline underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! ',
+                'text-foreground underline underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current!',
                 variant === 'default' ? 'decoration-neutral-300 dark:decoration-neutral-500' : '',
                 variant === 'ghost' ? 'decoration-transparent' : '',
                 className,
