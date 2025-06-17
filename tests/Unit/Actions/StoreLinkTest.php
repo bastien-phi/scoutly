@@ -26,12 +26,12 @@ it('creates a link with the given data', function (): void {
     $this->freezeSecond();
 
     $this->mockAction(FindOrCreateAuthor::class)
-        ->with('John Doe')
+        ->with($user, 'John Doe')
         ->returns(fn () => Author::factory()->createOne())
         ->in($author);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with(new Collection(['PHP']))
+        ->with($user, new Collection(['PHP']))
         ->returns(fn () => Tag::factory(1)->create(['label' => 'PHP']))
         ->in($tags);
 
@@ -66,11 +66,11 @@ it('creates a link without author nor tag', function (): void {
     $this->freezeSecond();
 
     $this->mockAction(FindOrCreateAuthor::class)
-        ->with(null)
+        ->with($user, null)
         ->returns(fn () => null);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with(new Collection)
+        ->with($user, new Collection)
         ->returns(fn () => new EloquentCollection);
 
     $link = app(StoreLink::class)->execute($user, $data);

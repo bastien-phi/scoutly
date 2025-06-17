@@ -14,9 +14,7 @@ use App\Data\SearchLinkFormData;
 use App\Data\TagData;
 use App\Http\Requests\GetUserLinksRequest;
 use App\Http\Requests\StoreLinkRequest;
-use App\Models\Author;
 use App\Models\Link;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
@@ -36,18 +34,18 @@ class LinkController
         return Inertia::render('links/index', [
             'request' => $data->onlyNotNull(),
             'links' => $links->currentPage() === 1 ? LinkData::collect($links) : Inertia::deepMerge(LinkData::collect($links)),
-            'authors' => fn () => AuthorData::collect(Author::query()->orderBy('name')->get()),
-            'tags' => fn () => TagData::collect(Tag::query()->orderBy('label')->get()),
+            'authors' => fn () => AuthorData::collect($user->authors()->orderBy('name')->get()),
+            'tags' => fn () => TagData::collect($user->tags()->orderBy('label')->get()),
         ]);
     }
 
-    public function create(): Response
+    public function create(#[CurrentUser] User $user): Response
     {
         return Inertia::render('links/create', [
-            'authors' => Author::query()
+            'authors' => $user->authors()
                 ->orderBy('name')
                 ->pluck('name'),
-            'tags' => Tag::query()
+            'tags' => $user->tags()
                 ->orderBy('label')
                 ->pluck('label'),
         ]);
@@ -69,16 +67,16 @@ class LinkController
         ]);
     }
 
-    public function edit(Link $link): Response
+    public function edit(#[CurrentUser] User $user, Link $link): Response
     {
         $link->load(['author', 'tags']);
 
         return Inertia::render('links/edit', [
             'link' => LinkData::from($link),
-            'authors' => Author::query()
+            'authors' => $user->authors()
                 ->orderBy('name')
                 ->pluck('name'),
-            'tags' => Tag::query()
+            'tags' => $user->tags()
                 ->orderBy('label')
                 ->pluck('label'),
         ]);

@@ -6,13 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
-use App\Actions\UpdateDraft;
+use App\Actions\UpdateLink;
 use App\Data\DraftFormData;
 use App\Data\LinkData;
 use App\Http\Requests\StoreDraftRequest;
-use App\Models\Author;
 use App\Models\Link;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Inertia\Inertia;
@@ -42,24 +40,24 @@ class DraftController
         return to_route('drafts.edit', $draft);
     }
 
-    public function edit(Link $draft): Response
+    public function edit(#[CurrentUser] User $user, Link $draft): Response
     {
         $draft->load(['author', 'tags']);
 
         return Inertia::render('drafts/edit', [
             'draft' => LinkData::from($draft),
-            'authors' => Author::query()
+            'authors' => $user->authors()
                 ->orderBy('name')
                 ->pluck('name'),
-            'tags' => Tag::query()
+            'tags' => $user->tags()
                 ->orderBy('label')
                 ->pluck('label'),
         ]);
     }
 
-    public function update(StoreDraftRequest $request, Link $draft, UpdateDraft $updateDraft): FoundationResponse
+    public function update(StoreDraftRequest $request, Link $draft, UpdateLink $updateLink): FoundationResponse
     {
-        $updateDraft->execute($draft, DraftFormData::from($request));
+        $updateLink->execute($draft, DraftFormData::from($request));
 
         return to_route('drafts.edit', $draft);
     }

@@ -17,8 +17,8 @@ class StoreLink
 
     public function execute(User $user, LinkFormData $data): Link
     {
-        $author = $this->findOrCreateAuthor->execute($data->author);
-        $tags = $this->findOrCreateTags->execute($data->tags);
+        $author = $this->findOrCreateAuthor->execute($user, $data->author);
+        $tags = $this->findOrCreateTags->execute($user, $data->tags);
 
         $link = $user->links()->create([
             'url' => $data->url,

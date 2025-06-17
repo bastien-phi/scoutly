@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
-use App\Actions\UpdateDraft;
+use App\Actions\UpdateLink;
 use App\Data\DraftFormData;
 use App\Models\Author;
 use App\Models\Link;
@@ -73,13 +73,14 @@ describe('store', function (): void {
 describe('edit', function (): void {
     it('returns draft link', function (): void {
         $user = User::factory()->createOne();
-        $link = Link::factory()->for($user)
+        $link = Link::factory()
+            ->recycle($user)
             ->draft()
             ->forAuthor(['name' => 'John Doe'])
             ->createOne();
 
-        Author::factory()->createOne(['name' => 'Jane Smith']);
-        Tag::factory()->createMany([
+        Author::factory()->for($user)->createOne(['name' => 'Jane Smith']);
+        Tag::factory()->for($user)->createMany([
             ['label' => 'PHP'],
             ['label' => 'Laravel'],
         ]);
@@ -112,7 +113,7 @@ describe('update', function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->for($user)->draft()->createOne();
 
-        $this->mockAction(UpdateDraft::class)
+        $this->mockAction(UpdateLink::class)
             ->with(
                 $link,
                 new DraftFormData(
