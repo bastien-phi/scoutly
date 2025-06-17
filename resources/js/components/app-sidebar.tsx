@@ -80,7 +80,7 @@ export function AppSidebar() {
                                     <span>My drafts</span>
                                 </Link>
                             </SidebarMenuButton>
-                            {page.props.draftCount && <SidebarMenuBadge>{page.props.draftCount}</SidebarMenuBadge>}
+                            {page.props.draftCount > 0 && <SidebarMenuBadge>{page.props.draftCount}</SidebarMenuBadge>}
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>
