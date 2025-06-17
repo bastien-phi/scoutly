@@ -9,6 +9,7 @@ use App\Actions\StoreDraft;
 use App\Actions\UpdateLink;
 use App\Data\DraftFormData;
 use App\Data\LinkData;
+use App\Data\ToastData;
 use App\Http\Requests\StoreDraftRequest;
 use App\Models\Link;
 use App\Models\User;
@@ -59,6 +60,8 @@ class DraftController
     {
         $updateLink->execute($draft, DraftFormData::from($request));
 
-        return to_route('drafts.edit', $draft);
+        return to_route('drafts.edit', $draft)->with([
+            'toast' => ToastData::success('Draft saved'),
+        ]);
     }
 }
