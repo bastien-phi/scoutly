@@ -29,6 +29,7 @@ export default function Edit({ draft, authors, tags }: { draft: LinkData; author
         url: draft.url,
         title: draft.title || '',
         description: draft.description || '',
+        is_public: draft.is_public || false,
         author: draft.author?.name || '',
         tags: draft.tags.map((tag) => tag.label) || [],
     });

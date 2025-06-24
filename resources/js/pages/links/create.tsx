@@ -25,6 +25,7 @@ export default function Create({ authors, tags }: { authors: string[]; tags: str
         url: '',
         title: '',
         description: '',
+        is_public: false,
         author: '',
         tags: [],
     });

@@ -30,6 +30,7 @@ export default function Edit({ link, authors, tags }: { link: LinkData; authors:
         url: link.url,
         title: link.title || '',
         description: link.description || '',
+        is_public: link.is_public || false,
         author: link.author?.name || '',
         tags: link.tags.map((tag: TagData) => tag.label) || [],
     });

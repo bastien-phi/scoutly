@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { MultiSuggest } from '@/components/ui/multi-suggest';
 import { Suggest } from '@/components/ui/suggest';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { InertiaFormProps } from '@inertiajs/react';
 import { ChangeEvent } from 'react';
@@ -93,6 +94,18 @@ export default function LinkForm({
                     placeholder="Tag"
                 />
                 <InputError message={errors.tags} />
+            </div>
+
+            <div className="grid gap-2">
+                <Label htmlFor="is_public">Share publicly</Label>
+                <Switch
+                    id="tags"
+                    tabIndex={6}
+                    checked={data.is_public}
+                    onCheckedChange={(checked: boolean) => setData('is_public', checked)}
+                    disabled={processing}
+                />
+                <InputError message={errors.is_public} />
             </div>
         </>
     );

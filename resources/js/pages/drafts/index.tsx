@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Info, Lightbulb, LoaderCircle, MailQuestion, User } from 'lucide-react';
+import { ArrowUpRight, Globe, Info, Lightbulb, LoaderCircle, MailQuestion, User } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
@@ -153,8 +153,11 @@ function DraftCard({ link }: { link: LinkData }) {
                         </TextLink>
                     </div>
                 )}
-                <div className="text-muted-foreground text-sm">
-                    Created : <Datetime datetime={new Date(link.created_at)} />
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                    {link.is_public && <Globe size={16} />}
+                    <span>
+                        Created : <Datetime datetime={new Date(link.created_at)} />
+                    </span>
                 </div>
             </CardFooter>
         </Card>
