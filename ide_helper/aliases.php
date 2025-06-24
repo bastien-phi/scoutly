@@ -57,6 +57,8 @@ namespace {
 
     class Number extends \Illuminate\Support\Number {}
 
+    class Octane extends \Laravel\Octane\Facades\Octane {}
+
     class Password extends \Illuminate\Support\Facades\Password {}
 
     class Process extends \Illuminate\Support\Facades\Process {}
