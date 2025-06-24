@@ -15,7 +15,7 @@ it('returns links sorted by published_at and id', function () {
     $third = Link::factory()->published(now()->subDays(2))->public()->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new SearchCommunityLinkFormData(search: null)
+        new SearchCommunityLinkFormData(search: null, author: null)
     );
 
     expect($links->collect())
@@ -26,7 +26,7 @@ it('returns only public links', function () {
     Link::factory(2)->private()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new SearchCommunityLinkFormData(search: null)
+        new SearchCommunityLinkFormData(search: null, author: null)
     );
 
     expect($links)->toBeEmpty();
@@ -36,7 +36,7 @@ it('returns only published links', function () {
     Link::factory()->draft()->public()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new SearchCommunityLinkFormData(search: null)
+        new SearchCommunityLinkFormData(search: null, author: null)
     );
 
     expect($links)->toBeEmpty();
@@ -51,7 +51,32 @@ it('filters by search', function () {
     $third = Link::factory()->published()->public()->createOne(['title' => 'Foo Fighters', 'description' => null]);
 
     $links = app(GetCommunityLinks::class)->execute(
-        new SearchCommunityLinkFormData(search: 'Hell')
+        new SearchCommunityLinkFormData(search: 'Hell', author: null)
+    );
+
+    expect($links->collect())
+        ->toBeCollectionCanonicalizing([$first, $second]);
+});
+
+it('filters by author', function () {
+    $first = Link::factory()
+        ->published()
+        ->public()
+        ->forAuthor(['name' => 'John Doe'])
+        ->createOne();
+    $second = Link::factory()
+        ->published()
+        ->public()
+        ->forAuthor(['name' => 'John DOE'])
+        ->createOne();
+    $third = Link::factory()
+        ->published()
+        ->public()
+        ->forAuthor(['name' => 'Jane Doe'])
+        ->createOne();
+
+    $links = app(GetCommunityLinks::class)->execute(
+        new SearchCommunityLinkFormData(search: null, author: 'John DOE')
     );
 
     expect($links->collect())

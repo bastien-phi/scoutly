@@ -20,6 +20,7 @@ class GetCommunityLinks
             ->wherePublished()
             ->wherePublic()
             ->tap($this->search($data->search))
+            ->tap($this->filterAuthor($data->author))
             ->latest('published_at')
             ->latest('id')
             ->with(['author', 'user', 'tags'])
@@ -40,6 +41,20 @@ class GetCommunityLinks
                 'id',
                 Link::search($search)->keys()
             );
+        };
+    }
+
+    /**
+     * @return callable(Builder<Link>): void
+     */
+    private function filterAuthor(?string $author): callable
+    {
+        if ($author === null) {
+            return function (Builder $query): void {};
+        }
+
+        return function (Builder $query) use ($author): void {
+            $query->whereRelation('author', 'name', $author);
         };
     }
 }

@@ -29,6 +29,10 @@ namespace IdeHelper\App\Models
      * @method $this whereName(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this wherePublic()
+     *
+     * @see project://app/Models/Author.php L50
+     *
      * @method \App\Models\Author create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author>|\App\Models\Author|null find($id, array $columns = ['*'])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author> findMany($id, array $columns = ['*'])

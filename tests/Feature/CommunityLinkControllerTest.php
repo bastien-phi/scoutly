@@ -35,7 +35,7 @@ describe('index', function (): void {
 
     it('returns links with search', function (): void {
         $this->mockAction(GetCommunityLinks::class)
-            ->with(new SearchCommunityLinkFormData(search: 'Hello world'))
+            ->with(new SearchCommunityLinkFormData(search: 'Hello world', author: 'John Doe'))
             ->returns(fn () => new LengthAwarePaginator(
                 Link::factory(2)->create()->load(['author', 'user', 'tags']),
                 total: 2,
@@ -46,6 +46,7 @@ describe('index', function (): void {
         $this->actingAs(User::factory()->createOne())
             ->get(route('community-links.index', [
                 'search' => 'Hello world',
+                'author' => 'John Doe',
             ]))
             ->assertOk()
             ->assertInertia(
@@ -55,6 +56,7 @@ describe('index', function (): void {
                     ->where('links.data.0.id', $links->first()->id)
                     ->where('links.data.1.id', $links->last()->id)
                     ->where('request', [
+                        'author' => 'John Doe',
                         'search' => 'Hello world',
                     ])
             );

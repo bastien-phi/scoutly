@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Actions\GetCommunityAuthors;
+use App\Models\Author;
+use Illuminate\Database\Eloquent\Collection;
+
+describe('index', function (): void {
+
+    it('returns authors', function (): void {
+        $author = Author::factory()->createOne();
+
+        $this->mockAction(GetCommunityAuthors::class)
+            ->with(null)
+            ->returns(fn () => Collection::make([$author]));
+
+        $this->actingAs(\App\Models\User::factory()->createOne())
+            ->getJson(route('community-authors.index'))
+            ->assertOk()
+            ->assertJsonPath('data', [
+                ['id' => $author->id, 'name' => $author->name],
+            ]);
+
+    });
+
+    it('filters authors', function (): void {
+        $this->mockAction(GetCommunityAuthors::class)
+            ->with('foo')
+            ->returns(fn () => Collection::make([]));
+
+        $this->actingAs(\App\Models\User::factory()->createOne())
+            ->getJson(route('community-authors.index', ['search' => 'foo']))
+            ->assertOk()
+            ->assertJsonPath('data', []);
+    });
+});
