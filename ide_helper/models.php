@@ -62,6 +62,7 @@ namespace IdeHelper\App\Models
      * @property \Carbon\CarbonImmutable|null $published_at
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
+     * @property bool $is_public
      * @property-read \App\Models\Author|null $author
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
      * @property-read \App\Models\User $user
@@ -87,13 +88,14 @@ namespace IdeHelper\App\Models
      * @method $this wherePublishedAt(\Carbon\CarbonImmutable|string|null $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this whereIsPublic(bool|string $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L93
+     * @see project://app/Models/Link.php L94
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L102
+     * @see project://app/Models/Link.php L103
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])

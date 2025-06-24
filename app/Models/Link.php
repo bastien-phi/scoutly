@@ -23,6 +23,7 @@ use Laravel\Scout\Searchable;
  * @property \Carbon\CarbonImmutable|null $published_at
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
+ * @property bool $is_public
  * @property-read \App\Models\Author|null $author
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read \App\Models\User $user
