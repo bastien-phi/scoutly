@@ -1,12 +1,16 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
+import { Input } from '@/components/ui/input';
 import { Pill } from '@/components/ui/pill';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
+import { clearFormData, debounce } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
-import { Head, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, PencilLine, User } from 'lucide-react';
-import { useState } from 'react';
+import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
+import { ArrowUpRight, PencilLine, Search, User, X } from 'lucide-react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
+import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -15,14 +19,58 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ links }: { links: Paginated<CommunityLinkData> }) {
+export default function Index({ links, request }: { links: Paginated<CommunityLinkData>; request: SearchCommunityLinkFormData }) {
     const [page, setPage] = useState<number>(links.current_page);
+    const firstRender = useRef(true);
+    const [search, setSearch] = useState<string>(request.search ?? '');
+
+    const { data, setData } = useForm<Required<SearchCommunityLinkFormData>>({
+        search: request.search ?? '',
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedSetSearchData = useCallback(
+        debounce((value: string) => setData('search', value), 300),
+        [],
+    );
+
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value);
+        debouncedSetSearchData(e.target.value);
+    };
+
+    const resetSearch = () => {
+        setSearch('');
+        setData('search', '');
+    };
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        router.get(route('community-links.index'), clearFormData(data), {
+            only: ['links'],
+            preserveState: true,
+        });
+    }, [data]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
             <div className="flex flex-col items-center space-y-4 px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
+                    <div className="flex gap-2">
+                        <div className="relative flex-1">
+                            <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+                            <Input type="text" value={search} onChange={handleSearchChange} placeholder="Search links..." className="pr-12 pl-12" />
+                            <X className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer" onClick={resetSearch} />
+                        </div>
+                    </div>
+
+                    <Separator />
+
                     {links.data.map((link: CommunityLinkData) => (
                         <CommunityLinkCard key={link.id} link={link} />
                     ))}
