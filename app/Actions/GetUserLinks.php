@@ -20,7 +20,6 @@ class GetUserLinks
         User $user,
         SearchLinkFormData $data,
     ): LengthAwarePaginator {
-
         return $user->links()
             ->wherePublished()
             ->tap($this->search($data->search))

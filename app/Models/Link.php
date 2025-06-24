@@ -100,6 +100,15 @@ class Link extends Model
      * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
      */
     #[Scope]
+    protected function wherePublic(Builder $query): void
+    {
+        $query->where('is_public', true);
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     */
+    #[Scope]
     protected function wherePublished(Builder $query): void
     {
         $query->whereNotNull('published_at');
