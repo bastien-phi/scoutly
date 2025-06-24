@@ -99,7 +99,7 @@ export default function LinkForm({
             <div className="grid gap-2">
                 <Label htmlFor="is_public">Share publicly</Label>
                 <Switch
-                    id="tags"
+                    id="is_public"
                     tabIndex={6}
                     checked={data.is_public}
                     onCheckedChange={(checked: boolean) => setData('is_public', checked)}
