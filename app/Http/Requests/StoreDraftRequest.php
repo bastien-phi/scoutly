@@ -20,6 +20,7 @@ class StoreDraftRequest extends FormRequest
             'author' => ['nullable', 'string', 'max:255'],
             'tags' => ['array'],
             'tags.*' => ['required', 'string', 'max:255'],
+            'is_public' => ['required', 'boolean'],
         ];
     }
 }

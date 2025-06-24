@@ -19,6 +19,7 @@ class LinkFormData extends Data
         public string $url,
         public string $title,
         public ?string $description,
+        public bool $is_public,
         public ?string $author,
         #[LiteralTypeScriptType('string[]')]
         public Collection $tags,

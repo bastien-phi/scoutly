@@ -52,6 +52,7 @@ describe('store', function (): void {
                     url: 'https://example.com',
                     title: null,
                     description: null,
+                    is_public: false,
                     author: null,
                     tags: new Collection,
                 )
@@ -64,6 +65,7 @@ describe('store', function (): void {
                 'url' => 'https://example.com',
                 'title' => null,
                 'description' => null,
+                'is_public' => false,
                 'author' => null,
                 'tags' => [],
             ])
@@ -125,6 +127,7 @@ describe('update', function (): void {
                     url: 'https://example.com',
                     title: 'Example Title',
                     description: 'Example Description',
+                    is_public: true,
                     author: 'John Doe',
                     tags: new Collection(['PHP'])
                 )
@@ -135,6 +138,7 @@ describe('update', function (): void {
                 'url' => 'https://example.com',
                 'title' => 'Example Title',
                 'description' => 'Example Description',
+                'is_public' => true,
                 'author' => 'John Doe',
                 'tags' => ['PHP'],
             ])

@@ -19,6 +19,7 @@ it('creates a link with the given data', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
+        is_public: false,
         author: 'John Doe',
         tags: new Collection(['PHP']),
     );
@@ -45,6 +46,7 @@ it('creates a link with the given data', function (): void {
         'description' => 'Example Description',
         'author_id' => $author->id,
         'published_at' => now(),
+        'is_public' => false,
     ]);
 
     $this->assertDatabaseHas('link_tag', [
@@ -59,6 +61,7 @@ it('creates a link without author nor tag', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
+        is_public: true,
         author: null,
         tags: new Collection,
     );

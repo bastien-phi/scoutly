@@ -33,6 +33,7 @@ it('ingests a draft message', function (): void {
                 url: 'https://github.com/bastien-phi/scoutly',
                 title: 'Test draft',
                 description: null,
+                is_public: false,
                 author: null,
                 tags: new Collection,
             )

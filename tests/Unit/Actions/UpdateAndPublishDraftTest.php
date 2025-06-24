@@ -16,6 +16,7 @@ it('updates a draft link and publish it', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
+        is_public: false,
         author: 'John Doe',
         tags: new Collection(['PHP']),
     );
