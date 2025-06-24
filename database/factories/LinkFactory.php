@@ -34,17 +34,31 @@ class LinkFactory extends Factory
         ];
     }
 
-    public function published(?CarbonImmutable $publishedAt = null): static
-    {
-        return $this->state([
-            'published_at' => $publishedAt ?? fake()->dateTime(),
-        ]);
-    }
-
     public function draft(): static
     {
         return $this->state([
             'published_at' => null,
+        ]);
+    }
+
+    public function published(?CarbonImmutable $publishedAt = null): static
+    {
+        return $this->state([
+            'published_at' => $publishedAt ?? fn () => fake()->dateTime(),
+        ]);
+    }
+
+    public function public(): static
+    {
+        return $this->state([
+            'is_public' => true,
+        ]);
+    }
+
+    public function private(): static
+    {
+        return $this->state([
+            'is_public' => false,
         ]);
     }
 }

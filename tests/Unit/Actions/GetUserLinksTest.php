@@ -11,14 +11,14 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
-it('returns links sorted by published_at and created_at', function () {
+it('returns links sorted by published_at and id', function () {
     $user = User::factory()->createOne();
 
     Date::setTestNow();
 
     $first = Link::factory()->for($user)->published(now()->subDay())->createOne();
-    $second = Link::factory()->for($user)->published(now()->subDays(2))->createOne(['created_at' => now()->subDays(2)]);
-    $third = Link::factory()->for($user)->published(now()->subDays(2))->createOne(['created_at' => now()->subDays(1)]);
+    $second = Link::factory()->for($user)->published(now()->subDays(2))->createOne();
+    $third = Link::factory()->for($user)->published(now()->subDays(2))->createOne();
 
     $links = app(GetUserLinks::class)->execute(
         $user,

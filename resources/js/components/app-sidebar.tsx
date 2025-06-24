@@ -1,3 +1,4 @@
+import AppLogoIcon from '@/components/app-logo-icon';
 import { NavFooter } from '@/components/nav-footer';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -12,11 +13,12 @@ import {
     SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from '@/components/ui/sidebar';
 import { routeMatches } from '@/lib/utils';
 import { type NavItem, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { GitPullRequest, LayoutGrid, Link as LinkIcon, Plus, SquarePen } from 'lucide-react';
+import { GitPullRequest, Globe, LayoutGrid, Link as LinkIcon, Plus, SquarePen } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const footerNavItems: NavItem[] = [
@@ -29,6 +31,7 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     const page = usePage<SharedData>();
+    const { open } = useSidebar();
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -37,7 +40,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <Link href={route('dashboard')} prefetch>
-                                <AppLogo className="h-12! w-auto!" />
+                                {open ? <AppLogo className="h-12! w-auto!" /> : <AppLogoIcon className="h-8! w-auto!" />}
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -81,6 +84,23 @@ export function AppSidebar() {
                                 </Link>
                             </SidebarMenuButton>
                             {page.props.draftCount > 0 && <SidebarMenuBadge>{page.props.draftCount}</SidebarMenuBadge>}
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+                <SidebarGroup className="px-2 py-0">
+                    <SidebarGroupLabel>Community</SidebarGroupLabel>
+                    <SidebarMenu>
+                        <SidebarMenuItem key="Community links">
+                            <SidebarMenuButton
+                                asChild
+                                isActive={routeMatches(page, 'community-links.index')}
+                                tooltip={{ children: 'Community links' }}
+                            >
+                                <Link href={route('community-links.index')} prefetch>
+                                    <Globe />
+                                    <span>Community links</span>
+                                </Link>
+                            </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarGroup>

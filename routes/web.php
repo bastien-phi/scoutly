@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CheckDraftInboxController;
+use App\Http\Controllers\CommunityLinkController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PublishDraftController;
@@ -59,6 +60,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('drafts/{draft}/publish', PublishDraftController::class)
         ->name('drafts.publish')
         ->can('update-draft', 'draft');
+
+    Route::controller(CommunityLinkController::class)
+        ->prefix('community-links')
+        ->name('community-links.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+        });
 });
 
 require __DIR__.'/settings.php';

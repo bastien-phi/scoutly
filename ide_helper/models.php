@@ -93,9 +93,13 @@ namespace IdeHelper\App\Models
      *
      * @see project://app/Models/Link.php L94
      *
-     * @method $this wherePublished()
+     * @method $this wherePublic()
      *
      * @see project://app/Models/Link.php L103
+     *
+     * @method $this wherePublished()
+     *
+     * @see project://app/Models/Link.php L112
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
