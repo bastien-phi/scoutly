@@ -1,16 +1,21 @@
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Datetime } from '@/components/ui/datetime';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Pill } from '@/components/ui/pill';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { clearFormData, debounce } from '@/lib/utils';
+import { clearFormData, cn, debounce } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, PencilLine, Search, User, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronsUpDown, Filter, LoaderCircle, PencilLine, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
+import AuthorData = App.Data.AuthorData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,11 +26,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index({ links, request }: { links: Paginated<CommunityLinkData>; request: SearchCommunityLinkFormData }) {
     const [page, setPage] = useState<number>(links.current_page);
+    const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
     const [search, setSearch] = useState<string>(request.search ?? '');
 
     const { data, setData } = useForm<Required<SearchCommunityLinkFormData>>({
         search: request.search ?? '',
+        author: request.author ?? '',
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +74,19 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                             <Input type="text" value={search} onChange={handleSearchChange} placeholder="Search links..." className="pr-12 pl-12" />
                             <X className="absolute top-1/2 right-4 size-2 h-4 w-4 -translate-y-1/2 transform cursor-pointer" onClick={resetSearch} />
                         </div>
+                        <Button variant="ghost" onClick={() => setShowFilters((prev) => !prev)}>
+                            <Filter />
+                        </Button>
                     </div>
+
+                    {showFilters && (
+                        <div className="space-y-4">
+                            <div className="grid gap-2">
+                                <Label>Author</Label>
+                                <AuthorSearch value={data.author} onChange={(value: string) => setData('author', value)} />
+                            </div>
+                        </div>
+                    )}
 
                     <Separator />
 
@@ -143,5 +162,87 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 )}
             </CardFooter>
         </Card>
+    );
+}
+
+function AuthorSearch({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+    const [open, setOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [authors, setAuthors] = useState<AuthorData[]>([]);
+    const [searchValue, setSearchValue] = useState<string>(value);
+
+    const fetchAuthors = useCallback((search: string) => {
+        setIsLoading(true);
+        setAuthors([]);
+
+        fetch(route('community-authors.index', { search: search }))
+            .then((res) => res.json())
+            .then((json) => {
+                setAuthors(json.data);
+            })
+            .catch((err) => console.error('Failed to fetch authors:', err))
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedFetchAuthors = useCallback(
+        debounce((search: string) => fetchAuthors(search), 300),
+        [],
+    );
+
+    useEffect(() => {
+        debouncedFetchAuthors(searchValue);
+    }, [searchValue, debouncedFetchAuthors]);
+
+    useEffect(() => {
+        fetchAuthors('');
+    }, [fetchAuthors]);
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <div className="flex gap-2">
+                <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+                        {value || 'Any author'}
+                        <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                </PopoverTrigger>
+                <Button variant="ghost" onClick={() => onChange('')}>
+                    <X />
+                </Button>
+            </div>
+            <PopoverContent className="w-96 p-0" align="start">
+                <Command className="w-96" shouldFilter={false}>
+                    <CommandInput placeholder="Search author..." className="h-9" value={searchValue} onValueChange={setSearchValue} />
+                    <CommandList>
+                        <CommandEmpty>
+                            {isLoading ? (
+                                <div className="flex justify-center">
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                </div>
+                            ) : (
+                                'No author found.'
+                            )}
+                        </CommandEmpty>
+                        <CommandGroup>
+                            {authors.map((author) => (
+                                <CommandItem
+                                    key={author.id}
+                                    value={author.name}
+                                    onSelect={() => {
+                                        onChange(value === author.name ? '' : author.name);
+                                        setSearchValue('');
+                                        setOpen(false);
+                                    }}
+                                >
+                                    {author.name}
+                                    <Check className={cn('ml-auto', value === author.name ? 'opacity-100' : 'opacity-0')} />
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
     );
 }

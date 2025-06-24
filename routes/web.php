@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CheckDraftInboxController;
+use App\Http\Controllers\CommunityAuthorController;
 use App\Http\Controllers\CommunityLinkController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
@@ -64,6 +65,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(CommunityLinkController::class)
         ->prefix('community-links')
         ->name('community-links.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+        });
+
+    Route::controller(CommunityAuthorController::class)
+        ->prefix('community-authors')
+        ->name('community-authors.')
         ->group(function (): void {
             Route::get('/', 'index')->name('index');
         });

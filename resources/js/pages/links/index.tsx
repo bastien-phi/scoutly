@@ -225,8 +225,8 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                     <X />
                 </Button>
             </div>
-            <PopoverContent className="w-full p-0">
-                <Command className="w-full">
+            <PopoverContent className="w-96 p-0" align="start">
+                <Command className="w-96">
                     <CommandInput placeholder="Search author..." className="h-9" />
                     <CommandList>
                         <CommandEmpty>No author found.</CommandEmpty>
@@ -278,8 +278,8 @@ function TagMultiselect({
                     <X />
                 </Button>
             </div>
-            <PopoverContent className="w-full p-0">
-                <Command className="w-full">
+            <PopoverContent className="w-96 p-0" align="start">
+                <Command className="w-96">
                     <CommandInput placeholder="Search tag..." className="h-9" />
                     <CommandList>
                         <CommandEmpty>No tag found.</CommandEmpty>

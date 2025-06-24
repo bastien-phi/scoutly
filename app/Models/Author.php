@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,5 +41,14 @@ class Author extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<$this>  $query
+     */
+    #[Scope]
+    protected function wherePublic(Builder $query): void
+    {
+        $query->whereRelation('links', 'is_public', true);
     }
 }

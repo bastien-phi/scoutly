@@ -15,5 +15,6 @@ class SearchCommunityLinkFormData extends Data
 
     public function __construct(
         public ?string $search,
+        public ?string $author,
     ) {}
 }

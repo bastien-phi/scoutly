@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetCommunityLinksRequest extends FormRequest
+class SearchRequest extends FormRequest
 {
     /**
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<int, mixed>|string>
@@ -15,7 +15,6 @@ class GetCommunityLinksRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
-            'author' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
