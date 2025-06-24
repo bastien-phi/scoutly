@@ -30,6 +30,7 @@ class LinkFactory extends Factory
             'url' => fake()->url(),
             'description' => fake()->paragraph(),
             'published_at' => fake()->optional(0.8)->dateTime(),
+            'is_public' => fake()->boolean(),
         ];
     }
 
