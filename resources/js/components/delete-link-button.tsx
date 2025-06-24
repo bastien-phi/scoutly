@@ -17,7 +17,7 @@ export default function DeleteLinkButton({ link }: { link: LinkData }) {
     return (
         <Dialog>
             <DialogTrigger>
-                <Trash className="cursor-pointer"></Trash>
+                <Trash className="text-muted-foreground hover:text-foreground cursor-pointer"></Trash>
             </DialogTrigger>
             <DialogPortal>
                 <DialogOverlay></DialogOverlay>

@@ -6,7 +6,7 @@ import { Pill } from '@/components/ui/pill';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Globe, Pencil, User } from 'lucide-react';
+import { Globe, Pencil, PencilLine } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -28,7 +28,7 @@ export default function Show({ link }: { link: LinkData }) {
                     <div className="flex items-baseline justify-between">
                         <h2 className="text-xl font-semibold tracking-tight">{link.title || 'Draft'} </h2>
                         <div className="flex space-x-2">
-                            <Link href={route('links.edit', link.id)}>
+                            <Link href={route('links.edit', link.id)} className="text-muted-foreground hover:text-foreground">
                                 <Pencil />
                             </Link>
                             <DeleteLinkButton link={link} />
@@ -58,7 +58,7 @@ export default function Show({ link }: { link: LinkData }) {
                         <div className="space-y-4">
                             {link.author && (
                                 <div className="flex gap-x-4">
-                                    <User />
+                                    <PencilLine />
                                     <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
                                         {link.author.name}
                                     </TextLink>

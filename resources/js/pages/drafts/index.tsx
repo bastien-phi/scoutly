@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Globe, Info, Lightbulb, LoaderCircle, MailQuestion, User } from 'lucide-react';
+import { ArrowUpRight, Globe, Info, Lightbulb, LoaderCircle, MailQuestion, PencilLine } from 'lucide-react';
 import { useState } from 'react';
 import LinkData = App.Data.LinkData;
 
@@ -120,7 +120,7 @@ function DraftCard({ link }: { link: LinkData }) {
                         <CardTitle>{link.url}</CardTitle>
                     </TextLink>
                     <div className="flex space-x-2">
-                        <a href={link.url} target="_blank">
+                        <a href={link.url} target="_blank" className="text-muted-foreground hover:text-foreground">
                             <ArrowUpRight></ArrowUpRight>
                         </a>
                         <DeleteLinkButton link={link} />
@@ -147,7 +147,7 @@ function DraftCard({ link }: { link: LinkData }) {
             <CardFooter className="flex justify-between">
                 {link.author && (
                     <div className="flex gap-x-4">
-                        <User />
+                        <PencilLine />
                         <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
                             {link.author.name}
                         </TextLink>

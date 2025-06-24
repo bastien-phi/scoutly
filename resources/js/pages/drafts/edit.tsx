@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import DeleteLinkButton from '@/components/delete-link-button';
 import LinkForm from '@/components/link-form';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -51,7 +51,10 @@ export default function Edit({ draft, authors, tags }: { draft: LinkData; author
             <Head title="Edit draft" />
             <div className="flex flex-col items-center px-4 py-6">
                 <div className="w-full space-y-4 xl:w-1/2">
-                    <Heading title="Edit draft" />
+                    <div className="flex items-baseline justify-between">
+                        <h2 className="text-xl font-semibold tracking-tight">Edit draft</h2>
+                        <DeleteLinkButton link={draft} />
+                    </div>
 
                     <form className="flex flex-col gap-6" onSubmit={submitLink}>
                         <div className="grid gap-6">
