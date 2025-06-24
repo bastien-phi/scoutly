@@ -35,7 +35,7 @@ it('find existing tags', function (): void {
 
 it('filters duplicated tags', function (): void {
     $user = User::factory()->createOne();
-    Tag::factory()->createOne(['label' => 'PHP']);
+    Tag::factory()->for($user)->createOne(['label' => 'PHP']);
 
     $labels = new Collection(['PHP', 'Php', 'Laravel', 'larAvEl']);
 
