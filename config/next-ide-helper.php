@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Author;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 return [
@@ -71,7 +73,14 @@ return [
          *
          * Prepend the type with '?' to mark it as nullable.
          */
-        'overrides' => [],
+        'overrides' => [
+            Author::class => [
+                'name' => 'string',
+            ],
+            Tag::class => [
+                'label' => 'string',
+            ],
+        ],
 
         /**
          * Use Larastan friendly docblock when possible.
