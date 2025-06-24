@@ -8,7 +8,6 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class FindOrCreateTags
 {
@@ -18,17 +17,8 @@ class FindOrCreateTags
      */
     public function execute(User $user, Collection $tags): EloquentCollection
     {
-        return $tags->map(fn (string $tag) => $this->findOrCreateTag($user, $tag))
+        return $tags->map(fn (string $tag) => $user->tags()->firstOrCreate(['label' => $tag]))
             ->pipeInto(EloquentCollection::class)
             ->unique();
-    }
-
-    private function findOrCreateTag(User $user, string $label): Tag
-    {
-        return $user->tags()
-            ->whereRaw('LOWER(label) = ?', Str::lower($label))
-            ->firstOr(
-                fn () => $user->tags()->create(['label' => $label])
-            );
     }
 }

@@ -6,7 +6,6 @@ namespace App\Actions;
 
 use App\Models\Author;
 use App\Models\User;
-use Illuminate\Support\Str;
 
 class FindOrCreateAuthor
 {
@@ -16,10 +15,6 @@ class FindOrCreateAuthor
             return null;
         }
 
-        return $user->authors()
-            ->whereRaw('LOWER(name) = ?', Str::lower($author))
-            ->firstOr(
-                fn () => $user->authors()->create(['name' => $author])
-            );
+        return $user->authors()->firstOrCreate(['name' => $author]);
     }
 }
