@@ -19,8 +19,21 @@ class DraftFormData extends Data
         public string $url,
         public ?string $title,
         public ?string $description,
+        public bool $is_public,
         public ?string $author,
         #[LiteralTypeScriptType('string[]')]
-        public Collection $tags = new Collection,
+        public Collection $tags,
     ) {}
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public static function fromMailIngest(array $data): self
+    {
+        return self::factory()->withoutMagicalCreation()->from([
+            'is_public' => false,
+            'tags' => new Collection,
+            ...$data,
+        ]);
+    }
 }

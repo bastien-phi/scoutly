@@ -25,6 +25,7 @@ class StoreDraft
             'title' => $data->title,
             'description' => $data->description,
             'author_id' => $author?->id,
+            'is_public' => $data->is_public,
         ]);
 
         $link->tags()->sync($tags);

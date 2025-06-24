@@ -26,6 +26,7 @@ class StoreLink
             'description' => $data->description,
             'author_id' => $author?->id,
             'published_at' => now(),
+            'is_public' => $data->is_public,
         ]);
 
         $link->tags()->sync($tags);

@@ -22,6 +22,7 @@ it('updates and publishes a draft link', function (): void {
                 url: 'https://example.com',
                 title: 'Example Title',
                 description: 'Example Description',
+                is_public: false,
                 author: 'John Doe',
                 tags: new Collection(['PHP']),
             )
@@ -32,6 +33,7 @@ it('updates and publishes a draft link', function (): void {
             'url' => 'https://example.com',
             'title' => 'Example Title',
             'description' => 'Example Description',
+            'is_public' => false,
             'author' => 'John Doe',
             'tags' => ['PHP'],
         ])

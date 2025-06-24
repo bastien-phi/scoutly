@@ -46,7 +46,7 @@ class IngestDraftMessage
 
         return $this->storeDraft->execute(
             $user,
-            DraftFormData::from($validator->validated())
+            DraftFormData::fromMailIngest($validator->validated())
         );
     }
 

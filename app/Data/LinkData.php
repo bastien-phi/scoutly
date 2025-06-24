@@ -22,6 +22,7 @@ class LinkData extends Data
         public ?string $title,
         public ?string $description,
         public ?CarbonImmutable $published_at,
+        public bool $is_public,
         public CarbonImmutable $created_at,
         public CarbonImmutable $updated_at,
         public ?AuthorData $author,

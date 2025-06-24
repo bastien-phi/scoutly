@@ -21,6 +21,7 @@ it('updates a link with the given data', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
+        is_public: false,
         author: 'John Doe',
         tags: new Collection(['PHP'])
     );
@@ -45,6 +46,7 @@ it('updates a link with the given data', function (): void {
         'description' => 'Example Description',
         'author_id' => $author->id,
         'published_at' => '2025-06-04 10:41:00',
+        'is_public' => false,
     ]);
 
     $this->assertDatabaseHas('link_tag', [
@@ -61,6 +63,7 @@ it('updates a link with the draft data', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: null,
+        is_public: true,
         author: 'John Doe',
         tags: new Collection(['PHP'])
     );
@@ -85,6 +88,7 @@ it('updates a link with the draft data', function (): void {
         'description' => null,
         'author_id' => $author->id,
         'published_at' => '2025-06-04 10:41:00',
+        'is_public' => true,
     ]);
 
     $this->assertDatabaseHas('link_tag', [

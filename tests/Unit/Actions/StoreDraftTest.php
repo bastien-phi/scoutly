@@ -19,6 +19,7 @@ it('creates a draft link with the given data', function (): void {
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
+        is_public: false,
         author: 'John Doe',
         tags: new Collection(['PHP']),
     );
@@ -43,6 +44,7 @@ it('creates a draft link with the given data', function (): void {
         'description' => 'Example Description',
         'author_id' => $author->id,
         'published_at' => null,
+        'is_public' => false,
     ]);
 
     $this->assertDatabaseHas('link_tag', [
@@ -57,6 +59,7 @@ it('creates a draft link with minimal data', function (): void {
         url: 'https://example.com',
         title: null,
         description: null,
+        is_public: true,
         author: null,
         tags: new Collection,
     );
@@ -79,5 +82,6 @@ it('creates a draft link with minimal data', function (): void {
         'description' => null,
         'author_id' => null,
         'published_at' => null,
+        'is_public' => true,
     ]);
 });
