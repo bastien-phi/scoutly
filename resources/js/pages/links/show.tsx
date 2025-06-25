@@ -6,7 +6,7 @@ import { Pill } from '@/components/ui/pill';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Globe, Pencil, PencilLine } from 'lucide-react';
+import { Globe, Pencil, User } from 'lucide-react';
 
 export default function Show({ link }: { link: LinkData }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -58,7 +58,7 @@ export default function Show({ link }: { link: LinkData }) {
                         <div className="space-y-4">
                             {link.author && (
                                 <div className="flex gap-x-4">
-                                    <PencilLine />
+                                    <User />
                                     <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
                                         {link.author.name}
                                     </TextLink>

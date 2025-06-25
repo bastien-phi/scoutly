@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Datetime } from '@/components/ui/datetime';
 import { Input } from '@/components/ui/input';
@@ -11,7 +11,7 @@ import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Check, ChevronsUpDown, Filter, LoaderCircle, PencilLine, Search, User, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronsUpDown, Filter, LoaderCircle, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
@@ -146,12 +146,16 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
 function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
     return (
         <Card>
-            <CardHeader className="flex-row items-baseline justify-between">
-                <CardTitle>{link.title}</CardTitle>
-                <a href={link.url} target="_blank">
-                    <ArrowUpRight></ArrowUpRight>
-                </a>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <CardTitle>{link.url}</CardTitle>
+                    <a href={link.url} target="_blank">
+                        <ArrowUpRight></ArrowUpRight>
+                    </a>
+                </div>
+                <CardDescription>By {link.user.username}</CardDescription>
             </CardHeader>
+
             <CardContent className="space-y-4">
                 {link.description && (
                     <pre className="font-sans whitespace-pre-wrap">
@@ -167,18 +171,14 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 )}
             </CardContent>
             <CardFooter className="flex justify-between">
-                <div className="space-y-4">
-                    {link.author && (
-                        <div className="flex gap-x-4">
-                            <PencilLine />
-                            <span>{link.author.name}</span>
-                        </div>
-                    )}
+                {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <span>{link.user.username}</span>
+                        <span>{link.author.name}</span>
                     </div>
-                </div>
+                ) : (
+                    <div />
+                )}
                 {link.published_at && (
                     <div className="text-muted-foreground flex items-center gap-2 text-sm">
                         <span>

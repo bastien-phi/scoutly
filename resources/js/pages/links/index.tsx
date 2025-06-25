@@ -12,7 +12,7 @@ import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Check, ChevronsUpDown, Filter, Globe, PencilLine, Search, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronsUpDown, Filter, Globe, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import LinkData = App.Data.LinkData;
 import SearchLinkFormData = App.Data.SearchLinkFormData;
@@ -188,13 +188,13 @@ function LinkCard({ link }: { link: LinkData }) {
             <CardFooter className="flex justify-between">
                 {link.author ? (
                     <div className="flex gap-x-4">
-                        <PencilLine />
+                        <User />
                         <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
                             {link.author.name}
                         </TextLink>
                     </div>
                 ) : (
-                    <div></div>
+                    <div />
                 )}
                 {link.published_at && (
                     <div className="text-muted-foreground flex items-center gap-2 text-sm">
