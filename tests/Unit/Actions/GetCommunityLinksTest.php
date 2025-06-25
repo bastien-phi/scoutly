@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Date;
 it('returns links sorted by published_at and id', function () {
     Date::setTestNow();
 
-    $first = Link::factory()->published(now()->subDay())->public()->createOne();
-    $second = Link::factory()->published(now()->subDays(2))->public()->createOne();
-    $third = Link::factory()->published(now()->subDays(2))->public()->createOne();
+    $first = Link::factory()->published(now()->subDay())->isPublic()->createOne();
+    $second = Link::factory()->published(now()->subDays(2))->isPublic()->createOne();
+    $third = Link::factory()->published(now()->subDays(2))->isPublic()->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
         new SearchCommunityLinkFormData(search: null, author: null)
@@ -25,7 +25,7 @@ it('returns links sorted by published_at and id', function () {
 });
 
 it('returns only public links', function () {
-    Link::factory(2)->private()->create();
+    Link::factory(2)->isPrivate()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
         new SearchCommunityLinkFormData(search: null, author: null)
@@ -35,7 +35,7 @@ it('returns only public links', function () {
 });
 
 it('returns only published links', function () {
-    Link::factory()->draft()->public()->create();
+    Link::factory()->draft()->isPublic()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
         new SearchCommunityLinkFormData(search: null, author: null)
@@ -45,12 +45,12 @@ it('returns only published links', function () {
 });
 
 it('filters by search', function () {
-    $first = Link::factory()->published()->public()->createOne(['title' => 'Hello World', 'description' => null]);
-    $second = Link::factory()->published()->public()->createOne([
+    $first = Link::factory()->published()->isPublic()->createOne(['title' => 'Hello World', 'description' => null]);
+    $second = Link::factory()->published()->isPublic()->createOne([
         'title' => 'High way to hell',
         'description' => null,
     ]);
-    $third = Link::factory()->published()->public()->createOne(['title' => 'Foo Fighters', 'description' => null]);
+    $third = Link::factory()->published()->isPublic()->createOne(['title' => 'Foo Fighters', 'description' => null]);
 
     $links = app(GetCommunityLinks::class)->execute(
         new SearchCommunityLinkFormData(search: 'Hell', author: null)
@@ -63,17 +63,17 @@ it('filters by search', function () {
 it('filters by author', function () {
     $first = Link::factory()
         ->published()
-        ->public()
+        ->isPublic()
         ->forAuthor(['name' => 'John Doe'])
         ->createOne();
     $second = Link::factory()
         ->published()
-        ->public()
+        ->isPublic()
         ->forAuthor(['name' => 'John DOE'])
         ->createOne();
     $third = Link::factory()
         ->published()
-        ->public()
+        ->isPublic()
         ->forAuthor(['name' => 'Jane Doe'])
         ->createOne();
 
@@ -89,9 +89,9 @@ it('filters by tags', function () {
     $php = Tag::factory()->createOne(['label' => 'PHP']);
     $laravel = Tag::factory()->createOne(['label' => 'Laravel']);
 
-    $first = Link::factory()->hasAttached($php)->published()->public()->createOne();
-    $second = Link::factory()->hasAttached([$php, $laravel])->published()->public()->createOne();
-    $third = Link::factory()->hasAttached($laravel)->published()->public()->createOne();
+    $first = Link::factory()->hasAttached($php)->published()->isPublic()->createOne();
+    $second = Link::factory()->hasAttached([$php, $laravel])->published()->isPublic()->createOne();
+    $third = Link::factory()->hasAttached($laravel)->published()->isPublic()->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
         new SearchCommunityLinkFormData(search: null, author: null, tags: new Collection(['php', 'laravel']))

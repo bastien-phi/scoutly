@@ -121,7 +121,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                         <CommunityLinkCard key={link.id} link={link} />
                     ))}
 
-                    {links.data.length === 0 && <div className="flex justify-center">Nothing to see there !</div>}
+                    {links.data.length === 0 && <div className="flex justify-center">Nothing to see there!</div>}
 
                     {page < links.last_page && (
                         <WhenVisible
@@ -334,7 +334,7 @@ function TagSearch({
             </div>
             <PopoverContent className="w-96 p-0" align="start">
                 <Command className="w-96" shouldFilter={false}>
-                    <CommandInput placeholder="Search author..." className="h-9" value={searchValue} onValueChange={setSearchValue} />
+                    <CommandInput placeholder="Search tag..." className="h-9" value={searchValue} onValueChange={setSearchValue} />
                     <CommandList>
                         <CommandEmpty>
                             {isLoading ? (

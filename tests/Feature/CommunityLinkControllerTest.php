@@ -14,7 +14,7 @@ describe('index', function (): void {
     it('returns links', function (): void {
         $this->mockAction(GetCommunityLinks::class)
             ->returns(fn () => new LengthAwarePaginator(
-                Link::factory(2)->public()->published()->create()->load(['author', 'user', 'tags']),
+                Link::factory(2)->isPublic()->published()->create()->load(['author', 'user', 'tags']),
                 total: 2,
                 perPage: 15
             ))
