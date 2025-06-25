@@ -10,13 +10,14 @@ import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
-import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
+import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
 import { ArrowUpRight, Check, ChevronsUpDown, Filter, LoaderCircle, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
 import AuthorData = App.Data.AuthorData;
 import TagData = App.Data.TagData;
+import TextLink from '@/components/text-link';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -165,7 +166,9 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Pill key={tag.id}>{tag.label}</Pill>
+                            <Link href={route('community.links.index', { tags: [tag.label] })} key={tag.id}>
+                                <Pill>{tag.label}</Pill>
+                            </Link>
                         ))}
                     </div>
                 )}
@@ -174,7 +177,9 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <span>{link.author.name}</span>
+                        <TextLink href={route('community.links.index', { author: link.author.name})} variant="ghost">
+                            {link.author.name}
+                        </TextLink>
                     </div>
                 ) : (
                     <div />
