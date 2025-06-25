@@ -16,6 +16,8 @@ class GetCommunityLinksRequest extends FormRequest
         return [
             'search' => ['nullable', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:255'],
+            'tags' => ['array'],
+            'tags.*' => ['required', 'string', 'max:255'],
         ];
     }
 }

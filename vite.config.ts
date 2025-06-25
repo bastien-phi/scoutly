@@ -25,7 +25,7 @@ export default defineConfig({
             {
               name: 'ziggy route list',
               run: ['php', 'artisan', 'ziggy:generate', '--types-only', 'resources/js/types/ziggy.d.ts'],
-              pattern: ['web/**/*.php'],
+              pattern: ['routes/**/*.php'],
             }
         ]),
     ],

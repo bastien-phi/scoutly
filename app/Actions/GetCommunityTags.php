@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\Author;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
-class GetCommunityAuthors
+class GetCommunityTags
 {
     /**
-     * @return Collection<int, Author>
+     * @return Collection<int, Tag>
      */
     public function execute(?string $search = null): Collection
     {
-        return Author::query()
-            ->distinct('name')
+        return Tag::query()
+            ->distinct('label')
             ->wherePublic()
             ->tap($this->search($search))
-            ->orderBy('name')
+            ->orderBy('label')
             ->orderBy('id')
             ->limit(30)
             ->get();
     }
 
     /**
-     * @return callable(Builder<Author>): void
+     * @return callable(Builder<Tag>): void
      */
     private function search(?string $search): callable
     {
@@ -35,7 +35,7 @@ class GetCommunityAuthors
         }
 
         return function (Builder $query) use ($search): void {
-            $query->whereLike('name', "%{$search}%");
+            $query->whereLike('label', "%{$search}%");
         };
     }
 }

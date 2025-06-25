@@ -93,8 +93,8 @@ it('filters by author', function () {
 it('filters by tags', function () {
     $user = User::factory()->createOne();
 
-    $php = Tag::factory()->createOne(['label' => 'PHP']);
-    $laravel = Tag::factory()->createOne(['label' => 'Laravel']);
+    $php = Tag::factory()->for($user)->createOne(['label' => 'PHP']);
+    $laravel = Tag::factory()->for($user)->createOne(['label' => 'Laravel']);
 
     $first = Link::factory()->for($user)->hasAttached($php)->published()->createOne();
     $second = Link::factory()->for($user)->hasAttached([$php, $laravel])->published()->createOne();

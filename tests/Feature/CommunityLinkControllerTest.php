@@ -7,11 +7,11 @@ use App\Data\SearchCommunityLinkFormData;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia;
 
 describe('index', function (): void {
     it('returns links', function (): void {
-
         $this->mockAction(GetCommunityLinks::class)
             ->returns(fn () => new LengthAwarePaginator(
                 Link::factory(2)->public()->published()->create()->load(['author', 'user', 'tags']),
@@ -35,7 +35,7 @@ describe('index', function (): void {
 
     it('returns links with search', function (): void {
         $this->mockAction(GetCommunityLinks::class)
-            ->with(new SearchCommunityLinkFormData(search: 'Hello world', author: 'John Doe'))
+            ->with(new SearchCommunityLinkFormData(search: 'Hello world', author: 'John Doe', tags: new Collection(['PHP', 'Laravel'])))
             ->returns(fn () => new LengthAwarePaginator(
                 Link::factory(2)->create()->load(['author', 'user', 'tags']),
                 total: 2,
@@ -47,6 +47,7 @@ describe('index', function (): void {
             ->get(route('community.links.index', [
                 'search' => 'Hello world',
                 'author' => 'John Doe',
+                'tags' => ['PHP', 'Laravel'],
             ]))
             ->assertOk()
             ->assertInertia(
@@ -58,6 +59,7 @@ describe('index', function (): void {
                     ->where('request', [
                         'author' => 'John Doe',
                         'search' => 'Hello world',
+                        'tags' => ['PHP', 'Laravel'],
                     ])
             );
     });

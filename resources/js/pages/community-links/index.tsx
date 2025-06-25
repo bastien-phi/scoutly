@@ -16,6 +16,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
 import AuthorData = App.Data.AuthorData;
+import TagData = App.Data.TagData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,6 +34,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
     const { data, setData } = useForm<Required<SearchCommunityLinkFormData>>({
         search: request.search ?? '',
         author: request.author ?? '',
+        tags: request.tags ?? [],
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,6 +86,30 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                             <div className="grid gap-2">
                                 <Label>Author</Label>
                                 <AuthorSearch value={data.author} onChange={(value: string) => setData('author', value)} />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Tags</Label>
+                                {data.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-2">
+                                        {data.tags.map((tag: string) => (
+                                            <Pill
+                                                key={tag}
+                                                onClose={() => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }))}
+                                            >
+                                                {tag}
+                                            </Pill>
+                                        ))}
+                                    </div>
+                                )}
+                                <TagSearch
+                                    selectedTags={data.tags}
+                                    onValueAdded={(value: string) =>
+                                        setData((prev) => (prev.tags.includes(value) ? prev : { ...prev, tags: [...prev.tags, value] }))
+                                    }
+                                    onValueRemoved={(value: string) =>
+                                        setData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== value) }))
+                                    }
+                                />
                             </div>
                         </div>
                     )}
@@ -225,7 +251,7 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
                             )}
                         </CommandEmpty>
                         <CommandGroup>
-                            {authors.map((author) => (
+                            {authors.map((author: AuthorData) => (
                                 <CommandItem
                                     key={author.id}
                                     value={author.name}
@@ -237,6 +263,100 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
                                 >
                                     {author.name}
                                     <Check className={cn('ml-auto', value === author.name ? 'opacity-100' : 'opacity-0')} />
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function TagSearch({
+    selectedTags,
+    onValueAdded,
+    onValueRemoved,
+}: {
+    selectedTags: string[];
+    onValueAdded: (tag: string) => void;
+    onValueRemoved: (tag: string) => void;
+}) {
+    const [open, setOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [tags, setTags] = useState<TagData[]>([]);
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    const fetchTags = useCallback((search: string) => {
+        setIsLoading(true);
+        setTags([]);
+
+        fetch(route('community.tags.index', { search: search }))
+            .then((res) => res.json())
+            .then((json) => {
+                setTags(json.data);
+            })
+            .catch((err) => console.error('Failed to fetch tags:', err))
+            .finally(() => setIsLoading(false));
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedFetchTags = useCallback(
+        debounce((search: string) => fetchTags(search), 300),
+        [],
+    );
+
+    useEffect(() => {
+        debouncedFetchTags(searchValue);
+    }, [searchValue, debouncedFetchTags]);
+
+    useEffect(() => {
+        fetchTags('');
+    }, [fetchTags]);
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <div className="flex gap-2">
+                <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
+                        Select tags
+                        <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                </PopoverTrigger>
+                <Button variant="ghost" onClick={() => selectedTags.forEach((tag) => onValueRemoved(tag))}>
+                    <X />
+                </Button>
+            </div>
+            <PopoverContent className="w-96 p-0" align="start">
+                <Command className="w-96" shouldFilter={false}>
+                    <CommandInput placeholder="Search author..." className="h-9" value={searchValue} onValueChange={setSearchValue} />
+                    <CommandList>
+                        <CommandEmpty>
+                            {isLoading ? (
+                                <div className="flex justify-center">
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                </div>
+                            ) : (
+                                'No tag found.'
+                            )}
+                        </CommandEmpty>
+                        <CommandGroup>
+                            {tags.map((tag: TagData) => (
+                                <CommandItem
+                                    key={tag.id}
+                                    value={tag.label}
+                                    onSelect={() => {
+                                        if (selectedTags.includes(tag.label)) {
+                                            onValueRemoved(tag.label);
+                                        } else {
+                                            onValueAdded(tag.label);
+                                        }
+                                        setSearchValue('');
+                                        setOpen(false);
+                                    }}
+                                >
+                                    {tag.label}
+                                    <Check className={cn('ml-auto', selectedTags.includes(tag.label) ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>

@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 describe('index', function (): void {
-
     it('returns authors', function (): void {
         $author = Author::factory()->createOne();
 
@@ -35,5 +34,4 @@ describe('index', function (): void {
             ->assertOk()
             ->assertJsonPath('data', []);
     });
-
 });

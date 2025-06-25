@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Actions\GetCommunityLinks;
 use App\Data\SearchCommunityLinkFormData;
 use App\Models\Link;
+use App\Models\Tag;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
 it('returns links sorted by published_at and id', function () {
@@ -81,4 +83,20 @@ it('filters by author', function () {
 
     expect($links->collect())
         ->toBeCollectionCanonicalizing([$first, $second]);
+});
+
+it('filters by tags', function () {
+    $php = Tag::factory()->createOne(['label' => 'PHP']);
+    $laravel = Tag::factory()->createOne(['label' => 'Laravel']);
+
+    $first = Link::factory()->hasAttached($php)->published()->public()->createOne();
+    $second = Link::factory()->hasAttached([$php, $laravel])->published()->public()->createOne();
+    $third = Link::factory()->hasAttached($laravel)->published()->public()->createOne();
+
+    $links = app(GetCommunityLinks::class)->execute(
+        new SearchCommunityLinkFormData(search: null, author: null, tags: new Collection(['php', 'laravel']))
+    );
+
+    expect($links->collect())
+        ->toBeCollectionCanonicalizing([$second]);
 });
