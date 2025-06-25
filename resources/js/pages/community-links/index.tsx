@@ -1,3 +1,4 @@
+import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -17,7 +18,6 @@ import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
 import AuthorData = App.Data.AuthorData;
 import TagData = App.Data.TagData;
-import TextLink from '@/components/text-link';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -177,7 +177,7 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <TextLink href={route('community.links.index', { author: link.author.name})} variant="ghost">
+                        <TextLink href={route('community.links.index', { author: link.author.name })} variant="ghost">
                             {link.author.name}
                         </TextLink>
                     </div>
