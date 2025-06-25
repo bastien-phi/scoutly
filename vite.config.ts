@@ -21,6 +21,11 @@ export default defineConfig({
               name: 'typescript transform',
               run: ['php', 'artisan', 'typescript:transform'],
               pattern: ['app/Data/**/*Data.php', 'app/Enums/**/*.php'],
+            },
+            {
+              name: 'ziggy route list',
+              run: ['php', 'artisan', 'ziggy:generate', '--types-only', 'resources/js/types/ziggy.d.ts'],
+              pattern: ['web/**/*.php'],
             }
         ]),
     ],

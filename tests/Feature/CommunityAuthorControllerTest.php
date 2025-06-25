@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\GetCommunityAuthors;
 use App\Models\Author;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 describe('index', function (): void {
@@ -15,8 +16,8 @@ describe('index', function (): void {
             ->with(null)
             ->returns(fn () => Collection::make([$author]));
 
-        $this->actingAs(\App\Models\User::factory()->createOne())
-            ->getJson(route('community-authors.index'))
+        $this->actingAs(User::factory()->createOne())
+            ->getJson(route('community.authors.index'))
             ->assertOk()
             ->assertJsonPath('data', [
                 ['id' => $author->id, 'name' => $author->name],
@@ -29,9 +30,10 @@ describe('index', function (): void {
             ->with('foo')
             ->returns(fn () => Collection::make([]));
 
-        $this->actingAs(\App\Models\User::factory()->createOne())
-            ->getJson(route('community-authors.index', ['search' => 'foo']))
+        $this->actingAs(User::factory()->createOne())
+            ->getJson(route('community.authors.index', ['search' => 'foo']))
             ->assertOk()
             ->assertJsonPath('data', []);
     });
+
 });

@@ -62,18 +62,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('drafts.publish')
         ->can('update-draft', 'draft');
 
-    Route::controller(CommunityLinkController::class)
-        ->prefix('community-links')
-        ->name('community-links.')
+    Route::prefix('community')
+        ->name('community.')
         ->group(function (): void {
-            Route::get('/', 'index')->name('index');
-        });
+            Route::get('links', [CommunityLinkController::class, 'index'])
+                ->name('links.index');
 
-    Route::controller(CommunityAuthorController::class)
-        ->prefix('community-authors')
-        ->name('community-authors.')
-        ->group(function (): void {
-            Route::get('/', 'index')->name('index');
+            Route::get('authors', [CommunityAuthorController::class, 'index'])
+                ->name('authors.index');
         });
 });
 

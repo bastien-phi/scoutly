@@ -20,7 +20,7 @@ import AuthorData = App.Data.AuthorData;
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Community links',
-        href: route('community-links.index'),
+        href: route('community.links.index'),
     },
 ];
 
@@ -57,7 +57,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
             return;
         }
 
-        router.get(route('community-links.index'), clearFormData(data), {
+        router.get(route('community.links.index'), clearFormData(data), {
             only: ['links'],
             preserveState: true,
         });
@@ -175,7 +175,7 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
         setIsLoading(true);
         setAuthors([]);
 
-        fetch(route('community-authors.index', { search: search }))
+        fetch(route('community.authors.index', { search: search }))
             .then((res) => res.json())
             .then((json) => {
                 setAuthors(json.data);

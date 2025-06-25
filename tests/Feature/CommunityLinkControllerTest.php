@@ -21,7 +21,7 @@ describe('index', function (): void {
             ->in($links);
 
         $this->actingAs(User::factory()->createOne())
-            ->get(route('community-links.index'))
+            ->get(route('community.links.index'))
             ->assertOk()
             ->assertInertia(
                 fn (AssertableInertia $page) => $page
@@ -44,7 +44,7 @@ describe('index', function (): void {
             ->in($links);
 
         $this->actingAs(User::factory()->createOne())
-            ->get(route('community-links.index', [
+            ->get(route('community.links.index', [
                 'search' => 'Hello world',
                 'author' => 'John Doe',
             ]))
@@ -66,7 +66,7 @@ describe('index', function (): void {
         $this->mockAction(GetCommunityLinks::class)
             ->neverCalled();
 
-        $this->get(route('community-links.index'))
+        $this->get(route('community.links.index'))
             ->assertRedirectToRoute('login');
     });
 });
