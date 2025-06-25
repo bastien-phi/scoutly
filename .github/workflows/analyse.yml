@@ -54,5 +54,8 @@ jobs:
       - name: Generate typescript types
         run: php artisan typescript:transform
 
+      - name: Generate ziggy routes
+        run: php artisan ziggy:generate --types-only resources/js/types/ziggy.d.ts
+
       - name: Run tsc
         run: pnpm run types
