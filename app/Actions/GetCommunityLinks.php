@@ -8,6 +8,7 @@ use App\Data\SearchCommunityLinkFormData;
 use App\Models\Link;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class GetCommunityLinks
 {
@@ -21,6 +22,7 @@ class GetCommunityLinks
             ->wherePublic()
             ->tap($this->search($data->search))
             ->tap($this->filterAuthor($data->author))
+            ->tap($this->filterTags($data->tags))
             ->latest('published_at')
             ->latest('id')
             ->with(['author', 'user', 'tags'])
@@ -55,6 +57,26 @@ class GetCommunityLinks
 
         return function (Builder $query) use ($author): void {
             $query->whereRelation('author', 'name', $author);
+        };
+    }
+
+    /**
+     * @param  Collection<int, string>  $tags
+     * @return callable(Builder<Link>): void
+     */
+    private function filterTags(Collection $tags): callable
+    {
+        if ($tags->isEmpty()) {
+            return function (Builder $query): void {};
+        }
+
+        return function (Builder $query) use ($tags): void {
+            $query->whereHas(
+                'tags',
+                fn (Builder $query) => $query->whereIn('label', $tags),
+                '=',
+                $tags->count()
+            );
         };
     }
 }

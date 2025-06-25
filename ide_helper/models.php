@@ -153,6 +153,10 @@ namespace IdeHelper\App\Models
      * @method $this whereLabel(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this wherePublic()
+     *
+     * @see project://app/Models/Tag.php L50
+     *
      * @method \App\Models\Tag create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag>|\App\Models\Tag|null find($id, array $columns = ['*'])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> findMany($id, array $columns = ['*'])

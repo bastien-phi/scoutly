@@ -12,7 +12,7 @@ use Spatie\LaravelData\DataCollection;
 class CommunityAuthorController
 {
     /**
-     * @return DataCollection<int, \App\Data\AuthorData>
+     * @return DataCollection<int, AuthorData>
      */
     public function index(SearchRequest $request, GetCommunityAuthors $getCommunityAuthors): DataCollection
     {

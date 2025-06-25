@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\CheckDraftInboxController;
 use App\Http\Controllers\CommunityAuthorController;
 use App\Http\Controllers\CommunityLinkController;
+use App\Http\Controllers\CommunityTagController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PublishDraftController;
@@ -65,11 +66,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('community')
         ->name('community.')
         ->group(function (): void {
+            Route::get('authors', [CommunityAuthorController::class, 'index'])
+                ->name('authors.index');
+
             Route::get('links', [CommunityLinkController::class, 'index'])
                 ->name('links.index');
 
-            Route::get('authors', [CommunityAuthorController::class, 'index'])
-                ->name('authors.index');
+            Route::get('tags', [CommunityTagController::class, 'index'])
+                ->name('tags.index');
         });
 });
 

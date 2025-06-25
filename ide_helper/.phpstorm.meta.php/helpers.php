@@ -3087,8 +3087,8 @@ namespace PHPSTORM_META {
     expectedArguments(\config(), 0, argumentsSet('configs'));
     registerArgumentsSet('routes',
         'appearance',
-        'community-authors.index',
-        'community-links.index',
+        'community.authors.index',
+        'community.links.index',
         'dashboard',
         'drafts.check-inbox',
         'drafts.edit',

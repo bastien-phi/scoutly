@@ -231,7 +231,7 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                     <CommandList>
                         <CommandEmpty>No author found.</CommandEmpty>
                         <CommandGroup>
-                            {authors.map((author) => (
+                            {authors.map((author: AuthorData) => (
                                 <CommandItem
                                     key={author.id}
                                     value={author.name}
