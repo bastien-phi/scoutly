@@ -8,10 +8,10 @@ use App\Models\Link;
 
 it('gets community authors', function (): void {
     $john = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'John Doe']);
     $jane = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'Jane Smith']);
 
     $authors = app(GetCommunityAuthors::class)->execute(search: null);
@@ -21,7 +21,7 @@ it('gets community authors', function (): void {
 
 it('limits results to 30', function (): void {
     Author::factory(31)
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->create();
 
     $authors = app(GetCommunityAuthors::class)->execute(search: null);
@@ -31,10 +31,10 @@ it('limits results to 30', function (): void {
 
 it('returns distinct names', function (): void {
     $john = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'John Doe']);
     $JOHN = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'JOHN DOE']);
 
     $authors = app(GetCommunityAuthors::class)->execute(search: null);
@@ -44,13 +44,13 @@ it('returns distinct names', function (): void {
 
 it('filters authors', function (): void {
     $john = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'John Doe']);
     $jane = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'Jane Doe']);
     $patrick = Author::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['name' => 'Patrick Smith']);
 
     $authors = app(GetCommunityAuthors::class)->execute(search: 'do');

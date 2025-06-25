@@ -48,14 +48,14 @@ class LinkFactory extends Factory
         ]);
     }
 
-    public function public(): static
+    public function isPublic(): static
     {
         return $this->state([
             'is_public' => true,
         ]);
     }
 
-    public function private(): static
+    public function isPrivate(): static
     {
         return $this->state([
             'is_public' => false,

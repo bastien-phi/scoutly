@@ -8,10 +8,10 @@ use App\Models\Tag;
 
 it('gets community tags', function (): void {
     $first = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'PHP']);
     $second = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'Laravel']);
 
     $authors = app(GetCommunityTags::class)->execute(search: null);
@@ -21,7 +21,7 @@ it('gets community tags', function (): void {
 
 it('limits results to 30', function (): void {
     Tag::factory(31)
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->create();
 
     $authors = app(GetCommunityTags::class)->execute(search: null);
@@ -31,10 +31,10 @@ it('limits results to 30', function (): void {
 
 it('returns distinct labels', function (): void {
     $php = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'Php']);
     $PHP = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'PHP']);
 
     $authors = app(GetCommunityTags::class)->execute(search: null);
@@ -44,13 +44,13 @@ it('returns distinct labels', function (): void {
 
 it('filters tags', function (): void {
     $php = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'PHP']);
     $php84 = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'PHP 8.4']);
     $laravel = Tag::factory()
-        ->has(Link::factory()->public())
+        ->has(Link::factory()->isPublic())
         ->createOne(['label' => 'Laravel']);
 
     $authors = app(GetCommunityTags::class)->execute(search: 'PHP');
