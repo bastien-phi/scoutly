@@ -13,9 +13,14 @@ it('returns trending tags tags', function (): void {
         ->create(['label' => 'Go']);
 
     $php = Tag::factory()
-        ->has(Link::factory(5)->published()->isPublic())
+        ->has(Link::factory(2)->published()->isPublic())
         ->has(Link::factory(1)->draft()->isPublic())
         ->create(['label' => 'PHP']);
+
+    $otherPHP = Tag::factory()
+        ->has(Link::factory(3)->published()->isPublic())
+        ->has(Link::factory(1)->draft()->isPublic())
+        ->create(['label' => 'php']);
 
     $laravel = Tag::factory()
         ->has(Link::factory(3)->published()->isPublic())
