@@ -1,7 +1,6 @@
 import CommunityLinkCard from '@/components/community-link-card';
 import LinkCard from '@/components/link-card';
 import { Pill } from '@/components/ui/pill';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { fetchJson } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
