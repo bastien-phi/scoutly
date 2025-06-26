@@ -31,7 +31,7 @@ namespace Illuminate\Http
      *
      * @method mixed inertia()
      *
-     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L77
+     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L76
      */
     class Request
     {
@@ -53,7 +53,7 @@ namespace Illuminate\Routing
     /**
      * @method mixed inertia($uri, $component, $props = [])
      *
-     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L84
+     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L83
      */
     class Router
     {
@@ -69,7 +69,7 @@ namespace Illuminate\Support\Facades
     /**
      * @method static mixed inertia($uri, $component, $props = [])
      *
-     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L84
+     * @see project://vendor/inertiajs/inertia-laravel/src/ServiceProvider.php L83
      */
     class Route {}
 }
@@ -79,11 +79,15 @@ namespace Illuminate\Testing
     /**
      * @method mixed assertInertia(?\Closure $callback = null)
      *
-     * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L11
+     * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L12
      *
      * @method mixed inertiaPage()
      *
-     * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L26
+     * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L27
+     *
+     * @method mixed inertiaProps(?string $propName = null)
+     *
+     * @see project://vendor/inertiajs/inertia-laravel/src/Testing/TestResponseMacros.php L34
      *
      * @method self assertValidContract(int $status)
      *

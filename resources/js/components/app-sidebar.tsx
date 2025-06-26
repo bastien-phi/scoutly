@@ -93,10 +93,10 @@ export function AppSidebar() {
                         <SidebarMenuItem key="Community links">
                             <SidebarMenuButton
                                 asChild
-                                isActive={routeMatches(page, 'community.links.index')}
+                                isActive={routeMatches(page, 'community-links.index')}
                                 tooltip={{ children: 'Community links' }}
                             >
-                                <Link href={route('community.links.index')} prefetch>
+                                <Link href={route('community-links.index')} prefetch>
                                     <Globe />
                                     <span>Community links</span>
                                 </Link>

@@ -22,7 +22,7 @@ import TagData = App.Data.TagData;
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Community links',
-        href: route('community.links.index'),
+        href: route('community-links.index'),
     },
 ];
 
@@ -60,7 +60,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
             return;
         }
 
-        router.get(route('community.links.index'), clearFormData(data), {
+        router.get(route('community-links.index'), clearFormData(data), {
             only: ['links'],
             preserveState: true,
         });
@@ -166,7 +166,7 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Link href={route('community.links.index', { tags: [tag.label] })} key={tag.id}>
+                            <Link href={route('community-links.index', { tags: [tag.label] })} key={tag.id}>
                                 <Pill>{tag.label}</Pill>
                             </Link>
                         ))}
@@ -177,7 +177,7 @@ function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
                 {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <TextLink href={route('community.links.index', { author: link.author.name })} variant="ghost">
+                        <TextLink href={route('community-links.index', { author: link.author.name })} variant="ghost">
                             {link.author.name}
                         </TextLink>
                     </div>
@@ -206,7 +206,7 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
         setIsLoading(true);
         setAuthors([]);
 
-        fetch(route('community.authors.index', { search: search }))
+        fetch(route('api.community-authors.index', { search: search }))
             .then((res) => res.json())
             .then((json) => {
                 setAuthors(json.data);
@@ -296,7 +296,7 @@ function TagSearch({
         setIsLoading(true);
         setTags([]);
 
-        fetch(route('community.tags.index', { search: search }))
+        fetch(route('api.community-tags.index', { search: search }))
             .then((res) => res.json())
             .then((json) => {
                 setTags(json.data);
