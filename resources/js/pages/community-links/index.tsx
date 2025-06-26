@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Pill } from '@/components/ui/pill';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { fetchJson } from '@/helpers';
 import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
@@ -206,12 +207,11 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
         setIsLoading(true);
         setAuthors([]);
 
-        fetch(route('api.community-authors.index', { search: search }))
-            .then((res) => res.json())
+        fetchJson<AuthorData[]>(route('api.community-authors.index', { search: search }))
             .then((json) => {
                 setAuthors(json.data);
             })
-            .catch((err) => console.error('Failed to fetch authors:', err))
+            .catch((err) => console.error('Failed to fetch authors.', err))
             .finally(() => setIsLoading(false));
     }, []);
 
@@ -296,12 +296,11 @@ function TagSearch({
         setIsLoading(true);
         setTags([]);
 
-        fetch(route('api.community-tags.index', { search: search }))
-            .then((res) => res.json())
+        fetchJson<TagData[]>(route('api.community-tags.index', { search: search }))
             .then((json) => {
                 setTags(json.data);
             })
-            .catch((err) => console.error('Failed to fetch tags:', err))
+            .catch((err) => console.error('Failed to fetch tags.', err))
             .finally(() => setIsLoading(false));
     }, []);
 
