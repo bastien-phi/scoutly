@@ -6,7 +6,7 @@ use App\Models\Link;
 use App\Models\Tag;
 use App\Models\User;
 
-it('returns trending tags tags', function (): void {
+it('returns trending tags', function (): void {
     $go = Tag::factory()
         ->has(Link::factory(2)->published()->isPublic())
         ->has(Link::factory(3)->published()->isPrivate())
