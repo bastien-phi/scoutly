@@ -1,12 +1,16 @@
+import CommunityLinkCard from '@/components/community-link-card';
+import LinkCard from '@/components/link-card';
 import { Pill } from '@/components/ui/pill';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { fetchJson } from '@/helpers';
 import AppLayout from '@/layouts/app-layout';
+import { fetchJson } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import TagStatisticData = App.Data.TagStatisticData;
+import CommunityLinkData = App.Data.CommunityLinkData;
+import LinkData = App.Data.LinkData;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,6 +24,14 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                <div className="grid auto-rows-min gap-4 xl:grid-cols-2">
+                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border">
+                        <RandomLink />
+                    </div>
+                    <div className="border-sidebar-border/70 dark:border-sidebar-border relative rounded-xl border">
+                        <RandomCommunityLink />
+                    </div>
+                </div>
                 <div className="grid auto-rows-min gap-4 sm:grid-cols-2 xl:grid-cols-4">
                     <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
                         <LinkCount title="Your links" url={route('api.dashboard.link-count')} />
@@ -41,9 +53,6 @@ export default function Dashboard() {
                             generateLinkUsing={(tag: TagStatisticData) => route('community-links.index', { tags: [tag.label] })}
                         />
                     </div>
-                </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                 </div>
             </div>
         </AppLayout>
@@ -117,6 +126,66 @@ function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: s
                         ))}
                     </div>
                 )}
+            </div>
+        </div>
+    );
+}
+
+function RandomLink() {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [link, setLink] = useState<LinkData | null>(null);
+
+    useEffect(() => {
+        fetchJson<LinkData>(route('api.dashboard.random-link'))
+            .then((json) => {
+                setLink(json.data);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch random link.', err);
+                setLink(null);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+    return (
+        <div className="flex size-full flex-col p-4">
+            <div className="text-muted-foreground">Random link</div>
+            <div className="flex min-h-32 flex-1 items-center justify-center">
+                {isLoading && <LoaderCircle className="text-muted-foreground h-8 w-8 animate-spin" />}
+                {!isLoading && !link && <span className="text-3xl font-semibold">-</span>}
+                {!isLoading && link && <LinkCard link={link} className="border-0 shadow-none" />}
+            </div>
+        </div>
+    );
+}
+
+function RandomCommunityLink() {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [link, setLink] = useState<CommunityLinkData | null>(null);
+
+    useEffect(() => {
+        fetchJson<CommunityLinkData>(route('api.dashboard.random-community-link'))
+            .then((json) => {
+                setLink(json.data);
+            })
+            .catch((err) => {
+                console.error('Failed to fetch random link.', err);
+                setLink(null);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+    return (
+        <div className="flex size-full flex-col p-4">
+            <div className="text-muted-foreground">Random community link</div>
+            <div className="flex min-h-32 flex-1 items-center justify-center">
+                {isLoading && <LoaderCircle className="text-muted-foreground h-8 w-8 animate-spin" />}
+                {!isLoading && !link && <span className="text-3xl font-semibold">-</span>}
+                {!isLoading && link && <CommunityLinkCard link={link} className="border-0 shadow-none" />}
             </div>
         </div>
     );

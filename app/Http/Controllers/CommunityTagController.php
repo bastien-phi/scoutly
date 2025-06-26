@@ -7,18 +7,15 @@ namespace App\Http\Controllers;
 use App\Actions\GetCommunityTags;
 use App\Data\TagData;
 use App\Http\Requests\SearchRequest;
-use Spatie\LaravelData\DataCollection;
+use App\Http\Resources\DataCollectionResource;
 
 class CommunityTagController
 {
-    /**
-     * @return DataCollection<int, TagData>
-     */
-    public function index(SearchRequest $request, GetCommunityTags $getCommunityTags): DataCollection
+    public function index(SearchRequest $request, GetCommunityTags $getCommunityTags): DataCollectionResource
     {
-        return TagData::collect(
+        return DataCollectionResource::make(
             $getCommunityTags->execute($request->validated('search')),
-            DataCollection::class
+            TagData::class
         );
     }
 }

@@ -8,6 +8,8 @@ use App\Http\Controllers\Dashboard\CommunityLinkCountController;
 use App\Http\Controllers\Dashboard\CommunityTrendingTagsController;
 use App\Http\Controllers\Dashboard\FavoriteTagsController;
 use App\Http\Controllers\Dashboard\LinkCountController;
+use App\Http\Controllers\Dashboard\RandomCommunityLinkController;
+use App\Http\Controllers\Dashboard\RandomLinkController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->name('api.')->group(function (): void {
@@ -31,5 +33,11 @@ Route::middleware(['auth', 'verified'])->name('api.')->group(function (): void {
 
             Route::get('link-count', LinkCountController::class)
                 ->name('link-count');
+
+            Route::get('random-community-link', RandomCommunityLinkController::class)
+                ->name('random-community-link');
+
+            Route::get('random-link', RandomLinkController::class)
+                ->name('random-link');
         });
 });

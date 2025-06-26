@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
@@ -18,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDate();
         $this->configureModels();
+        $this->registerMacros();
     }
 
     private function configureDate(): void
@@ -31,5 +33,21 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(! app()->isProduction());
 
         Relation::enforceMorphMap([]);
+    }
+
+    private function registerMacros(): void
+    {
+        Builder::macro(
+            'random',
+            function () {
+                $total = $this->toBase()->getCountForPagination();
+
+                if ($total === 0) {
+                    return null;
+                }
+
+                return $this->offset(random_int(0, $total - 1))->first();
+            }
+        );
     }
 }

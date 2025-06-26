@@ -1,19 +1,16 @@
-import TextLink from '@/components/text-link';
+import CommunityLinkCard from '@/components/community-link-card';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Datetime } from '@/components/ui/datetime';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Pill } from '@/components/ui/pill';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { fetchJson } from '@/helpers';
 import AppLayout from '@/layouts/app-layout';
-import { clearFormData, cn, debounce } from '@/lib/utils';
+import { clearFormData, cn, debounce, fetchJson } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
-import { Head, Link, router, useForm, WhenVisible } from '@inertiajs/react';
-import { ArrowUpRight, Check, ChevronsUpDown, Filter, LoaderCircle, Search, User, X } from 'lucide-react';
+import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
+import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
 import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
@@ -142,58 +139,6 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                 </div>
             </div>
         </AppLayout>
-    );
-}
-
-function CommunityLinkCard({ link }: { link: CommunityLinkData }) {
-    return (
-        <Card>
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <CardTitle>{link.url}</CardTitle>
-                    <a href={link.url} target="_blank">
-                        <ArrowUpRight></ArrowUpRight>
-                    </a>
-                </div>
-                <CardDescription>By {link.user.username}</CardDescription>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-                {link.description && (
-                    <pre className="font-sans whitespace-pre-wrap">
-                        {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
-                    </pre>
-                )}
-                {link.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                        {link.tags.map((tag) => (
-                            <Link href={route('community-links.index', { tags: [tag.label] })} key={tag.id}>
-                                <Pill>{tag.label}</Pill>
-                            </Link>
-                        ))}
-                    </div>
-                )}
-            </CardContent>
-            <CardFooter className="flex justify-between">
-                {link.author ? (
-                    <div className="flex gap-x-4">
-                        <User />
-                        <TextLink href={route('community-links.index', { author: link.author.name })} variant="ghost">
-                            {link.author.name}
-                        </TextLink>
-                    </div>
-                ) : (
-                    <div />
-                )}
-                {link.published_at && (
-                    <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                        <span>
-                            Published : <Datetime datetime={new Date(link.published_at)} />
-                        </span>
-                    </div>
-                )}
-            </CardFooter>
-        </Card>
     );
 }
 

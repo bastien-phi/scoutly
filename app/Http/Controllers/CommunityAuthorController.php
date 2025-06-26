@@ -7,18 +7,15 @@ namespace App\Http\Controllers;
 use App\Actions\GetCommunityAuthors;
 use App\Data\AuthorData;
 use App\Http\Requests\SearchRequest;
-use Spatie\LaravelData\DataCollection;
+use App\Http\Resources\DataCollectionResource;
 
 class CommunityAuthorController
 {
-    /**
-     * @return DataCollection<int, AuthorData>
-     */
-    public function index(SearchRequest $request, GetCommunityAuthors $getCommunityAuthors): DataCollection
+    public function index(SearchRequest $request, GetCommunityAuthors $getCommunityAuthors): DataCollectionResource
     {
-        return AuthorData::collect(
+        return DataCollectionResource::make(
             $getCommunityAuthors->execute($request->validated('search')),
-            DataCollection::class
+            AuthorData::class
         );
     }
 }
