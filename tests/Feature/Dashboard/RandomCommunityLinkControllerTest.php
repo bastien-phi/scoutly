@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\Link;
 use App\Models\User;
 
-it('returns a random community links', function (): void {
+it('returns a random community link', function (): void {
     $link = Link::factory()
         ->forAuthor()
         ->published()
