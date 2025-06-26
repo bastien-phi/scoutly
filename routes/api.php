@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\CommunityAuthorController;
 use App\Http\Controllers\CommunityTagController;
 use App\Http\Controllers\Dashboard\CommunityLinkCountController;
+use App\Http\Controllers\Dashboard\LinkCountController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->name('api.')->group(function (): void {
@@ -17,6 +18,9 @@ Route::middleware(['auth', 'verified'])->name('api.')->group(function (): void {
     Route::name('dashboard.')
         ->prefix('dashboard')
         ->group(function (): void {
+            Route::get('link-count', LinkCountController::class)
+                ->name('link-count');
+
             Route::get('community-link-count', CommunityLinkCountController::class)
                 ->name('community-link-count');
         });
