@@ -69,7 +69,6 @@ function LinkCount({ title, url }: { title: string; url: string }) {
             })
             .catch((err) => {
                 console.error('Failed to fetch link count.', err);
-                setCount(null);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -100,7 +99,7 @@ function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: s
                 setTags(json.data);
             })
             .catch((err) => {
-                console.error('Failed to fetch link count.', err);
+                console.error('Failed to fetch trending tags.', err);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -141,7 +140,6 @@ function RandomLink() {
             })
             .catch((err) => {
                 console.error('Failed to fetch random link.', err);
-                setLink(null);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -170,8 +168,7 @@ function RandomCommunityLink() {
                 setLink(json.data);
             })
             .catch((err) => {
-                console.error('Failed to fetch random link.', err);
-                setLink(null);
+                console.error('Failed to fetch random community link.', err);
             })
             .finally(() => {
                 setIsLoading(false);
