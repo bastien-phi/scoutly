@@ -35,7 +35,11 @@ export default function Dashboard() {
                         <LinkCount title="Community links" url={route('api.dashboard.community-link-count')} />
                     </div>
                     <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                        <TrendingTags
+                            title="Community trending tags"
+                            url={route('api.dashboard.community-trending-tags')}
+                            generateLinkUsing={(tag: TagStatisticData) => route('community-links.index', { tags: [tag.label] })}
+                        />
                     </div>
                 </div>
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
