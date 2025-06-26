@@ -6,22 +6,25 @@ use App\Models\Link;
 use App\Models\User;
 
 it('returns a random community links', function (): void {
-    $user = User::factory()->createOne();
-
     $link = Link::factory()
-        ->recycle($user)
         ->forAuthor()
         ->published()
+        ->isPublic()
         ->createOne();
 
     Link::factory()
-        ->recycle($user)
+        ->published()
+        ->isPrivate()
+        ->createOne();
+
+    Link::factory()
         ->draft()
+        ->isPublic()
         ->createOne();
 
     $this
-        ->actingAs($user)
-        ->getJson(route('api.dashboard.random-link'))
+        ->actingAs(User::factory()->createOne())
+        ->getJson(route('api.dashboard.random-community-link'))
         ->assertOk()
         ->assertData([
             'id' => $link->id,
@@ -29,9 +32,10 @@ it('returns a random community links', function (): void {
             'title' => $link->title,
             'description' => $link->description,
             'published_at' => $link->published_at?->toIso8601String(),
-            'is_public' => $link->is_public,
-            'created_at' => $link->created_at->toIso8601String(),
-            'updated_at' => $link->updated_at->toIso8601String(),
+            'user' => [
+                'id' => $link->user->id,
+                'username' => $link->user->username,
+            ],
             'author' => [
                 'id' => $link->author->id,
                 'name' => $link->author->name,
