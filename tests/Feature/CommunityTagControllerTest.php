@@ -18,7 +18,7 @@ describe('index', function (): void {
         $this->actingAs(User::factory()->createOne())
             ->getJson(route('api.community-tags.index'))
             ->assertOk()
-            ->assertJsonPath('data', [
+            ->assertData([
                 ['id' => $tag->id, 'label' => $tag->label],
             ]);
 

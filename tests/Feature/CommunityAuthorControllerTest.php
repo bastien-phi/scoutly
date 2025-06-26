@@ -18,7 +18,7 @@ describe('index', function (): void {
         $this->actingAs(User::factory()->createOne())
             ->getJson(route('api.community-authors.index'))
             ->assertOk()
-            ->assertJsonPath('data', [
+            ->assertData([
                 ['id' => $author->id, 'name' => $author->name],
             ]);
 
