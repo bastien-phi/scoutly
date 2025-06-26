@@ -86,7 +86,7 @@ class LinkController
     {
         $updateLink->execute($link, LinkFormData::from($request));
 
-        return Inertia::location(route('links.show', $link));
+        return to_route('links.show', $link);
     }
 
     public function destroy(Link $link): FoundationResponse
