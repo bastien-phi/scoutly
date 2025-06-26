@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Dashboard;
 
 use App\Data\TagStatisticData;
+use App\Http\Resources\DataCollectionResource;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\LaravelData\DataCollection;
 
 class CommunityTrendingTagsController
 {
-    /**
-     * @return DataCollection<int, TagStatisticData>
-     */
-    public function __invoke(): DataCollection
+    public function __invoke(): DataCollectionResource
     {
         $tags = Tag::query()
             ->withCount([
@@ -25,6 +22,6 @@ class CommunityTrendingTagsController
             ->limit(3)
             ->get();
 
-        return TagStatisticData::collect($tags, DataCollection::class);
+        return DataCollectionResource::make($tags, TagStatisticData::class);
     }
 }
