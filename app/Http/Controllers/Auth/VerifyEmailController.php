@@ -15,7 +15,7 @@ class VerifyEmailController
     public function __invoke(EmailVerificationRequest $request, #[CurrentUser] User $user): RedirectResponse
     {
         if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+            return redirect()->intended(route('dashboard.show', absolute: false).'?verified=1');
         }
 
         if ($user->markEmailAsVerified()) {

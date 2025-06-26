@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\CheckDraftInboxController;
-use App\Http\Controllers\CommunityAuthorController;
 use App\Http\Controllers\CommunityLinkController;
-use App\Http\Controllers\CommunityTagController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\DraftController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\PublishDraftController;
@@ -17,9 +16,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::controller(LinkController::class)
         ->prefix('links')
@@ -63,18 +60,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('drafts.publish')
         ->can('update-draft', 'draft');
 
-    Route::prefix('community')
-        ->name('community.')
-        ->group(function (): void {
-            Route::get('authors', [CommunityAuthorController::class, 'index'])
-                ->name('authors.index');
-
-            Route::get('links', [CommunityLinkController::class, 'index'])
-                ->name('links.index');
-
-            Route::get('tags', [CommunityTagController::class, 'index'])
-                ->name('tags.index');
-        });
+    Route::get('community-links', [CommunityLinkController::class, 'index'])
+        ->name('community-links.index');
 });
 
 require __DIR__.'/settings.php';

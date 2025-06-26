@@ -16,7 +16,7 @@ describe('index', function (): void {
             ->returns(fn () => Collection::make([$tag]));
 
         $this->actingAs(User::factory()->createOne())
-            ->getJson(route('community.tags.index'))
+            ->getJson(route('api.community-tags.index'))
             ->assertOk()
             ->assertJsonPath('data', [
                 ['id' => $tag->id, 'label' => $tag->label],
@@ -30,7 +30,7 @@ describe('index', function (): void {
             ->returns(fn () => Collection::make([]));
 
         $this->actingAs(User::factory()->createOne())
-            ->getJson(route('community.tags.index', ['search' => 'foo']))
+            ->getJson(route('api.community-tags.index', ['search' => 'foo']))
             ->assertOk()
             ->assertJsonPath('data', []);
     });

@@ -16,7 +16,7 @@ describe('index', function (): void {
             ->returns(fn () => Collection::make([$author]));
 
         $this->actingAs(User::factory()->createOne())
-            ->getJson(route('community.authors.index'))
+            ->getJson(route('api.community-authors.index'))
             ->assertOk()
             ->assertJsonPath('data', [
                 ['id' => $author->id, 'name' => $author->name],
@@ -30,7 +30,7 @@ describe('index', function (): void {
             ->returns(fn () => Collection::make([]));
 
         $this->actingAs(User::factory()->createOne())
-            ->getJson(route('community.authors.index', ['search' => 'foo']))
+            ->getJson(route('api.community-authors.index', ['search' => 'foo']))
             ->assertOk()
             ->assertJsonPath('data', []);
     });
