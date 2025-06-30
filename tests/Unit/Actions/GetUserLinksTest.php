@@ -22,7 +22,7 @@ it('returns links sorted by published_at and id', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_id: null, tags: new Collection)
+        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
     );
 
     expect($links->collect())
@@ -35,7 +35,7 @@ it("returns only user's links", function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_id: null, tags: new Collection)
+        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
     );
 
     expect($links)->toBeEmpty();
@@ -47,7 +47,7 @@ it('returns only published links', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_id: null, tags: new Collection)
+        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
     );
 
     expect($links)->toBeEmpty();
@@ -65,7 +65,7 @@ it('filters by search', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: 'Hell', author_id: null, tags: new Collection)
+        new SearchLinkFormData(search: 'Hell', author_uuid: null, tag_uuids: new Collection)
     );
 
     expect($links->collect())
@@ -83,7 +83,7 @@ it('filters by author', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_id: $author->id, tags: new Collection)
+        new SearchLinkFormData(search: null, author_uuid: $author->uuid, tag_uuids: new Collection)
     );
 
     expect($links->collect())
@@ -102,7 +102,7 @@ it('filters by tags', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_id: null, tags: new Collection([$php->id, $laravel->id]))
+        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection([$php->uuid, $laravel->uuid]))
     );
 
     expect($links->collect())

@@ -19,9 +19,8 @@ describe('index', function (): void {
             ->getJson(route('api.community-tags.index'))
             ->assertOk()
             ->assertData([
-                ['id' => $tag->id, 'label' => $tag->label],
+                ['uuid' => $tag->uuid, 'label' => $tag->label],
             ]);
-
     });
 
     it('filters tags', function (): void {

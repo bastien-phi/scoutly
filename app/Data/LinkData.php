@@ -17,7 +17,7 @@ class LinkData extends Data
      * @param  Collection<int, TagData>  $tags
      */
     public function __construct(
-        public int $id,
+        public string $uuid,
         public string $url,
         public ?string $title,
         public ?string $description,

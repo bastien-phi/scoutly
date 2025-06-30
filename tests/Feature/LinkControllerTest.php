@@ -21,7 +21,7 @@ describe('index', function (): void {
         $user = User::factory()->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user, new SearchLinkFormData(search: null, author_id: null))
+            ->with($user, new SearchLinkFormData(search: null, author_uuid: null))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->for($user)->create()->load(['author', 'tags']),
                 total: 2,
@@ -36,8 +36,8 @@ describe('index', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('links/index')
                     ->has('links.data', 2)
-                    ->where('links.data.0.id', $links->first()->id)
-                    ->where('links.data.1.id', $links->last()->id)
+                    ->where('links.data.0.uuid', $links->first()->uuid)
+                    ->where('links.data.1.uuid', $links->last()->uuid)
                     ->where('request', [])
             );
     });
@@ -49,7 +49,7 @@ describe('index', function (): void {
         $tag = Tag::factory()->for($user)->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user, new SearchLinkFormData(search: 'Hello world', author_id: $author->id, tags: new Collection([$tag->id])))
+            ->with($user, new SearchLinkFormData(search: 'Hello world', author_uuid: $author->uuid, tag_uuids: new Collection([$tag->uuid])))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->recycle($user)->create()->load(['author', 'tags']),
                 total: 2,
@@ -60,20 +60,20 @@ describe('index', function (): void {
         $this->actingAs($user)
             ->get(route('links.index', [
                 'search' => 'Hello world',
-                'author_id' => $author->id,
-                'tags' => [$tag->id],
+                'author_uuid' => $author->uuid,
+                'tag_uuids' => [$tag->uuid],
             ]))
             ->assertOk()
             ->assertInertia(
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('links/index')
                     ->has('links.data', 2)
-                    ->where('links.data.0.id', $links->first()->id)
-                    ->where('links.data.1.id', $links->last()->id)
+                    ->where('links.data.0.uuid', $links->first()->uuid)
+                    ->where('links.data.1.uuid', $links->last()->uuid)
                     ->where('request', [
                         'search' => 'Hello world',
-                        'author_id' => $author->id,
-                        'tags' => [$tag->id],
+                        'author_uuid' => $author->uuid,
+                        'tag_uuids' => [$tag->uuid],
                     ])
             );
     });
@@ -156,7 +156,7 @@ describe('show', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('links/show')
                     ->has('link')
-                    ->where('link.id', $link->id)
+                    ->where('link.uuid', $link->uuid)
             );
     });
 
@@ -192,7 +192,7 @@ describe('edit', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('links/edit')
                     ->has('link')
-                    ->where('link.id', $link->id)
+                    ->where('link.uuid', $link->uuid)
                     ->where('authors', fn (Collection $value): bool => $value->all() === ['Jane Smith', 'John Doe'])
                     ->where('tags', fn (Collection $value): bool => $value->all() === ['Laravel', 'PHP'])
             );

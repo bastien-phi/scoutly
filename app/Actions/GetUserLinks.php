@@ -23,8 +23,8 @@ class GetUserLinks
         return $user->links()
             ->wherePublished()
             ->tap($this->search($data->search))
-            ->tap($this->filterAuthor($data->author_id))
-            ->tap($this->filterTags($data->tags))
+            ->tap($this->filterAuthor($data->author_uuid))
+            ->tap($this->filterTags($data->tag_uuids))
             ->latest('published_at')
             ->latest('id')
             ->with(['author', 'tags'])
@@ -51,33 +51,33 @@ class GetUserLinks
     /**
      * @return callable(Builder<Link>): void
      */
-    private function filterAuthor(?int $authorId): callable
+    private function filterAuthor(?string $authorUuid): callable
     {
-        if ($authorId === null) {
+        if ($authorUuid === null) {
             return function (Builder $query): void {};
         }
 
-        return function (Builder $query) use ($authorId): void {
-            $query->where('author_id', $authorId);
+        return function (Builder $query) use ($authorUuid): void {
+            $query->whereRelation('author', 'uuid', $authorUuid);
         };
     }
 
     /**
-     * @param  \Illuminate\Support\Collection<int, int>  $tagIds
+     * @param  \Illuminate\Support\Collection<int, string>  $tagUuids
      * @return callable(Builder<Link>): void
      */
-    private function filterTags(Collection $tagIds): callable
+    private function filterTags(Collection $tagUuids): callable
     {
-        if ($tagIds->isEmpty()) {
+        if ($tagUuids->isEmpty()) {
             return function (Builder $query): void {};
         }
 
-        return function (Builder $query) use ($tagIds): void {
+        return function (Builder $query) use ($tagUuids): void {
             $query->whereHas(
                 'tags',
-                fn (Builder $query) => $query->whereIn('id', $tagIds),
+                fn (Builder $query) => $query->whereIn('uuid', $tagUuids),
                 '=',
-                $tagIds->count()
+                $tagUuids->count()
             );
         };
     }

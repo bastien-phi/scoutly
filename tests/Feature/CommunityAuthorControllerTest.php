@@ -19,9 +19,8 @@ describe('index', function (): void {
             ->getJson(route('api.community-authors.index'))
             ->assertOk()
             ->assertData([
-                ['id' => $author->id, 'name' => $author->name],
+                ['uuid' => $author->uuid, 'name' => $author->name],
             ]);
-
     });
 
     it('filters authors', function (): void {

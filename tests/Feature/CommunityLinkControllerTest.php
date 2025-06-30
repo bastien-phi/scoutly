@@ -28,8 +28,8 @@ describe('index', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('community-links/index')
                     ->has('links.data', 2)
-                    ->where('links.data.0.id', $links->first()->id)
-                    ->where('links.data.1.id', $links->last()->id)
+                    ->where('links.data.0.uuid', $links->first()->uuid)
+                    ->where('links.data.1.uuid', $links->last()->uuid)
                     ->where('request', [])
             );
     });
@@ -55,8 +55,8 @@ describe('index', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('community-links/index')
                     ->has('links.data', 2)
-                    ->where('links.data.0.id', $links->first()->id)
-                    ->where('links.data.1.id', $links->last()->id)
+                    ->where('links.data.0.uuid', $links->first()->uuid)
+                    ->where('links.data.1.uuid', $links->last()->uuid)
                     ->where('request', [
                         'author' => 'John Doe',
                         'search' => 'Hello world',

@@ -24,7 +24,7 @@ it('returns a random link', function (): void {
         ->getJson(route('api.dashboard.random-link'))
         ->assertOk()
         ->assertData([
-            'id' => $link->id,
+            'uuid' => $link->uuid,
             'url' => $link->url,
             'title' => $link->title,
             'description' => $link->description,
@@ -33,7 +33,7 @@ it('returns a random link', function (): void {
             'created_at' => $link->created_at->toIso8601String(),
             'updated_at' => $link->updated_at->toIso8601String(),
             'author' => [
-                'id' => $link->author->id,
+                'uuid' => $link->author->uuid,
                 'name' => $link->author->name,
             ],
             'tags' => [],

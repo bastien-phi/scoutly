@@ -35,8 +35,8 @@ it('returns trending tags', function (): void {
         ->getJson(route('api.dashboard.community-trending-tags'))
         ->assertOk()
         ->assertData([
-            ['id' => $php->id, 'label' => 'PHP', 'links_count' => 5],
-            ['id' => $laravel->id, 'label' => 'Laravel', 'links_count' => 3],
-            ['id' => $go->id, 'label' => 'Go', 'links_count' => 2],
+            ['uuid' => $php->uuid, 'label' => 'PHP', 'links_count' => 5],
+            ['uuid' => $laravel->uuid, 'label' => 'Laravel', 'links_count' => 3],
+            ['uuid' => $go->uuid, 'label' => 'Go', 'links_count' => 2],
         ]);
 });

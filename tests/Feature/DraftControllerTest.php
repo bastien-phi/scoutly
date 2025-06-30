@@ -36,8 +36,8 @@ describe('index', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('drafts/index')
                     ->has('drafts.data', 2)
-                    ->where('drafts.data.0.id', $links->first()->id)
-                    ->where('drafts.data.1.id', $links->last()->id)
+                    ->where('drafts.data.0.uuid', $links->first()->uuid)
+                    ->where('drafts.data.1.uuid', $links->last()->uuid)
             );
     });
 });
@@ -100,7 +100,7 @@ describe('edit', function (): void {
                 fn (AssertableInertia $page): AssertableJson => $page
                     ->component('drafts/edit')
                     ->has('draft')
-                    ->where('draft.id', $link->id)
+                    ->where('draft.uuid', $link->uuid)
                     ->where('authors', fn (Collection $value): bool => $value->all() === ['Jane Smith', 'John Doe'])
                     ->where('tags', fn (Collection $value): bool => $value->all() === ['Laravel', 'PHP'])
             );

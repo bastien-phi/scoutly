@@ -20,9 +20,9 @@ class GetUserLinksRequest extends FormRequest
     {
         return [
             'search' => ['nullable', 'string', 'max:255'],
-            'author_id' => ['nullable', 'integer', Rule::exists(Author::class, 'id')->where('user_id', $user->id)],
-            'tags' => ['array'],
-            'tags.*' => ['integer', Rule::exists(Tag::class, 'id')->where('user_id', $user->id)],
+            'author_uuid' => ['nullable', 'uuid', Rule::exists(Author::class, 'uuid')->where('user_id', $user->id)],
+            'tag_uuids' => ['array'],
+            'tag_uuids.*' => ['uuid', Rule::exists(Tag::class, 'uuid')->where('user_id', $user->id)],
         ];
     }
 }
