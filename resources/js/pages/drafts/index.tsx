@@ -86,7 +86,7 @@ export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkDa
                     <Separator />
 
                     {drafts.data.map((link: LinkData) => (
-                        <DraftCard key={link.id} link={link} />
+                        <DraftCard key={link.uuid} link={link} />
                     ))}
 
                     {drafts.data.length === 0 && <div className="flex justify-center">Nothing to see there !</div>}
@@ -116,7 +116,7 @@ function DraftCard({ link }: { link: LinkData }) {
         <Card>
             <CardHeader>
                 <div className="flex items-center justify-between">
-                    <TextLink href={route('drafts.edit', link.id)} variant="ghost">
+                    <TextLink href={route('drafts.edit', link.uuid)} variant="ghost">
                         <CardTitle>{link.url}</CardTitle>
                     </TextLink>
                     <div className="flex space-x-2">
@@ -137,7 +137,7 @@ function DraftCard({ link }: { link: LinkData }) {
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                            <Link href={route('links.index', { tag_uuids: [tag.uuid] })} key={tag.uuid}>
                                 <Pill>{tag.label}</Pill>
                             </Link>
                         ))}
@@ -148,7 +148,7 @@ function DraftCard({ link }: { link: LinkData }) {
                 {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                        <TextLink href={route('links.index', { author_uuid: link.author.uuid })} variant="ghost">
                             {link.author.name}
                         </TextLink>
                     </div>

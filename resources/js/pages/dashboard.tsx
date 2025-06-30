@@ -39,7 +39,7 @@ export default function Dashboard() {
                         <TrendingTags
                             title="Your favorite tags"
                             url={route('api.dashboard.favorite-tags')}
-                            generateLinkUsing={(tag: TagStatisticData) => route('links.index', { tags: [tag.id] })}
+                            generateLinkUsing={(tag: TagStatisticData) => route('links.index', { tag_uuids: [tag.uuid] })}
                         />
                     </div>
                     <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
@@ -115,7 +115,7 @@ function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: s
                 {!isLoading && tags && tags.length > 0 && (
                     <div className="flex size-full flex-col justify-evenly">
                         {tags.map((tag) => (
-                            <div className="flex justify-between" key={tag.id}>
+                            <div className="flex justify-between" key={tag.uuid}>
                                 <Link href={generateLinkUsing(tag)}>
                                     <Pill>{tag.label}</Pill>
                                 </Link>

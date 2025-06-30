@@ -11,7 +11,7 @@ export default function LinkCard({ link, className }: { link: LinkData; classNam
     return (
         <Card className={cn('w-full', className)}>
             <CardHeader className="flex-row items-baseline justify-between">
-                <TextLink href={route('links.show', link.id)} variant="ghost">
+                <TextLink href={route('links.show', link.uuid)} variant="ghost">
                     <CardTitle>{link.title}</CardTitle>
                 </TextLink>
                 <a href={link.url} target="_blank" className="text-muted-foreground hover:text-foreground">
@@ -27,7 +27,7 @@ export default function LinkCard({ link, className }: { link: LinkData; classNam
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                            <Link href={route('links.index', { tag_uuids: [tag.uuid] })} key={tag.uuid}>
                                 <Pill>{tag.label}</Pill>
                             </Link>
                         ))}
@@ -38,7 +38,7 @@ export default function LinkCard({ link, className }: { link: LinkData; classNam
                 {link.author ? (
                     <div className="flex gap-x-4">
                         <User />
-                        <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                        <TextLink href={route('links.index', { author_uuid: link.author.uuid })} variant="ghost">
                             {link.author.name}
                         </TextLink>
                     </div>

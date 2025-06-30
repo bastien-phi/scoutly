@@ -29,7 +29,7 @@ export default function CommunityLinkCard({ link, className }: { link: Community
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
-                            <Link href={route('community-links.index', { tags: [tag.label] })} key={tag.id}>
+                            <Link href={route('community-links.index', { tags: [tag.label] })} key={tag.uuid}>
                                 <Pill>{tag.label}</Pill>
                             </Link>
                         ))}

@@ -116,7 +116,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                     <Separator />
 
                     {links.data.map((link: CommunityLinkData) => (
-                        <CommunityLinkCard key={link.id} link={link} />
+                        <CommunityLinkCard key={link.uuid} link={link} />
                     ))}
 
                     {links.data.length === 0 && <div className="flex justify-center">Nothing to see there!</div>}
@@ -203,7 +203,7 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
                         <CommandGroup>
                             {authors.map((author: AuthorData) => (
                                 <CommandItem
-                                    key={author.id}
+                                    key={author.uuid}
                                     value={author.name}
                                     onSelect={() => {
                                         onChange(value === author.name ? '' : author.name);
@@ -292,7 +292,7 @@ function TagSearch({
                         <CommandGroup>
                             {tags.map((tag: TagData) => (
                                 <CommandItem
-                                    key={tag.id}
+                                    key={tag.uuid}
                                     value={tag.label}
                                     onSelect={() => {
                                         if (selectedTags.includes(tag.label)) {

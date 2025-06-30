@@ -16,7 +16,7 @@ export default function Show({ link }: { link: LinkData }) {
         },
         {
             title: link.title || 'Draft',
-            href: route('links.show', link.id),
+            href: route('links.show', link.uuid),
         },
     ];
 
@@ -28,7 +28,7 @@ export default function Show({ link }: { link: LinkData }) {
                     <div className="flex items-baseline justify-between">
                         <h2 className="text-xl font-semibold tracking-tight">{link.title || 'Draft'} </h2>
                         <div className="flex space-x-2">
-                            <Link href={route('links.edit', link.id)} className="text-muted-foreground hover:text-foreground">
+                            <Link href={route('links.edit', link.uuid)} className="text-muted-foreground hover:text-foreground">
                                 <Pencil />
                             </Link>
                             <DeleteLinkButton link={link} />
@@ -47,7 +47,7 @@ export default function Show({ link }: { link: LinkData }) {
                     {link.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                             {link.tags.map((tag) => (
-                                <Link href={route('links.index', { tags: [tag.id] })} key={tag.id}>
+                                <Link href={route('links.index', { tag_uuids: [tag.uuid] })} key={tag.uuid}>
                                     <Pill>{tag.label}</Pill>
                                 </Link>
                             ))}
@@ -59,7 +59,7 @@ export default function Show({ link }: { link: LinkData }) {
                             {link.author && (
                                 <div className="flex gap-x-4">
                                     <User />
-                                    <TextLink href={route('links.index', { author_id: link.author.id })} variant="ghost">
+                                    <TextLink href={route('links.index', { author_uuid: link.author.uuid })} variant="ghost">
                                         {link.author.name}
                                     </TextLink>
                                 </div>
