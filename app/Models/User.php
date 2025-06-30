@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Concerns\RoutedByUuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Carbon\CarbonImmutable $created_at
  * @property \Carbon\CarbonImmutable $updated_at
+ * @property string $uuid
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author> $authors
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
@@ -32,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory;
 
     use Notifiable;
+    use RoutedByUuid;
 
     /**
      * @var list<string>

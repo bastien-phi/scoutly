@@ -10,6 +10,7 @@ namespace IdeHelper\App\Models
      * @property string $name
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
+     * @property string $uuid
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
      * @property-read \App\Models\User $user
      *
@@ -29,9 +30,10 @@ namespace IdeHelper\App\Models
      * @method $this whereName(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this whereUuid(string $value)
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Author.php L50
+     * @see project://app/Models/Author.php L52
      *
      * @method \App\Models\Author create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author>|\App\Models\Author|null find($id, array $columns = ['*'])
@@ -67,6 +69,7 @@ namespace IdeHelper\App\Models
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
      * @property bool $is_public
+     * @property string $uuid
      * @property-read \App\Models\Author|null $author
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
      * @property-read \App\Models\User $user
@@ -93,17 +96,18 @@ namespace IdeHelper\App\Models
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereIsPublic(bool|string $value)
+     * @method $this whereUuid(string $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L94
+     * @see project://app/Models/Link.php L95
      *
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Link.php L103
+     * @see project://app/Models/Link.php L104
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L112
+     * @see project://app/Models/Link.php L113
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
@@ -134,6 +138,7 @@ namespace IdeHelper\App\Models
      * @property string $label
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
+     * @property string $uuid
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
      * @property-read \App\Models\User $user
      *
@@ -153,9 +158,10 @@ namespace IdeHelper\App\Models
      * @method $this whereLabel(string $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this whereUuid(string $value)
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Tag.php L50
+     * @see project://app/Models/Tag.php L52
      *
      * @method \App\Models\Tag create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag>|\App\Models\Tag|null find($id, array $columns = ['*'])
@@ -190,6 +196,7 @@ namespace IdeHelper\App\Models
      * @property string|null $remember_token
      * @property \Carbon\CarbonImmutable $created_at
      * @property \Carbon\CarbonImmutable $updated_at
+     * @property string $uuid
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author> $authors
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link> $links
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
@@ -215,6 +222,7 @@ namespace IdeHelper\App\Models
      * @method $this whereRememberToken(string|null $value)
      * @method $this whereCreatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
+     * @method $this whereUuid(string $value)
      * @method \App\Models\User create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\User>|\App\Models\User|null find($id, array $columns = ['*'])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> findMany($id, array $columns = ['*'])
