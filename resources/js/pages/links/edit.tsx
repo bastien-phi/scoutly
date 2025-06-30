@@ -18,11 +18,11 @@ export default function Edit({ link, authors, tags }: { link: LinkData; authors:
         },
         {
             title: link.title || 'Draft',
-            href: route('links.show', link.id),
+            href: route('links.show', link.uuid),
         },
         {
             title: 'Edition',
-            href: route('links.edit', link.id),
+            href: route('links.edit', link.uuid),
         },
     ];
 
@@ -37,7 +37,7 @@ export default function Edit({ link, authors, tags }: { link: LinkData; authors:
 
     const submitLink: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('links.update', link.id));
+        put(route('links.update', link.uuid));
     };
 
     const isValid = data.url && data.title;

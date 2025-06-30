@@ -26,7 +26,7 @@ export default function DeleteLinkButton({ link }: { link: LinkData }) {
                     <DialogDescription>Are you sure you want to delete this link? This action cannot be undone.</DialogDescription>
                     <div className="flex justify-between">
                         <DialogClose>Cancel</DialogClose>
-                        <Button variant="destructive" onClick={() => router.delete(route('links.destroy', link.id))}>
+                        <Button variant="destructive" onClick={() => router.delete(route('links.destroy', link.uuid))}>
                             Delete
                         </Button>
                     </div>

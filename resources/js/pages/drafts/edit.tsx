@@ -17,11 +17,11 @@ export default function Edit({ draft, authors, tags }: { draft: LinkData; author
         },
         {
             title: draft.title || 'Draft',
-            href: route('drafts.edit', draft.id),
+            href: route('drafts.edit', draft.uuid),
         },
         {
             title: 'Edition',
-            href: route('drafts.edit', draft.id),
+            href: route('drafts.edit', draft.uuid),
         },
     ];
 
@@ -36,12 +36,12 @@ export default function Edit({ draft, authors, tags }: { draft: LinkData; author
 
     const submitDraft: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('drafts.update', draft.id));
+        put(route('drafts.update', draft.uuid));
     };
 
     const submitLink: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('drafts.publish', draft.id));
+        put(route('drafts.publish', draft.uuid));
     };
 
     const isValid = data.url && data.title;

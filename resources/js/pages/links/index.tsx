@@ -42,8 +42,8 @@ export default function Index({
 
     const { data, setData } = useForm<Required<SearchLinkFormData>>({
         search: request.search ?? '',
-        author_id: request.author_id ?? 0,
-        tags: request.tags ?? [],
+        author_uuid: request.author_uuid ?? '',
+        tag_uuids: request.tag_uuids ?? [],
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,19 +94,25 @@ export default function Index({
                         <div className="space-y-4">
                             <div className="grid gap-2">
                                 <Label>Author</Label>
-                                <AuthorSelect authors={authors} value={data.author_id} onChange={(value: number) => setData('author_id', value)} />
+                                <AuthorSelect
+                                    authors={authors}
+                                    value={data.author_uuid}
+                                    onChange={(value: string) => setData('author_uuid', value)}
+                                />
                             </div>
                             <div className="grid gap-2">
                                 <Label>Tags</Label>
-                                {data.tags.length > 0 && (
+                                {data.tag_uuids.length > 0 && (
                                     <div className="flex flex-wrap gap-2">
-                                        {data.tags
-                                            .map((tagId) => tags.find((tag) => tag.id === tagId))
+                                        {data.tag_uuids
+                                            .map((uuid) => tags.find((tag) => tag.uuid === uuid))
                                             .filter((tag: TagData | undefined): tag is TagData => tag !== undefined)
                                             .map((tag: TagData) => (
                                                 <Pill
-                                                    key={tag.id}
-                                                    onClose={() => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag.id) }))}
+                                                    key={tag.uuid}
+                                                    onClose={() =>
+                                                        setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((t) => t !== tag.uuid) }))
+                                                    }
                                                 >
                                                     {tag.label}
                                                 </Pill>
@@ -115,12 +121,14 @@ export default function Index({
                                 )}
                                 <TagMultiselect
                                     tags={tags}
-                                    selectedTags={data.tags}
-                                    onValueAdded={(value: number) =>
-                                        setData((prev) => (prev.tags.includes(value) ? prev : { ...prev, tags: [...prev.tags, value] }))
+                                    selectedTags={data.tag_uuids}
+                                    onValueAdded={(value: string) =>
+                                        setData((prev) =>
+                                            prev.tag_uuids.includes(value) ? prev : { ...prev, tag_uuids: [...prev.tag_uuids, value] },
+                                        )
                                     }
-                                    onValueRemoved={(value: number) =>
-                                        setData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== value) }))
+                                    onValueRemoved={(value: string) =>
+                                        setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((tag) => tag !== value) }))
                                     }
                                 />
                             </div>
@@ -130,7 +138,7 @@ export default function Index({
                     <Separator />
 
                     {links.data.map((link: LinkData) => (
-                        <LinkCard key={link.id} link={link} />
+                        <LinkCard key={link.uuid} link={link} />
                     ))}
 
                     {links.data.length === 0 && <div className="flex justify-center">Nothing to see there !</div>}
@@ -156,7 +164,7 @@ export default function Index({
     );
 }
 
-function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: number; onChange: (value: number) => void }) {
+function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: string; onChange: (value: string) => void }) {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
@@ -164,11 +172,11 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
             <div className="flex gap-2">
                 <PopoverTrigger asChild>
                     <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        {value !== 0 ? authors.find((author) => author.id === value)?.name : 'Any author'}
+                        {value !== '' ? authors.find((author) => author.uuid === value)?.name : 'Any author'}
                         <ChevronsUpDown className="opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <Button variant="ghost" onClick={() => onChange(0)}>
+                <Button variant="ghost" onClick={() => onChange('')}>
                     <X />
                 </Button>
             </div>
@@ -180,15 +188,15 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                         <CommandGroup>
                             {authors.map((author: AuthorData) => (
                                 <CommandItem
-                                    key={author.id}
+                                    key={author.uuid}
                                     value={author.name}
                                     onSelect={() => {
-                                        onChange(author.id === value ? 0 : author.id);
+                                        onChange(author.uuid === value ? '' : author.uuid);
                                         setOpen(false);
                                     }}
                                 >
                                     {author.name}
-                                    <Check className={cn('ml-auto', value === author.id ? 'opacity-100' : 'opacity-0')} />
+                                    <Check className={cn('ml-auto', value === author.uuid ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
@@ -206,9 +214,9 @@ function TagMultiselect({
     onValueRemoved,
 }: {
     tags: TagData[];
-    selectedTags: number[];
-    onValueAdded: (tag: number) => void;
-    onValueRemoved: (tag: number) => void;
+    selectedTags: string[];
+    onValueAdded: (tag: string) => void;
+    onValueRemoved: (tag: string) => void;
 }) {
     const [open, setOpen] = useState<boolean>(false);
 
@@ -233,19 +241,19 @@ function TagMultiselect({
                         <CommandGroup>
                             {tags.map((tag: TagData) => (
                                 <CommandItem
-                                    key={tag.id}
+                                    key={tag.uuid}
                                     value={tag.label}
                                     onSelect={() => {
-                                        if (selectedTags.includes(tag.id)) {
-                                            onValueRemoved(tag.id);
+                                        if (selectedTags.includes(tag.uuid)) {
+                                            onValueRemoved(tag.uuid);
                                         } else {
-                                            onValueAdded(tag.id);
+                                            onValueAdded(tag.uuid);
                                         }
                                         setOpen(false);
                                     }}
                                 >
                                     {tag.label}
-                                    <Check className={cn('ml-auto', selectedTags.includes(tag.id) ? 'opacity-100' : 'opacity-0')} />
+                                    <Check className={cn('ml-auto', selectedTags.includes(tag.uuid) ? 'opacity-100' : 'opacity-0')} />
                                 </CommandItem>
                             ))}
                         </CommandGroup>
