@@ -21,8 +21,8 @@ class Username implements ValidationRule
      * @param  list<string>  $reserved
      */
     public function __construct(
-        private ?User $user = null,
-        private array $reserved = [
+        private readonly ?User $user = null,
+        private readonly array $reserved = [
             '0',
             'about',
             'access',

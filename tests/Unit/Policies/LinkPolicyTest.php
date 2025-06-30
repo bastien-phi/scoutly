@@ -20,7 +20,7 @@ describe('view', function (): void {
         expect($user->can('view', $link))->toBeFalse();
     });
 
-    it('denies user to view other\'s link', function (): void {
+    it("denies user to view other's link", function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->published()->createOne();
 
@@ -43,7 +43,7 @@ describe('update', function (): void {
         expect($user->can('update', $link))->toBeFalse();
     });
 
-    it('denies user to update other\'s link', function (): void {
+    it("denies user to update other's link", function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->published()->createOne();
 
@@ -66,7 +66,7 @@ describe('updateDraft', function (): void {
         expect($user->can('update-draft', $link))->toBeFalse();
     });
 
-    it('denies user to update other\'s link', function (): void {
+    it("denies user to update other's link", function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->draft()->createOne();
 

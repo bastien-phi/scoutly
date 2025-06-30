@@ -66,11 +66,11 @@ it('creates a draft link with minimal data', function (): void {
 
     $this->mockAction(FindOrCreateAuthor::class)
         ->with($user, null)
-        ->returns(fn () => null);
+        ->returns(fn (): null => null);
 
     $this->mockAction(FindOrCreateTags::class)
         ->with($user, new Collection)
-        ->returns(fn () => new EloquentCollection);
+        ->returns(fn (): EloquentCollection => new EloquentCollection);
 
     $link = app(StoreDraft::class)->execute($user, $data);
 

@@ -70,11 +70,11 @@ it('creates a link without author nor tag', function (): void {
 
     $this->mockAction(FindOrCreateAuthor::class)
         ->with($user, null)
-        ->returns(fn () => null);
+        ->returns(fn (): null => null);
 
     $this->mockAction(FindOrCreateTags::class)
         ->with($user, new Collection)
-        ->returns(fn () => new EloquentCollection);
+        ->returns(fn (): \Illuminate\Database\Eloquent\Collection => new EloquentCollection);
 
     $link = app(StoreLink::class)->execute($user, $data);
 

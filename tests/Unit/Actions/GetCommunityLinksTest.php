@@ -9,7 +9,7 @@ use App\Models\Tag;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
-it('returns links sorted by published_at and id', function () {
+it('returns links sorted by published_at and id', function (): void {
     Date::setTestNow();
 
     $first = Link::factory()->published(now()->subDay())->isPublic()->createOne();
@@ -24,7 +24,7 @@ it('returns links sorted by published_at and id', function () {
         ->toBeCollection([$first, $third, $second]);
 });
 
-it('returns only public links', function () {
+it('returns only public links', function (): void {
     Link::factory(2)->isPrivate()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
@@ -34,7 +34,7 @@ it('returns only public links', function () {
     expect($links)->toBeEmpty();
 });
 
-it('returns only published links', function () {
+it('returns only published links', function (): void {
     Link::factory()->draft()->isPublic()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
@@ -44,7 +44,7 @@ it('returns only published links', function () {
     expect($links)->toBeEmpty();
 });
 
-it('filters by search', function () {
+it('filters by search', function (): void {
     $first = Link::factory()->published()->isPublic()->createOne(['title' => 'Hello World', 'description' => null]);
     $second = Link::factory()->published()->isPublic()->createOne([
         'title' => 'High way to hell',
@@ -60,7 +60,7 @@ it('filters by search', function () {
         ->toBeCollectionCanonicalizing([$first, $second]);
 });
 
-it('filters by author', function () {
+it('filters by author', function (): void {
     $first = Link::factory()
         ->published()
         ->isPublic()
@@ -85,7 +85,7 @@ it('filters by author', function () {
         ->toBeCollectionCanonicalizing([$first, $second]);
 });
 
-it('filters by tags', function () {
+it('filters by tags', function (): void {
     $php = Tag::factory()->createOne(['label' => 'PHP']);
     $laravel = Tag::factory()->createOne(['label' => 'Laravel']);
 

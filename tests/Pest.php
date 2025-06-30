@@ -24,7 +24,7 @@ pest()->extend(Tests\TestCase::class)
         Illuminate\Foundation\Testing\RefreshDatabase::class,
         MocksActions::class
     )
-    ->beforeEach(function () {
+    ->beforeEach(function (): void {
         $this->withoutExceptionHandling([
             AuthenticationException::class,
             AuthorizationException::class,
@@ -47,9 +47,7 @@ pest()->extend(Tests\TestCase::class)
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+expect()->extend('toBeOne', fn () => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +60,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function something(): void
 {
     // ..
 }

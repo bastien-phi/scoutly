@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use App\Models\User;
 
-test('registration screen can be rendered', function () {
+test('registration screen can be rendered', function (): void {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
 });
 
-test('new users can register', function () {
+test('new users can register', function (): void {
     $response = $this->post('/register', [
         'name' => 'Test User',
         'username' => 'testuser',
@@ -23,7 +23,7 @@ test('new users can register', function () {
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
-test('new users cannot register using invalid username', function (string $username, string $error) {
+test('new users cannot register using invalid username', function (string $username, string $error): void {
     $response = $this->post('/register', [
         'name' => 'Test User',
         'username' => $username,
@@ -59,7 +59,7 @@ test('new users cannot register using invalid username', function (string $usern
     ],
 ]);
 
-test('new users cannot register using existing username', function () {
+test('new users cannot register using existing username', function (): void {
     User::factory()->createOne([
         'username' => 'testuser',
     ]);

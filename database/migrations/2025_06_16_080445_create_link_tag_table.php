@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('link_tag', function (Blueprint $table) {
+        Schema::create('link_tag', function (Blueprint $table): void {
             $table->foreignId('link_id')
                 ->constrained('links')
                 ->cascadeOnDelete();

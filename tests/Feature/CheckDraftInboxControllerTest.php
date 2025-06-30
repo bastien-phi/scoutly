@@ -11,7 +11,7 @@ it('checks draft inbox', function (): void {
 
     $this->mockAction(CheckDraftInbox::class)
         ->with($user)
-        ->returns(fn () => 3);
+        ->returns(fn (): int => 3);
 
     $this->actingAs($user)
         ->post(route('drafts.check-inbox'))
@@ -27,7 +27,7 @@ it('is possible not to have new drafts', function (): void {
 
     $this->mockAction(CheckDraftInbox::class)
         ->with($user)
-        ->returns(fn () => 0);
+        ->returns(fn (): int => 0);
 
     $this->actingAs($user)
         ->post(route('drafts.check-inbox'))

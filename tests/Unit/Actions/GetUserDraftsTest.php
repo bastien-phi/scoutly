@@ -7,7 +7,7 @@ use App\Models\Link;
 use App\Models\User;
 use Illuminate\Support\Facades\Date;
 
-test('action returns draft links sorted by id', function () {
+test('action returns draft links sorted by id', function (): void {
     $user = User::factory()->createOne();
 
     Date::setTestNow();
@@ -22,7 +22,7 @@ test('action returns draft links sorted by id', function () {
         ->toBeCollection([$third, $second, $first]);
 });
 
-it('returns only user\'s links', function () {
+it("returns only user's links", function (): void {
     $user = User::factory()->createOne();
     Link::factory(2)->draft()->create();
 
@@ -31,7 +31,7 @@ it('returns only user\'s links', function () {
     expect($links)->toBeEmpty();
 });
 
-it('returns only draft links', function () {
+it('returns only draft links', function (): void {
     $user = User::factory()->createOne();
     Link::factory()->for($user)->published()->create();
 

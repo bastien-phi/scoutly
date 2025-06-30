@@ -10,7 +10,7 @@ use App\Models\Link;
 class UpdateAndPublishDraft
 {
     public function __construct(
-        private UpdateLink $updateLink,
+        private readonly UpdateLink $updateLink,
     ) {}
 
     public function execute(Link $draft, LinkFormData $data): void

@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
-it('returns links sorted by published_at and id', function () {
+it('returns links sorted by published_at and id', function (): void {
     $user = User::factory()->createOne();
 
     Date::setTestNow();
@@ -29,7 +29,7 @@ it('returns links sorted by published_at and id', function () {
         ->toBeCollection([$first, $third, $second]);
 });
 
-it('returns only user\'s links', function () {
+it("returns only user's links", function (): void {
     $user = User::factory()->createOne();
     Link::factory(2)->create();
 
@@ -41,7 +41,7 @@ it('returns only user\'s links', function () {
     expect($links)->toBeEmpty();
 });
 
-it('returns only published links', function () {
+it('returns only published links', function (): void {
     $user = User::factory()->createOne();
     Link::factory()->for($user)->draft()->create();
 
@@ -53,7 +53,7 @@ it('returns only published links', function () {
     expect($links)->toBeEmpty();
 });
 
-it('filters by search', function () {
+it('filters by search', function (): void {
     $user = User::factory()->createOne();
 
     $first = Link::factory()->for($user)->published()->createOne(['title' => 'Hello World', 'description' => null]);
@@ -72,7 +72,7 @@ it('filters by search', function () {
         ->toBeCollectionCanonicalizing([$first, $second]);
 });
 
-it('filters by author', function () {
+it('filters by author', function (): void {
     $user = User::factory()->createOne();
 
     $author = Author::factory()->createOne();
@@ -90,7 +90,7 @@ it('filters by author', function () {
         ->toBeCollectionCanonicalizing([$first, $third]);
 });
 
-it('filters by tags', function () {
+it('filters by tags', function (): void {
     $user = User::factory()->createOne();
 
     $php = Tag::factory()->for($user)->createOne(['label' => 'PHP']);

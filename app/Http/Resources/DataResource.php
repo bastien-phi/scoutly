@@ -15,7 +15,7 @@ class DataResource extends JsonResource
      */
     public function __construct(
         mixed $resource,
-        private string $dataClass
+        private readonly string $dataClass
     ) {
         parent::__construct($resource);
     }
@@ -23,6 +23,7 @@ class DataResource extends JsonResource
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return $this->dataClass::from($this->resource)->toArray();

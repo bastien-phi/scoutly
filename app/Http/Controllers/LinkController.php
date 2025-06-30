@@ -17,6 +17,7 @@ use App\Http\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
@@ -34,8 +35,8 @@ class LinkController
         return Inertia::render('links/index', [
             'request' => $data->onlyNotNull(),
             'links' => $links->currentPage() === 1 ? LinkData::collect($links) : Inertia::deepMerge(LinkData::collect($links)),
-            'authors' => fn () => AuthorData::collect($user->authors()->orderBy('name')->get()),
-            'tags' => fn () => TagData::collect($user->tags()->orderBy('label')->get()),
+            'authors' => fn (): Collection => AuthorData::collect($user->authors()->orderBy('name')->get()),
+            'tags' => fn (): Collection => TagData::collect($user->tags()->orderBy('label')->get()),
         ]);
     }
 
