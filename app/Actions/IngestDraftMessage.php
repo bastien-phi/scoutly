@@ -31,7 +31,7 @@ class IngestDraftMessage
     {
         $validator = Validator::make(
             [
-                'url' => $this->extractUrl($message->text()),
+                'url' => $this->extractUrl($this->extractBody($message)),
                 'title' => $message->subject(),
             ],
             [
@@ -48,6 +48,21 @@ class IngestDraftMessage
             $user,
             DraftFormData::fromMailIngest($validator->validated())
         );
+    }
+
+    private function extractBody(Message $message): ?string
+    {
+        $text = $message->text();
+        if ($text !== null) {
+            return $text;
+        }
+
+        $html = $message->html();
+        if ($html !== null) {
+            return strip_tags($html);
+        }
+
+        return null;
     }
 
     private function extractUrl(?string $text): ?string
