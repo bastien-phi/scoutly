@@ -13,6 +13,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
 describe('index', function (): void {
@@ -21,7 +22,7 @@ describe('index', function (): void {
 
         $this->mockAction(GetUserDrafts::class)
             ->with($user)
-            ->returns(fn () => new LengthAwarePaginator(
+            ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->for($user)->create()->load(['author', 'tags']),
                 total: 2,
                 perPage: 15
@@ -32,7 +33,7 @@ describe('index', function (): void {
             ->get(route('drafts.index'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page
+                fn (AssertableInertia $page): AssertableJson => $page
                     ->component('drafts/index')
                     ->has('drafts.data', 2)
                     ->where('drafts.data.0.id', $links->first()->id)
@@ -96,12 +97,12 @@ describe('edit', function (): void {
             ->get(route('drafts.edit', $link))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page
+                fn (AssertableInertia $page): AssertableJson => $page
                     ->component('drafts/edit')
                     ->has('draft')
                     ->where('draft.id', $link->id)
-                    ->where('authors', fn (Collection $value) => $value->all() === ['Jane Smith', 'John Doe'])
-                    ->where('tags', fn (Collection $value) => $value->all() === ['Laravel', 'PHP'])
+                    ->where('authors', fn (Collection $value): bool => $value->all() === ['Jane Smith', 'John Doe'])
+                    ->where('tags', fn (Collection $value): bool => $value->all() === ['Laravel', 'PHP'])
             );
     });
 

@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class CheckDraftInbox
 {
     public function __construct(
-        private IngestDraftMessage $ingestDraftMessage
+        private readonly IngestDraftMessage $ingestDraftMessage
     ) {}
 
     public function execute(User $user): int

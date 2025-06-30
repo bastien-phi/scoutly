@@ -8,12 +8,13 @@ use App\Models\Link;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
 describe('index', function (): void {
     it('returns links', function (): void {
         $this->mockAction(GetCommunityLinks::class)
-            ->returns(fn () => new LengthAwarePaginator(
+            ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->isPublic()->published()->create()->load(['author', 'user', 'tags']),
                 total: 2,
                 perPage: 15
@@ -24,7 +25,7 @@ describe('index', function (): void {
             ->get(route('community-links.index'))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page
+                fn (AssertableInertia $page): AssertableJson => $page
                     ->component('community-links/index')
                     ->has('links.data', 2)
                     ->where('links.data.0.id', $links->first()->id)
@@ -36,7 +37,7 @@ describe('index', function (): void {
     it('returns links with search', function (): void {
         $this->mockAction(GetCommunityLinks::class)
             ->with(new SearchCommunityLinkFormData(search: 'Hello world', author: 'John Doe', tags: new Collection(['PHP', 'Laravel'])))
-            ->returns(fn () => new LengthAwarePaginator(
+            ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->create()->load(['author', 'user', 'tags']),
                 total: 2,
                 perPage: 15
@@ -51,7 +52,7 @@ describe('index', function (): void {
             ]))
             ->assertOk()
             ->assertInertia(
-                fn (AssertableInertia $page) => $page
+                fn (AssertableInertia $page): AssertableJson => $page
                     ->component('community-links/index')
                     ->has('links.data', 2)
                     ->where('links.data.0.id', $links->first()->id)

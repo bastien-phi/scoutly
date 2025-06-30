@@ -15,7 +15,7 @@ class DataCollectionResource extends ResourceCollection
      */
     public function __construct(
         mixed $resource,
-        private string $dataClass
+        private readonly string $dataClass
     ) {
         parent::__construct($resource);
     }
@@ -23,6 +23,7 @@ class DataCollectionResource extends ResourceCollection
     /**
      * @return array<int|string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return $this->collection

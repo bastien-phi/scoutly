@@ -11,8 +11,8 @@ use App\Models\Link;
 class UpdateLink
 {
     public function __construct(
-        private FindOrCreateAuthor $findOrCreateAuthor,
-        private FindOrCreateTags $findOrCreateTags,
+        private readonly FindOrCreateAuthor $findOrCreateAuthor,
+        private readonly FindOrCreateTags $findOrCreateTags,
     ) {}
 
     public function execute(Link $link, LinkFormData|DraftFormData $data): void

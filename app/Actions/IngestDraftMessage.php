@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class IngestDraftMessage
 {
     public function __construct(
-        private StoreDraft $storeDraft
+        private readonly StoreDraft $storeDraft
     ) {}
 
     public function execute(User $user, Message $message): ?Link

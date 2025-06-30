@@ -11,8 +11,8 @@ use App\Models\User;
 class StoreDraft
 {
     public function __construct(
-        private FindOrCreateAuthor $findOrCreateAuthor,
-        private FindOrCreateTags $findOrCreateTags,
+        private readonly FindOrCreateAuthor $findOrCreateAuthor,
+        private readonly FindOrCreateTags $findOrCreateTags,
     ) {}
 
     public function execute(User $user, DraftFormData $data): Link
