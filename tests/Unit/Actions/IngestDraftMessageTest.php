@@ -10,7 +10,7 @@ use App\Models\User;
 use DirectoryTree\ImapEngine\Message;
 use Illuminate\Support\Collection;
 
-it('ingests a draft message', function (): void {
+it('ingests a draft message from text', function (): void {
     $user = User::factory()->createOne();
 
     $message = mock(Message::class);
@@ -46,12 +46,62 @@ it('ingests a draft message', function (): void {
     expect($link)->toBeModel($createdLink);
 });
 
-it('does not ingest incomplete messages', function (?string $body): void {
+it('ingests a draft message from html', function (): void {
     $user = User::factory()->createOne();
 
     $message = mock(Message::class);
     $message->shouldReceive('text')
-        ->andReturn($body)
+        ->andReturn(null)
+        ->once();
+    $message->shouldReceive('html')
+        ->andReturn(
+            <<<'HTML'
+            <html>
+                <head>
+                    <link rel="stylesheet" href="https://example.com/style.css">
+                </head>
+                <body>
+                    <p>I found a great app ! Check <a href="https://github.com/bastien-phi/scoutly"> https://github.com/bastien-phi/scoutly </a> </p>
+                </body>
+            </html>
+            HTML
+        )
+        ->once();
+    $message->shouldReceive('subject')
+        ->andReturn('Test draft')
+        ->once();
+    $message->shouldReceive('markSeen')
+        ->once();
+    $message->shouldReceive('delete')
+        ->with(true)
+        ->once();
+
+    $this->mockAction(StoreDraft::class)
+        ->with(
+            $user,
+            new DraftFormData(
+                url: 'https://github.com/bastien-phi/scoutly',
+                title: 'Test draft',
+                description: null,
+                is_public: false,
+                author: null,
+                tags: new Collection,
+            )
+        )
+        ->returns(fn () => Link::factory()->createOne())
+        ->in($createdLink);
+
+    $link = app(IngestDraftMessage::class)->execute($user, $message);
+
+    expect($link)->toBeModel($createdLink);
+});
+
+it('does not ingest messages without link', function (): void {
+    $user = User::factory()->createOne();
+
+    $message = mock(Message::class);
+    $message->shouldReceive('text')
+        ->andReturn('I found a great app but I cannot remember where...')
         ->once();
     $message->shouldReceive('subject')
         ->andReturn('Test draft')
@@ -68,7 +118,31 @@ it('does not ingest incomplete messages', function (?string $body): void {
     $link = app(IngestDraftMessage::class)->execute($user, $message);
 
     expect($link)->toBeNull();
-})->with([
-    'no url' => 'I found a great app but I cannot remember where...',
-    'empty body' => null,
-]);
+});
+
+it('does not ingest with empty text and html', function (): void {
+    $user = User::factory()->createOne();
+
+    $message = mock(Message::class);
+    $message->shouldReceive('text')
+        ->andReturn(null)
+        ->once();
+    $message->shouldReceive('html')
+        ->andReturn(null)
+        ->once();
+    $message->shouldReceive('subject')
+        ->andReturn('Test draft')
+        ->once();
+    $message->shouldReceive('markSeen')
+        ->once();
+    $message->shouldReceive('delete')
+        ->with(true)
+        ->once();
+
+    $this->mockAction(StoreDraft::class)
+        ->neverCalled();
+
+    $link = app(IngestDraftMessage::class)->execute($user, $message);
+
+    expect($link)->toBeNull();
+});
