@@ -27,17 +27,17 @@ it('returns a random community link', function (): void {
         ->getJson(route('api.dashboard.random-community-link'))
         ->assertOk()
         ->assertData([
-            'id' => $link->id,
+            'uuid' => $link->uuid,
             'url' => $link->url,
             'title' => $link->title,
             'description' => $link->description,
             'published_at' => $link->published_at?->toIso8601String(),
             'user' => [
-                'id' => $link->user->id,
+                'uuid' => $link->user->uuid,
                 'username' => $link->user->username,
             ],
             'author' => [
-                'id' => $link->author->id,
+                'uuid' => $link->author->uuid,
                 'name' => $link->author->name,
             ],
             'tags' => [],

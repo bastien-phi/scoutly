@@ -19,10 +19,10 @@ class CommunityTrendingTagsController
 
         $tags = Tag::query()
             ->from($tagStatQuery, 'tag_stats')
-            ->selectRaw('min(id) as id, label, sum(links_count) as links_count')
+            ->selectRaw('min(uuid) as uuid, label, sum(links_count) as links_count')
             ->groupBy('label')
             ->orderBy('links_count', 'desc')
-            ->orderBy('id')
+            ->orderBy('uuid')
             ->limit(3)
             ->get();
 

@@ -11,7 +11,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class TagData extends Data
 {
     public function __construct(
-        public int $id,
+        public string $uuid,
         public string $label,
     ) {}
 }

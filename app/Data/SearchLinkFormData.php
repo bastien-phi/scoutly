@@ -16,12 +16,12 @@ class SearchLinkFormData extends Data
     use IncludesOnlyFilledValues;
 
     /**
-     * @param  Collection<int, int>  $tags
+     * @param  Collection<int, string>  $tag_uuids
      */
     public function __construct(
         public ?string $search,
-        public ?int $author_id,
-        #[LiteralTypeScriptType('number[]')]
-        public Collection $tags = new Collection,
+        public ?string $author_uuid,
+        #[LiteralTypeScriptType('string[]')]
+        public Collection $tag_uuids = new Collection,
     ) {}
 }
