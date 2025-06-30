@@ -66,7 +66,7 @@ describe('updateDraft', function (): void {
         expect($user->can('update-draft', $link))->toBeFalse();
     });
 
-    it("denies user to update other's link", function (): void {
+    it("denies user to update other's draft", function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->draft()->createOne();
 
