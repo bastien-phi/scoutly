@@ -35,6 +35,7 @@
         "pestphp/pest": "^3.8.2",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan-strict-rules": "^2.0.4",
+        "rector/rector": "^2.1",
         "soyhuce/laravel-testing": "^2.13",
         "soyhuce/next-ide-helper": "^2.2.3",
         "soyhuce/pest-plugin-laravel": "^1.0"
@@ -80,6 +81,7 @@
             "@php artisan next-ide-helper:all --ansi",
             "@cs"
         ],
+        "rector": "./vendor/bin/rector --ansi",
         "cs": "./vendor/bin/pint --ansi",
         "test": [
             "@php artisan config:clear --ansi",
@@ -87,6 +89,7 @@
         ],
         "analyse": "./vendor/bin/phpstan analyse",
         "all": [
+            "@rector",
             "@cs",
             "@test",
             "@analyse"
