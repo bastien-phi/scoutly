@@ -145,3 +145,37 @@ it('does not ingest with empty text and html', function (): void {
 
     expect($link)->toBeNull();
 });
+
+it('ingests a draft message with long subject', function (): void {
+    $user = User::factory()->createOne();
+
+    $message = mock(Message::class);
+    $message->shouldReceive('text')
+        ->andReturn('I found a great app ! Check https://github.com/bastien-phi/scoutly !')
+        ->once();
+    $message->shouldReceive('subject')
+        ->andReturn(str_repeat('A', 300))
+        ->once();
+    $message->shouldReceive('markSeen')
+        ->once();
+    $message->shouldReceive('delete')
+        ->with(true)
+        ->once();
+
+    $this->mockAction(StoreDraft::class)
+        ->with(
+            $user,
+            new StoreDraftRequest(
+                url: 'https://github.com/bastien-phi/scoutly',
+                title: str_repeat('A', 252).'...',
+                description: null,
+                is_public: false,
+                author: null,
+                tags: null,
+            )
+        )
+        ->returns(fn () => Link::factory()->createOne())
+        ->in($createdLink);
+
+    app(IngestDraftMessage::class)->execute($user, $message);
+});

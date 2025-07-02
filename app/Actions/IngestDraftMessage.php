@@ -32,7 +32,7 @@ class IngestDraftMessage
         $validator = Validator::make(
             [
                 'url' => $this->extractUrl($this->extractBody($message)),
-                'title' => $message->subject(),
+                'title' => $this->extractSubject($message),
             ],
             [
                 'url' => ['required', 'url'],
@@ -100,5 +100,15 @@ class IngestDraftMessage
         )~ixu';
 
         return str_replace('PROTOCOLS', $protocols, $pattern);
+    }
+
+    private function extractSubject(Message $message): ?string
+    {
+        $subject = $message->subject();
+        if ($subject === null) {
+            return null;
+        }
+
+        return Str::limit($subject, limit: 252);
     }
 }
