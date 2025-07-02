@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\LinkFormData;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
 
@@ -15,7 +15,7 @@ class StoreLink
         private readonly FindOrCreateTags $findOrCreateTags,
     ) {}
 
-    public function execute(User $user, LinkFormData $data): Link
+    public function execute(User $user, StoreLinkRequest $data): Link
     {
         $author = $this->findOrCreateAuthor->execute($user, $data->author);
         $tags = $this->findOrCreateTags->execute($user, $data->tags);

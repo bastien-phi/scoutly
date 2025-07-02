@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
-use App\Data\LinkFormData;
 use App\Data\Requests\GetUserLinksRequest;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
@@ -119,13 +119,13 @@ describe('store', function (): void {
         $this->mockAction(StoreLink::class)
             ->with(
                 $user,
-                new LinkFormData(
+                new StoreLinkRequest(
                     url: 'https://example.com',
                     title: 'Example Title',
                     description: 'Example Description',
                     is_public: true,
                     author: 'John Doe',
-                    tags: new Collection(['PHP']),
+                    tags: ['PHP'],
                 )
             )
             ->returns(fn () => Link::factory()->for($user)->createOne())
@@ -216,13 +216,13 @@ describe('update', function (): void {
         $this->mockAction(UpdateLink::class)
             ->with(
                 $link,
-                new LinkFormData(
+                new StoreLinkRequest(
                     url: 'https://example.com',
                     title: 'Example Title',
                     description: 'Example Description',
                     is_public: false,
                     author: 'John Doe',
-                    tags: new Collection(['PHP']),
+                    tags: ['PHP'],
                 )
             );
 

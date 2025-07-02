@@ -6,9 +6,9 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import LinkFormData = App.Data.LinkFormData;
 import LinkData = App.Data.LinkData;
 import TagData = App.Data.TagData;
+import StoreLinkRequest = App.Data.Requests.StoreLinkRequest;
 
 export default function Edit({ link, authors, tags }: { link: LinkData; authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -26,7 +26,7 @@ export default function Edit({ link, authors, tags }: { link: LinkData; authors:
         },
     ];
 
-    const { data, setData, put, processing, errors } = useForm<Required<LinkFormData>>({
+    const { data, setData, put, processing, errors } = useForm<Required<StoreLinkRequest>>({
         url: link.url,
         title: link.title || '',
         description: link.description || '',

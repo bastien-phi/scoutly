@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\DraftFormData;
+use App\Data\Requests\StoreDraftRequest;
 use App\Models\Link;
 use App\Models\User;
 use DirectoryTree\ImapEngine\Message;
@@ -46,7 +46,7 @@ class IngestDraftMessage
 
         return $this->storeDraft->execute(
             $user,
-            DraftFormData::fromMailIngest($validator->validated())
+            StoreDraftRequest::fromMailIngest($validator->validated())
         );
     }
 

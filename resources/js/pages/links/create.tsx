@@ -6,8 +6,8 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import LinkFormData = App.Data.LinkFormData;
-import DraftFormData = App.Data.DraftFormData;
+import StoreLinkRequest = App.Data.Requests.StoreLinkRequest;
+import StoreDraftRequest = App.Data.Requests.StoreDraftRequest;
 
 export default function Create({ authors, tags }: { authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -21,7 +21,7 @@ export default function Create({ authors, tags }: { authors: string[]; tags: str
         },
     ];
 
-    const { data, setData, post, processing, errors } = useForm<Required<LinkFormData & DraftFormData>>({
+    const { data, setData, post, processing, errors } = useForm<Required<StoreLinkRequest & StoreDraftRequest>>({
         url: '',
         title: '',
         description: '',

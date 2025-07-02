@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\DraftFormData;
+use App\Data\Requests\StoreDraftRequest;
 use App\Models\Link;
 use App\Models\User;
 
@@ -15,7 +15,7 @@ class StoreDraft
         private readonly FindOrCreateTags $findOrCreateTags,
     ) {}
 
-    public function execute(User $user, DraftFormData $data): Link
+    public function execute(User $user, StoreDraftRequest $data): Link
     {
         $author = $this->findOrCreateAuthor->execute($user, $data->author);
         $tags = $this->findOrCreateTags->execute($user, $data->tags);

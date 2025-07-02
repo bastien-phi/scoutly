@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\DraftFormData;
-use App\Data\LinkFormData;
+use App\Data\Requests\StoreDraftRequest;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Link;
 
 class UpdateLink
@@ -15,7 +15,7 @@ class UpdateLink
         private readonly FindOrCreateTags $findOrCreateTags,
     ) {}
 
-    public function execute(Link $link, LinkFormData|DraftFormData $data): void
+    public function execute(Link $link, StoreLinkRequest|StoreDraftRequest $data): void
     {
         $author = $this->findOrCreateAuthor->execute($link->user, $data->author);
         $tags = $this->findOrCreateTags->execute($link->user, $data->tags);

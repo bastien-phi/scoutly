@@ -9,10 +9,9 @@ use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
 use App\Data\AuthorData;
 use App\Data\LinkData;
-use App\Data\LinkFormData;
 use App\Data\Requests\GetUserLinksRequest;
+use App\Data\Requests\StoreLinkRequest;
 use App\Data\TagData;
-use App\Http\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -50,9 +49,9 @@ class LinkController
         ]);
     }
 
-    public function store(StoreLinkRequest $request, #[CurrentUser] User $user, StoreLink $storeLink): FoundationResponse
+    public function store(StoreLinkRequest $data, #[CurrentUser] User $user, StoreLink $storeLink): FoundationResponse
     {
-        $link = $storeLink->execute($user, LinkFormData::from($request));
+        $link = $storeLink->execute($user, $data);
 
         return to_route('links.show', $link);
     }
@@ -81,9 +80,9 @@ class LinkController
         ]);
     }
 
-    public function update(StoreLinkRequest $request, Link $link, UpdateLink $updateLink): FoundationResponse
+    public function update(StoreLinkRequest $data, Link $link, UpdateLink $updateLink): FoundationResponse
     {
-        $updateLink->execute($link, LinkFormData::from($request));
+        $updateLink->execute($link, $data);
 
         return to_route('links.show', $link);
     }

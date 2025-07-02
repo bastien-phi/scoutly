@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use App\Actions\UpdateAndPublishDraft;
-use App\Data\LinkFormData;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
-use Illuminate\Support\Collection;
 
 it('updates and publishes a draft link', function (): void {
     $user = User::factory()->createOne();
@@ -18,13 +17,13 @@ it('updates and publishes a draft link', function (): void {
     $this->mockAction(UpdateAndPublishDraft::class)
         ->with(
             $link,
-            new LinkFormData(
+            new StoreLinkRequest(
                 url: 'https://example.com',
                 title: 'Example Title',
                 description: 'Example Description',
                 is_public: false,
                 author: 'John Doe',
-                tags: new Collection(['PHP']),
+                tags: ['PHP'],
             )
         );
 

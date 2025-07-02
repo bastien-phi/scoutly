@@ -5,25 +5,24 @@ declare(strict_types=1);
 use App\Actions\FindOrCreateAuthor;
 use App\Actions\FindOrCreateTags;
 use App\Actions\UpdateLink;
-use App\Data\DraftFormData;
-use App\Data\LinkFormData;
+use App\Data\Requests\StoreDraftRequest;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
 it('updates a link with the given data', function (): void {
     $link = Link::factory()
         ->published(Date::createFromFormat('!Y-m-d H:i:s', '2025-06-04 10:41:00'))
         ->createOne();
-    $data = new LinkFormData(
+    $data = new StoreLinkRequest(
         url: 'https://example.com',
         title: 'Example Title',
         description: 'Example Description',
         is_public: false,
         author: 'John Doe',
-        tags: new Collection(['PHP'])
+        tags: ['PHP']
     );
 
     $this->mockAction(FindOrCreateAuthor::class)
@@ -32,7 +31,7 @@ it('updates a link with the given data', function (): void {
         ->in($author);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with($link->user, new Collection(['PHP']))
+        ->with($link->user, ['PHP'])
         ->returns(fn () => Tag::factory(1)->create())
         ->in($tags);
 
@@ -59,13 +58,13 @@ it('updates a link with the draft data', function (): void {
     $link = Link::factory()
         ->published(Date::createFromFormat('!Y-m-d H:i:s', '2025-06-04 10:41:00'))
         ->createOne();
-    $data = new DraftFormData(
+    $data = new StoreDraftRequest(
         url: 'https://example.com',
         title: 'Example Title',
         description: null,
         is_public: true,
         author: 'John Doe',
-        tags: new Collection(['PHP'])
+        tags: ['PHP']
     );
 
     $this->mockAction(FindOrCreateAuthor::class)
@@ -74,7 +73,7 @@ it('updates a link with the draft data', function (): void {
         ->in($author);
 
     $this->mockAction(FindOrCreateTags::class)
-        ->with($link->user, new Collection(['PHP']))
+        ->with($link->user, ['PHP'])
         ->returns(fn () => Tag::factory(1)->create())
         ->in($tags);
 
