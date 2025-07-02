@@ -7,6 +7,12 @@ parameters:
 			path: app/Actions/CheckDraftInbox.php
 
 		-
+			message: '#^Parameter \$data of class App\\Data\\Resources\\JsonResource constructor expects array\<Spatie\\LaravelData\\Resource\>\|Illuminate\\Contracts\\Pagination\\CursorPaginator\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Illuminate\\Contracts\\Pagination\\Paginator\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Illuminate\\Pagination\\AbstractCursorPaginator\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Illuminate\\Pagination\\AbstractPaginator\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Illuminate\\Support\\Enumerable\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Spatie\\LaravelData\\DataCollection\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Spatie\\LaravelData\\Resource, array\<Spatie\\LaravelData\\Resource\>\|Illuminate\\Contracts\\Pagination\\CursorPaginator\|Illuminate\\Contracts\\Pagination\\Paginator\|Illuminate\\Pagination\\AbstractCursorPaginator\|Illuminate\\Pagination\\AbstractPaginator\|Illuminate\\Support\\Enumerable\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Spatie\\LaravelData\\CursorPaginatedDataCollection\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Spatie\\LaravelData\\DataCollection\<\(int\|string\), Spatie\\LaravelData\\Resource\>\|Spatie\\LaravelData\\PaginatedDataCollection\<\(int\|string\), Spatie\\LaravelData\\Resource\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Data/Resources/JsonResource.php
+
+		-
 			message: '#^Parameter \#2 \$where \(array\<string, mixed\>\) of method App\\Services\\Database\\PostgresGrammar\:\:whereFullText\(\) should be contravariant with parameter \$where \(array\) of method Tpetry\\PostgresqlEnhanced\\Query\\Grammar\:\:whereFullText\(\)$#'
 			identifier: method.childParameterType
 			count: 1

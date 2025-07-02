@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Data\TagStatisticData;
-use App\Http\Resources\DataCollectionResource;
+use App\Data\Resources\JsonResource;
+use App\Data\Resources\TagStatisticResource;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 
 class CommunityTrendingTagsController
 {
-    public function __invoke(): DataCollectionResource
+    public function __invoke(): JsonResource
     {
         $tagStatQuery = Tag::query()->withCount([
             'links' => fn (Builder $query) => $query->wherePublished()->wherePublic(),
@@ -26,6 +26,6 @@ class CommunityTrendingTagsController
             ->limit(3)
             ->get();
 
-        return DataCollectionResource::make($tags, TagStatisticData::class);
+        return JsonResource::collection($tags, TagStatisticResource::class);
     }
 }
