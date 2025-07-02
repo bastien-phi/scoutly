@@ -13,7 +13,7 @@ class GetCommunityAuthors
     /**
      * @return Collection<int, Author>
      */
-    public function execute(?string $search = null): Collection
+    public function execute(?string $search): Collection
     {
         return Author::query()
             ->distinct('name')
