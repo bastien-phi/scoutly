@@ -33,7 +33,7 @@ namespace IdeHelper\App\Models
      * @method $this whereUuid(string $value)
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Author.php L52
+     * @see project://app/Models/Author.php L54
      *
      * @method \App\Models\Author create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Author>|\App\Models\Author|null find($id, array $columns = ['*'])
@@ -99,15 +99,15 @@ namespace IdeHelper\App\Models
      * @method $this whereUuid(string $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L95
+     * @see project://app/Models/Link.php L97
      *
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Link.php L104
+     * @see project://app/Models/Link.php L106
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L113
+     * @see project://app/Models/Link.php L115
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
@@ -161,7 +161,7 @@ namespace IdeHelper\App\Models
      * @method $this whereUuid(string $value)
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Tag.php L52
+     * @see project://app/Models/Tag.php L54
      *
      * @method \App\Models\Tag create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag>|\App\Models\Tag|null find($id, array $columns = ['*'])
