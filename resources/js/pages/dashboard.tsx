@@ -7,9 +7,9 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import CommunityLinkData = App.Data.CommunityLinkData;
 import TagStatisticResource = App.Data.Resources.TagStatisticResource;
 import LinkResource = App.Data.Resources.LinkResource;
+import CommunityLinkResource = App.Data.Resources.CommunityLinkResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -160,10 +160,10 @@ function RandomLink() {
 
 function RandomCommunityLink() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [link, setLink] = useState<CommunityLinkData | null>(null);
+    const [link, setLink] = useState<CommunityLinkResource | null>(null);
 
     useEffect(() => {
-        fetchJson<CommunityLinkData>(route('api.dashboard.random-community-link'))
+        fetchJson<CommunityLinkResource>(route('api.dashboard.random-community-link'))
             .then((json) => {
                 setLink(json.data);
             })

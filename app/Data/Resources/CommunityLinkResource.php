@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Data\Resources;
 
-use App\Data\Resources\AuthorResource;
-use App\Data\Resources\TagResource;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class CommunityLinkData extends Data
+class CommunityLinkResource extends Resource
 {
     /**
      * @param  Collection<int, TagResource>  $tags
@@ -24,9 +22,9 @@ class CommunityLinkData extends Data
         public ?string $title,
         public ?string $description,
         public ?CarbonImmutable $published_at,
-        public UserData $user,
+        public UserResource $user,
         public ?AuthorResource $author,
-        #[LiteralTypeScriptType('App.Data.TagData[]')]
+        #[LiteralTypeScriptType('App.Data.Resources.TagResource[]')]
         public Collection $tags,
     ) {}
 }

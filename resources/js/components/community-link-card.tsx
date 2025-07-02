@@ -5,9 +5,9 @@ import { Pill } from '@/components/ui/pill';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight, User } from 'lucide-react';
-import CommunityLinkData = App.Data.CommunityLinkData;
+import CommunityLinkResource = App.Data.Resources.CommunityLinkResource;
 
-export default function CommunityLinkCard({ link, className }: { link: CommunityLinkData; className?: string }) {
+export default function CommunityLinkCard({ link, className }: { link: CommunityLinkResource; className?: string }) {
     return (
         <Card className={cn('w-full', className)}>
             <CardHeader>
