@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\SearchLinkFormData;
+use App\Data\Requests\GetUserLinksRequest;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class GetUserLinks
 {
     /**
      * @return LengthAwarePaginator<int, \App\Models\Link>
      */
-    public function execute(
-        User $user,
-        SearchLinkFormData $data,
-    ): LengthAwarePaginator {
+    public function execute(User $user, GetUserLinksRequest $data): LengthAwarePaginator
+    {
         return $user->links()
             ->wherePublished()
             ->tap($this->search($data->search))
@@ -63,12 +60,12 @@ class GetUserLinks
     }
 
     /**
-     * @param  \Illuminate\Support\Collection<int, string>  $tagUuids
+     * @param  ?array<int, string>  $tagUuids
      * @return callable(Builder<Link>): void
      */
-    private function filterTags(Collection $tagUuids): callable
+    private function filterTags(?array $tagUuids): callable
     {
-        if ($tagUuids->isEmpty()) {
+        if ($tagUuids === null) {
             return function (Builder $query): void {};
         }
 
@@ -77,7 +74,7 @@ class GetUserLinks
                 'tags',
                 fn (Builder $query) => $query->whereIn('uuid', $tagUuids),
                 '=',
-                $tagUuids->count()
+                count($tagUuids)
             );
         };
     }

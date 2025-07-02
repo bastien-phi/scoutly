@@ -10,9 +10,8 @@ use App\Actions\UpdateLink;
 use App\Data\AuthorData;
 use App\Data\LinkData;
 use App\Data\LinkFormData;
-use App\Data\SearchLinkFormData;
+use App\Data\Requests\GetUserLinksRequest;
 use App\Data\TagData;
-use App\Http\Requests\GetUserLinksRequest;
 use App\Http\Requests\StoreLinkRequest;
 use App\Models\Link;
 use App\Models\User;
@@ -25,11 +24,10 @@ use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 class LinkController
 {
     public function index(
-        GetUserLinksRequest $request,
+        GetUserLinksRequest $data,
         #[CurrentUser] User $user,
         GetUserLinks $getUserLinks
     ): Response {
-        $data = SearchLinkFormData::from($request);
         $links = $getUserLinks->execute($user, $data);
 
         return Inertia::render('links/index', [

@@ -6,7 +6,7 @@ use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
 use App\Data\LinkFormData;
-use App\Data\SearchLinkFormData;
+use App\Data\Requests\GetUserLinksRequest;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
@@ -21,7 +21,7 @@ describe('index', function (): void {
         $user = User::factory()->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user, new SearchLinkFormData(search: null, author_uuid: null))
+            ->with($user, new GetUserLinksRequest(search: null, author_uuid: null, tag_uuids: null))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->for($user)->create()->load(['author', 'tags']),
                 total: 2,
@@ -49,7 +49,7 @@ describe('index', function (): void {
         $tag = Tag::factory()->for($user)->createOne();
 
         $this->mockAction(GetUserLinks::class)
-            ->with($user, new SearchLinkFormData(search: 'Hello world', author_uuid: $author->uuid, tag_uuids: new Collection([$tag->uuid])))
+            ->with($user, new GetUserLinksRequest(search: 'Hello world', author_uuid: $author->uuid, tag_uuids: [$tag->uuid]))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->recycle($user)->create()->load(['author', 'tags']),
                 total: 2,
