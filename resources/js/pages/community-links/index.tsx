@@ -12,10 +12,10 @@ import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import CommunityLinkData = App.Data.CommunityLinkData;
 import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
 import AuthorResource = App.Data.Resources.AuthorResource;
 import TagResource = App.Data.Resources.TagResource;
+import CommunityLinkResource = App.Data.Resources.CommunityLinkResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ links, request }: { links: Paginated<CommunityLinkData>; request: GetCommunityLinksRequest }) {
+export default function Index({ links, request }: { links: Paginated<CommunityLinkResource>; request: GetCommunityLinksRequest }) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
@@ -115,7 +115,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
 
                     <Separator />
 
-                    {links.data.map((link: CommunityLinkData) => (
+                    {links.data.map((link: CommunityLinkResource) => (
                         <CommunityLinkCard key={link.uuid} link={link} />
                     ))}
 

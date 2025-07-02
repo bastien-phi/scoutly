@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Data\Resources;
 
-use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class UserData extends Data
+class UserResource extends Resource
 {
     public function __construct(
         public string $uuid,
