@@ -8,8 +8,8 @@ import { Head, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
-import LinkData = App.Data.LinkData;
 import TagStatisticResource = App.Data.Resources.TagStatisticResource;
+import LinkResource = App.Data.Resources.LinkResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -131,10 +131,10 @@ function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: s
 
 function RandomLink() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [link, setLink] = useState<LinkData | null>(null);
+    const [link, setLink] = useState<LinkResource | null>(null);
 
     useEffect(() => {
-        fetchJson<LinkData>(route('api.dashboard.random-link'))
+        fetchJson<LinkResource>(route('api.dashboard.random-link'))
             .then((json) => {
                 setLink(json.data);
             })

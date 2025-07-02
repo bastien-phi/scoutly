@@ -11,9 +11,9 @@ import {
 } from '@/components/ui/dialog';
 import { router } from '@inertiajs/react';
 import { Trash } from 'lucide-react';
-import LinkData = App.Data.LinkData;
+import LinkResource = App.Data.Resources.LinkResource;
 
-export default function DeleteLinkButton({ link }: { link: LinkData }) {
+export default function DeleteLinkButton({ link }: { link: LinkResource }) {
     return (
         <Dialog>
             <DialogTrigger>

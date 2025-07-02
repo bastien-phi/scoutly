@@ -6,10 +6,10 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import LinkData = App.Data.LinkData;
 import StoreLinkRequest = App.Data.Requests.StoreLinkRequest;
+import LinkResource = App.Data.Resources.LinkResource;
 
-export default function Edit({ draft, authors, tags }: { draft: LinkData; authors: string[]; tags: string[] }) {
+export default function Edit({ draft, authors, tags }: { draft: LinkResource; authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Drafts',

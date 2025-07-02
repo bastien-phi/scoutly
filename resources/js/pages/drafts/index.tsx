@@ -12,7 +12,7 @@ import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, WhenVisible } from '@inertiajs/react';
 import { ArrowUpRight, Globe, Info, Lightbulb, LoaderCircle, MailQuestion, User } from 'lucide-react';
 import { useState } from 'react';
-import LinkData = App.Data.LinkData;
+import LinkResource = App.Data.Resources.LinkResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkData>; draftEmail: string }) {
+export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkResource>; draftEmail: string }) {
     const [page, setPage] = useState<number>(drafts.current_page);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -85,7 +85,7 @@ export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkDa
 
                     <Separator />
 
-                    {drafts.data.map((link: LinkData) => (
+                    {drafts.data.map((link: LinkResource) => (
                         <DraftCard key={link.uuid} link={link} />
                     ))}
 
@@ -111,7 +111,7 @@ export default function Index({ drafts, draftEmail }: { drafts: Paginated<LinkDa
     );
 }
 
-function DraftCard({ link }: { link: LinkData }) {
+function DraftCard({ link }: { link: LinkResource }) {
     return (
         <Card>
             <CardHeader>

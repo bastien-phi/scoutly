@@ -7,11 +7,11 @@ namespace App\Http\Controllers;
 use App\Actions\GetUserLinks;
 use App\Actions\StoreLink;
 use App\Actions\UpdateLink;
-use App\Data\AuthorData;
-use App\Data\LinkData;
 use App\Data\Requests\GetUserLinksRequest;
 use App\Data\Requests\StoreLinkRequest;
-use App\Data\TagData;
+use App\Data\Resources\AuthorResource;
+use App\Data\Resources\LinkResource;
+use App\Data\Resources\TagResource;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -31,9 +31,9 @@ class LinkController
 
         return Inertia::render('links/index', [
             'request' => $data->onlyNotNull(),
-            'links' => $links->currentPage() === 1 ? LinkData::collect($links) : Inertia::deepMerge(LinkData::collect($links)),
-            'authors' => fn (): Collection => AuthorData::collect($user->authors()->orderBy('name')->get()),
-            'tags' => fn (): Collection => TagData::collect($user->tags()->orderBy('label')->get()),
+            'links' => $links->currentPage() === 1 ? LinkResource::collect($links) : Inertia::deepMerge(LinkResource::collect($links)),
+            'authors' => fn (): Collection => AuthorResource::collect($user->authors()->orderBy('name')->get()),
+            'tags' => fn (): Collection => TagResource::collect($user->tags()->orderBy('label')->get()),
         ]);
     }
 
@@ -61,7 +61,7 @@ class LinkController
         $link->load(['author', 'tags']);
 
         return Inertia::render('links/show', [
-            'link' => LinkData::from($link),
+            'link' => LinkResource::from($link),
         ]);
     }
 
@@ -70,7 +70,7 @@ class LinkController
         $link->load(['author', 'tags']);
 
         return Inertia::render('links/edit', [
-            'link' => LinkData::from($link),
+            'link' => LinkResource::from($link),
             'authors' => $user->authors()
                 ->orderBy('name')
                 ->pluck('name'),

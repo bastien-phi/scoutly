@@ -7,8 +7,8 @@ namespace App\Http\Controllers;
 use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
 use App\Actions\UpdateLink;
-use App\Data\LinkData;
 use App\Data\Requests\StoreDraftRequest;
+use App\Data\Resources\LinkResource;
 use App\Data\ToastData;
 use App\Models\Link;
 use App\Models\User;
@@ -25,7 +25,7 @@ class DraftController
     ): Response {
         return Inertia::render('drafts/index', [
             'drafts' => Inertia::deepMerge(
-                LinkData::collect(
+                LinkResource::collect(
                     $getUserDrafts->execute($user)
                 )
             ),
@@ -47,7 +47,7 @@ class DraftController
         $draft->load(['author', 'tags']);
 
         return Inertia::render('drafts/edit', [
-            'draft' => LinkData::from($draft),
+            'draft' => LinkResource::from($draft),
             'authors' => $user->authors()
                 ->orderBy('name')
                 ->pluck('name'),

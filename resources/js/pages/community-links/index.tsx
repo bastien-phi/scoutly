@@ -13,9 +13,9 @@ import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
-import AuthorData = App.Data.AuthorData;
-import TagData = App.Data.TagData;
 import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
+import AuthorResource = App.Data.Resources.AuthorResource;
+import TagResource = App.Data.Resources.TagResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -145,14 +145,14 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
 function AuthorSearch({ value, onChange }: { value: string; onChange: (value: string) => void }) {
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [authors, setAuthors] = useState<AuthorData[]>([]);
+    const [authors, setAuthors] = useState<AuthorResource[]>([]);
     const [searchValue, setSearchValue] = useState<string>(value);
 
     const fetchAuthors = useCallback((search: string) => {
         setIsLoading(true);
         setAuthors([]);
 
-        fetchJson<AuthorData[]>(route('api.community-authors.index', { search: search }))
+        fetchJson<AuthorResource[]>(route('api.community-authors.index', { search: search }))
             .then((json) => {
                 setAuthors(json.data);
             })
@@ -201,7 +201,7 @@ function AuthorSearch({ value, onChange }: { value: string; onChange: (value: st
                             )}
                         </CommandEmpty>
                         <CommandGroup>
-                            {authors.map((author: AuthorData) => (
+                            {authors.map((author: AuthorResource) => (
                                 <CommandItem
                                     key={author.uuid}
                                     value={author.name}
@@ -234,14 +234,14 @@ function TagSearch({
 }) {
     const [open, setOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [tags, setTags] = useState<TagData[]>([]);
+    const [tags, setTags] = useState<TagResource[]>([]);
     const [searchValue, setSearchValue] = useState<string>('');
 
     const fetchTags = useCallback((search: string) => {
         setIsLoading(true);
         setTags([]);
 
-        fetchJson<TagData[]>(route('api.community-tags.index', { search: search }))
+        fetchJson<TagResource[]>(route('api.community-tags.index', { search: search }))
             .then((json) => {
                 setTags(json.data);
             })
@@ -290,7 +290,7 @@ function TagSearch({
                             )}
                         </CommandEmpty>
                         <CommandGroup>
-                            {tags.map((tag: TagData) => (
+                            {tags.map((tag: TagResource) => (
                                 <CommandItem
                                     key={tag.uuid}
                                     value={tag.label}
