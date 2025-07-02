@@ -3,17 +3,17 @@
 declare(strict_types=1);
 
 use App\Actions\GetCommunityLinks;
-use App\Data\SearchCommunityLinkFormData;
+use App\Data\Requests\GetCommunityLinksRequest;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Inertia\Testing\AssertableInertia;
 
 describe('index', function (): void {
     it('returns links', function (): void {
         $this->mockAction(GetCommunityLinks::class)
+            ->with(new GetCommunityLinksRequest(search: null, author: null, tags: null))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->isPublic()->published()->create()->load(['author', 'user', 'tags']),
                 total: 2,
@@ -36,7 +36,7 @@ describe('index', function (): void {
 
     it('returns links with search', function (): void {
         $this->mockAction(GetCommunityLinks::class)
-            ->with(new SearchCommunityLinkFormData(search: 'Hello world', author: 'John Doe', tags: new Collection(['PHP', 'Laravel'])))
+            ->with(new GetCommunityLinksRequest(search: 'Hello world', author: 'John Doe', tags: ['PHP', 'Laravel']))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->create()->load(['author', 'user', 'tags']),
                 total: 2,
