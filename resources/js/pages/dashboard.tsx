@@ -7,9 +7,9 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import TagStatisticData = App.Data.TagStatisticData;
 import CommunityLinkData = App.Data.CommunityLinkData;
 import LinkData = App.Data.LinkData;
+import TagStatisticResource = App.Data.Resources.TagStatisticResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,7 +39,7 @@ export default function Dashboard() {
                         <TrendingTags
                             title="Your favorite tags"
                             url={route('api.dashboard.favorite-tags')}
-                            generateLinkUsing={(tag: TagStatisticData) => route('links.index', { tag_uuids: [tag.uuid] })}
+                            generateLinkUsing={(tag: TagStatisticResource) => route('links.index', { tag_uuids: [tag.uuid] })}
                         />
                     </div>
                     <div className="border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border">
@@ -49,7 +49,7 @@ export default function Dashboard() {
                         <TrendingTags
                             title="Community trending tags"
                             url={route('api.dashboard.community-trending-tags')}
-                            generateLinkUsing={(tag: TagStatisticData) => route('community-links.index', { tags: [tag.label] })}
+                            generateLinkUsing={(tag: TagStatisticResource) => route('community-links.index', { tags: [tag.label] })}
                         />
                     </div>
                 </div>
@@ -89,12 +89,12 @@ function LinkCount({ title, url }: { title: string; url: string }) {
     );
 }
 
-function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: string; generateLinkUsing: (tag: TagStatisticData) => string }) {
+function TrendingTags({ title, url, generateLinkUsing }: { title: string; url: string; generateLinkUsing: (tag: TagStatisticResource) => string }) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [tags, setTags] = useState<TagStatisticData[] | null>(null);
+    const [tags, setTags] = useState<TagStatisticResource[] | null>(null);
 
     useEffect(() => {
-        fetchJson<TagStatisticData[]>(url)
+        fetchJson<TagStatisticResource[]>(url)
             .then((json) => {
                 setTags(json.data);
             })
