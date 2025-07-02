@@ -12,10 +12,10 @@ import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Filter, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import LinkData = App.Data.LinkData;
-import AuthorData = App.Data.AuthorData;
-import TagData = App.Data.TagData;
 import GetUserLinksRequest = App.Data.Requests.GetUserLinksRequest;
+import LinkResource = App.Data.Resources.LinkResource;
+import AuthorResource = App.Data.Resources.AuthorResource;
+import TagResource = App.Data.Resources.TagResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -30,9 +30,9 @@ export default function Index({
     tags,
     request,
 }: {
-    links: Paginated<LinkData>;
-    authors: AuthorData[];
-    tags: TagData[];
+    links: Paginated<LinkResource>;
+    authors: AuthorResource[];
+    tags: TagResource[];
     request: GetUserLinksRequest;
 }) {
     const [page, setPage] = useState<number>(links.current_page);
@@ -106,8 +106,8 @@ export default function Index({
                                     <div className="flex flex-wrap gap-2">
                                         {data.tag_uuids
                                             .map((uuid) => tags.find((tag) => tag.uuid === uuid))
-                                            .filter((tag: TagData | undefined): tag is TagData => tag !== undefined)
-                                            .map((tag: TagData) => (
+                                            .filter((tag: TagResource | undefined): tag is TagResource => tag !== undefined)
+                                            .map((tag: TagResource) => (
                                                 <Pill
                                                     key={tag.uuid}
                                                     onClose={() =>
@@ -137,7 +137,7 @@ export default function Index({
 
                     <Separator />
 
-                    {links.data.map((link: LinkData) => (
+                    {links.data.map((link: LinkResource) => (
                         <LinkCard key={link.uuid} link={link} />
                     ))}
 
@@ -164,7 +164,7 @@ export default function Index({
     );
 }
 
-function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; value: string; onChange: (value: string) => void }) {
+function AuthorSelect({ authors, value, onChange }: { authors: AuthorResource[]; value: string; onChange: (value: string) => void }) {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
@@ -186,7 +186,7 @@ function AuthorSelect({ authors, value, onChange }: { authors: AuthorData[]; val
                     <CommandList>
                         <CommandEmpty>No author found.</CommandEmpty>
                         <CommandGroup>
-                            {authors.map((author: AuthorData) => (
+                            {authors.map((author: AuthorResource) => (
                                 <CommandItem
                                     key={author.uuid}
                                     value={author.name}
@@ -213,7 +213,7 @@ function TagMultiselect({
     onValueAdded,
     onValueRemoved,
 }: {
-    tags: TagData[];
+    tags: TagResource[];
     selectedTags: string[];
     onValueAdded: (tag: string) => void;
     onValueRemoved: (tag: string) => void;
@@ -239,7 +239,7 @@ function TagMultiselect({
                     <CommandList>
                         <CommandEmpty>No tag found.</CommandEmpty>
                         <CommandGroup>
-                            {tags.map((tag: TagData) => (
+                            {tags.map((tag: TagResource) => (
                                 <CommandItem
                                     key={tag.uuid}
                                     value={tag.label}

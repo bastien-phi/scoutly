@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight, Globe, User } from 'lucide-react';
 import TextLink from './text-link';
-import LinkData = App.Data.LinkData;
+import LinkResource = App.Data.Resources.LinkResource;
 
-export default function LinkCard({ link, className }: { link: LinkData; className?: string }) {
+export default function LinkCard({ link, className }: { link: LinkResource; className?: string }) {
     return (
         <Card className={cn('w-full', className)}>
             <CardHeader className="flex-row items-baseline justify-between">

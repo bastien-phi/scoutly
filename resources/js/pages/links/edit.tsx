@@ -6,11 +6,11 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import LinkData = App.Data.LinkData;
-import TagData = App.Data.TagData;
 import StoreLinkRequest = App.Data.Requests.StoreLinkRequest;
+import LinkResource = App.Data.Resources.LinkResource;
+import TagResource = App.Data.Resources.TagResource;
 
-export default function Edit({ link, authors, tags }: { link: LinkData; authors: string[]; tags: string[] }) {
+export default function Edit({ link, authors, tags }: { link: LinkResource; authors: string[]; tags: string[] }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Links',
@@ -32,7 +32,7 @@ export default function Edit({ link, authors, tags }: { link: LinkData; authors:
         description: link.description || '',
         is_public: link.is_public || false,
         author: link.author?.name || '',
-        tags: link.tags.map((tag: TagData) => tag.label) || [],
+        tags: link.tags.map((tag: TagResource) => tag.label) || [],
     });
 
     const submitLink: FormEventHandler = (e) => {

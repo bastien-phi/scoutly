@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Data\Resources;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Resource;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class LinkData extends Data
+class LinkResource extends Resource
 {
     /**
-     * @param  Collection<int, TagData>  $tags
+     * @param  Collection<int, TagResource>  $tags
      */
     public function __construct(
         public string $uuid,
@@ -25,8 +25,8 @@ class LinkData extends Data
         public bool $is_public,
         public CarbonImmutable $created_at,
         public CarbonImmutable $updated_at,
-        public ?AuthorData $author,
-        #[LiteralTypeScriptType('App.Data.TagData[]')]
+        public ?AuthorResource $author,
+        #[LiteralTypeScriptType('App.Data.Resources.TagResource[]')]
         public Collection $tags,
     ) {}
 }

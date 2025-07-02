@@ -1,4 +1,3 @@
-import LinkData = App.Data.LinkData;
 import DeleteLinkButton from '@/components/delete-link-button';
 import TextLink from '@/components/text-link';
 import { Datetime } from '@/components/ui/datetime';
@@ -7,8 +6,9 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Globe, Pencil, User } from 'lucide-react';
+import LinkResource = App.Data.Resources.LinkResource;
 
-export default function Show({ link }: { link: LinkData }) {
+export default function Show({ link }: { link: LinkResource }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Links',
