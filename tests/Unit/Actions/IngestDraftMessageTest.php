@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 use App\Actions\IngestDraftMessage;
 use App\Actions\StoreDraft;
-use App\Data\DraftFormData;
+use App\Data\Requests\StoreDraftRequest;
 use App\Models\Link;
 use App\Models\User;
 use DirectoryTree\ImapEngine\Message;
-use Illuminate\Support\Collection;
 
 it('ingests a draft message from text', function (): void {
     $user = User::factory()->createOne();
@@ -29,13 +28,13 @@ it('ingests a draft message from text', function (): void {
     $this->mockAction(StoreDraft::class)
         ->with(
             $user,
-            new DraftFormData(
+            new StoreDraftRequest(
                 url: 'https://github.com/bastien-phi/scoutly',
                 title: 'Test draft',
                 description: null,
                 is_public: false,
                 author: null,
-                tags: new Collection,
+                tags: null,
             )
         )
         ->returns(fn () => Link::factory()->createOne())
@@ -79,13 +78,13 @@ it('ingests a draft message from html', function (): void {
     $this->mockAction(StoreDraft::class)
         ->with(
             $user,
-            new DraftFormData(
+            new StoreDraftRequest(
                 url: 'https://github.com/bastien-phi/scoutly',
                 title: 'Test draft',
                 description: null,
                 is_public: false,
                 author: null,
-                tags: new Collection,
+                tags: null,
             )
         )
         ->returns(fn () => Link::factory()->createOne())

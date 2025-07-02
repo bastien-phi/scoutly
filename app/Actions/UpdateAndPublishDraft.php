@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\LinkFormData;
+use App\Data\Requests\StoreLinkRequest;
 use App\Models\Link;
 
 class UpdateAndPublishDraft
@@ -13,7 +13,7 @@ class UpdateAndPublishDraft
         private readonly UpdateLink $updateLink,
     ) {}
 
-    public function execute(Link $draft, LinkFormData $data): void
+    public function execute(Link $draft, StoreLinkRequest $data): void
     {
         $this->updateLink->execute($draft, $data);
 

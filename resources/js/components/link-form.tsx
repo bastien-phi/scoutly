@@ -1,5 +1,3 @@
-import LinkFormData = App.Data.LinkFormData;
-import DraftFormData = App.Data.DraftFormData;
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +7,8 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { InertiaFormProps } from '@inertiajs/react';
 import { ChangeEvent } from 'react';
+import StoreLinkRequest = App.Data.Requests.StoreLinkRequest;
+import StoreDraftRequest = App.Data.Requests.StoreDraftRequest;
 
 export default function LinkForm({
     data,
@@ -17,7 +17,7 @@ export default function LinkForm({
     errors,
     authors,
     tags,
-}: Pick<InertiaFormProps<Required<LinkFormData & DraftFormData>>, 'data' | 'setData' | 'processing' | 'errors'> & {
+}: Pick<InertiaFormProps<Required<StoreLinkRequest & StoreDraftRequest>>, 'data' | 'setData' | 'processing' | 'errors'> & {
     authors: string[];
     tags: string[];
 }) {

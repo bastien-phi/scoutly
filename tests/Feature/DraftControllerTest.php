@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
 use App\Actions\UpdateLink;
-use App\Data\DraftFormData;
+use App\Data\Requests\StoreDraftRequest;
 use App\Data\ToastData;
 use App\Models\Author;
 use App\Models\Link;
@@ -49,13 +49,13 @@ describe('store', function (): void {
         $this->mockAction(StoreDraft::class)
             ->with(
                 $user,
-                new DraftFormData(
+                new StoreDraftRequest(
                     url: 'https://example.com',
                     title: null,
                     description: null,
                     is_public: false,
                     author: null,
-                    tags: new Collection,
+                    tags: null,
                 )
             )
             ->returns(fn () => Link::factory()->for($user)->draft()->createOne())
@@ -68,7 +68,7 @@ describe('store', function (): void {
                 'description' => null,
                 'is_public' => false,
                 'author' => null,
-                'tags' => [],
+                'tags' => null,
             ])
             ->assertRedirectToRoute('drafts.edit', $draft)
             ->assertSessionHas(
@@ -124,13 +124,13 @@ describe('update', function (): void {
         $this->mockAction(UpdateLink::class)
             ->with(
                 $link,
-                new DraftFormData(
+                new StoreDraftRequest(
                     url: 'https://example.com',
                     title: 'Example Title',
                     description: 'Example Description',
                     is_public: true,
                     author: 'John Doe',
-                    tags: new Collection(['PHP'])
+                    tags: ['PHP']
                 )
             );
 

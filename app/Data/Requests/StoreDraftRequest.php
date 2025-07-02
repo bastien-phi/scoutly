@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Data;
+namespace App\Data\Requests;
 
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\LiteralTypeScriptType;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
-class DraftFormData extends Data
+class StoreDraftRequest extends Data
 {
     /**
-     * @param  Collection<int, string>  $tags
+     * @param  ?array<int, string>  $tags
      */
     public function __construct(
         public string $url,
@@ -22,7 +21,7 @@ class DraftFormData extends Data
         public bool $is_public,
         public ?string $author,
         #[LiteralTypeScriptType('string[]')]
-        public Collection $tags,
+        public ?array $tags,
     ) {}
 
     /**
@@ -32,8 +31,20 @@ class DraftFormData extends Data
     {
         return self::factory()->withoutMagicalCreation()->from([
             'is_public' => false,
-            'tags' => new Collection,
             ...$data,
         ]);
+    }
+
+    /**
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<int, mixed>|string>
+     */
+    public static function rules(): array
+    {
+        return [
+            'url' => ['url'],
+            'title' => ['max:255'],
+            'author' => ['max:255'],
+            'tags.*' => ['required', 'string', 'max:255'],
+        ];
     }
 }

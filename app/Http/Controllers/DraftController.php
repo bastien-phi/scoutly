@@ -7,10 +7,9 @@ namespace App\Http\Controllers;
 use App\Actions\GetUserDrafts;
 use App\Actions\StoreDraft;
 use App\Actions\UpdateLink;
-use App\Data\DraftFormData;
 use App\Data\LinkData;
+use App\Data\Requests\StoreDraftRequest;
 use App\Data\ToastData;
-use App\Http\Requests\StoreDraftRequest;
 use App\Models\Link;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -34,9 +33,9 @@ class DraftController
         ]);
     }
 
-    public function store(StoreDraftRequest $request, #[CurrentUser] User $user, StoreDraft $storeDraft): FoundationResponse
+    public function store(StoreDraftRequest $data, #[CurrentUser] User $user, StoreDraft $storeDraft): FoundationResponse
     {
-        $draft = $storeDraft->execute($user, DraftFormData::from($request));
+        $draft = $storeDraft->execute($user, $data);
 
         return to_route('drafts.edit', $draft)->with([
             'toast' => ToastData::success('Draft saved'),
@@ -58,9 +57,9 @@ class DraftController
         ]);
     }
 
-    public function update(StoreDraftRequest $request, Link $draft, UpdateLink $updateLink): FoundationResponse
+    public function update(StoreDraftRequest $data, Link $draft, UpdateLink $updateLink): FoundationResponse
     {
-        $updateLink->execute($draft, DraftFormData::from($request));
+        $updateLink->execute($draft, $data);
 
         return to_route('drafts.edit', $draft)->with([
             'toast' => ToastData::success('Draft saved'),

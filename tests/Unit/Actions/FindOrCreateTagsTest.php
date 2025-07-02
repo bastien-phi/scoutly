@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 it('create new tags if not exists', function (): void {
     $user = User::factory()->createOne();
-    $labels = new Collection(['PHP', 'Laravel']);
+    $labels = ['PHP', 'Laravel'];
 
     app(FindOrCreateTags::class)->execute($user, $labels);
 
@@ -21,12 +21,20 @@ it('create new tags if not exists', function (): void {
     }
 });
 
+it('handle null tags', function (): void {
+    $user = User::factory()->createOne();
+
+    $tags = app(FindOrCreateTags::class)->execute($user, null);
+
+    expect($tags)->toBeCollection(new Collection);
+});
+
 it('find existing tags', function (): void {
     $user = User::factory()->createOne();
     $php = Tag::factory()->for($user)->createOne(['label' => 'PHP']);
     $laravel = Tag::factory()->for($user)->createOne(['label' => 'Laravel']);
 
-    $labels = new Collection(['Php', 'larAvEl']);
+    $labels = ['Php', 'larAvEl'];
 
     $tags = app(FindOrCreateTags::class)->execute($user, $labels);
 
@@ -37,7 +45,7 @@ it('filters duplicated tags', function (): void {
     $user = User::factory()->createOne();
     Tag::factory()->for($user)->createOne(['label' => 'PHP']);
 
-    $labels = new Collection(['PHP', 'Php', 'Laravel', 'larAvEl']);
+    $labels = ['PHP', 'Php', 'Laravel', 'larAvEl'];
 
     $tags = app(FindOrCreateTags::class)->execute($user, $labels);
 
