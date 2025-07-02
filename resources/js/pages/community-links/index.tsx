@@ -13,9 +13,9 @@ import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import CommunityLinkData = App.Data.CommunityLinkData;
-import SearchCommunityLinkFormData = App.Data.SearchCommunityLinkFormData;
 import AuthorData = App.Data.AuthorData;
 import TagData = App.Data.TagData;
+import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,13 +24,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ links, request }: { links: Paginated<CommunityLinkData>; request: SearchCommunityLinkFormData }) {
+export default function Index({ links, request }: { links: Paginated<CommunityLinkData>; request: GetCommunityLinksRequest }) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
     const [search, setSearch] = useState<string>(request.search ?? '');
 
-    const { data, setData } = useForm<Required<SearchCommunityLinkFormData>>({
+    const { data, setData } = useForm<Required<GetCommunityLinksRequest>>({
         search: request.search ?? '',
         author: request.author ?? '',
         tags: request.tags ?? [],

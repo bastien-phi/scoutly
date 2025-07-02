@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Data\SearchCommunityLinkFormData;
+use App\Data\Requests\GetCommunityLinksRequest;
 use App\Models\Link;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class GetCommunityLinks
 {
     /**
      * @return \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Link>
      */
-    public function execute(SearchCommunityLinkFormData $data): LengthAwarePaginator
+    public function execute(GetCommunityLinksRequest $data): LengthAwarePaginator
     {
         return Link::query()
             ->wherePublished()
@@ -61,12 +60,12 @@ class GetCommunityLinks
     }
 
     /**
-     * @param  Collection<int, string>  $tags
+     * @param  ?array<int, string>  $tags
      * @return callable(Builder<Link>): void
      */
-    private function filterTags(Collection $tags): callable
+    private function filterTags(?array $tags): callable
     {
-        if ($tags->isEmpty()) {
+        if ($tags === null) {
             return function (Builder $query): void {};
         }
 
@@ -75,7 +74,7 @@ class GetCommunityLinks
                 'tags',
                 fn (Builder $query) => $query->whereIn('label', $tags),
                 '=',
-                $tags->count()
+                count($tags)
             );
         };
     }
