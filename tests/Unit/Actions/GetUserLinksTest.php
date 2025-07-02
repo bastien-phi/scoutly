@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 use App\Actions\GetUserLinks;
-use App\Data\SearchLinkFormData;
+use App\Data\Requests\GetUserLinksRequest;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 
 it('returns links sorted by published_at and id', function (): void {
@@ -22,7 +21,7 @@ it('returns links sorted by published_at and id', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
+        new GetUserLinksRequest(search: null, author_uuid: null, tag_uuids: null)
     );
 
     expect($links->collect())
@@ -35,7 +34,7 @@ it("returns only user's links", function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
+        new GetUserLinksRequest(search: null, author_uuid: null, tag_uuids: null)
     );
 
     expect($links)->toBeEmpty();
@@ -47,7 +46,7 @@ it('returns only published links', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection)
+        new GetUserLinksRequest(search: null, author_uuid: null, tag_uuids: null)
     );
 
     expect($links)->toBeEmpty();
@@ -65,7 +64,7 @@ it('filters by search', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: 'Hell', author_uuid: null, tag_uuids: new Collection)
+        new GetUserLinksRequest(search: 'Hell', author_uuid: null, tag_uuids: null)
     );
 
     expect($links->collect())
@@ -83,7 +82,7 @@ it('filters by author', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_uuid: $author->uuid, tag_uuids: new Collection)
+        new GetUserLinksRequest(search: null, author_uuid: $author->uuid, tag_uuids: null)
     );
 
     expect($links->collect())
@@ -102,7 +101,7 @@ it('filters by tags', function (): void {
 
     $links = app(GetUserLinks::class)->execute(
         $user,
-        new SearchLinkFormData(search: null, author_uuid: null, tag_uuids: new Collection([$php->uuid, $laravel->uuid]))
+        new GetUserLinksRequest(search: null, author_uuid: null, tag_uuids: [$php->uuid, $laravel->uuid])
     );
 
     expect($links->collect())

@@ -13,9 +13,9 @@ import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Filter, Search, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import LinkData = App.Data.LinkData;
-import SearchLinkFormData = App.Data.SearchLinkFormData;
 import AuthorData = App.Data.AuthorData;
 import TagData = App.Data.TagData;
+import GetUserLinksRequest = App.Data.Requests.GetUserLinksRequest;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,14 +33,14 @@ export default function Index({
     links: Paginated<LinkData>;
     authors: AuthorData[];
     tags: TagData[];
-    request: SearchLinkFormData;
+    request: GetUserLinksRequest;
 }) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
     const [search, setSearch] = useState<string>(request.search ?? '');
 
-    const { data, setData } = useForm<Required<SearchLinkFormData>>({
+    const { data, setData } = useForm<Required<GetUserLinksRequest>>({
         search: request.search ?? '',
         author_uuid: request.author_uuid ?? '',
         tag_uuids: request.tag_uuids ?? [],

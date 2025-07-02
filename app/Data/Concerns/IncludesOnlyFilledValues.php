@@ -13,7 +13,7 @@ trait IncludesOnlyFilledValues
     {
         return array_filter(
             $this->toArray(),
-            fn ($value) => filled($value)
+            fn (mixed $value): bool => filled($value)
         );
     }
 }
