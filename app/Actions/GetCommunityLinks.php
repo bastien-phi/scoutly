@@ -65,7 +65,7 @@ class GetCommunityLinks
      */
     private function filterTags(?array $tags): callable
     {
-        if ($tags === null) {
+        if ($tags === null || $tags === []) {
             return function (Builder $query): void {};
         }
 

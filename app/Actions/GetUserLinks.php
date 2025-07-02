@@ -65,7 +65,7 @@ class GetUserLinks
      */
     private function filterTags(?array $tagUuids): callable
     {
-        if ($tagUuids === null) {
+        if ($tagUuids === null || $tagUuids === []) {
             return function (Builder $query): void {};
         }
 
