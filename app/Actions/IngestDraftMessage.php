@@ -109,6 +109,8 @@ class IngestDraftMessage
             return null;
         }
 
-        return Str::limit($subject, limit: 252);
+        return Str::length($subject) <= 255
+            ? $subject
+            : Str::limit($subject, limit: 255 - 3, end: '...');
     }
 }
