@@ -34,7 +34,7 @@ class GetCommunityLinksRequest extends Data
         return [
             'search' => ['max:255'],
             'author' => ['max:255'],
-            'tag_uuids.*' => ['required', 'string', 'max:255'],
+            'tags.*' => ['required', 'string', 'max:255'],
         ];
     }
 }
