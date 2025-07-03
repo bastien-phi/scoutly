@@ -10,7 +10,7 @@ import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { Check, ChevronsUpDown, Filter, Search, X } from 'lucide-react';
+import { Check, ChevronsUpDown, Filter, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import GetUserLinksRequest = App.Data.Requests.GetUserLinksRequest;
 import LinkResource = App.Data.Resources.LinkResource;
@@ -74,6 +74,19 @@ export default function Index({
         });
     }, [data]);
 
+    const selectedAuthor = authors.find((author) => author.uuid === data.author_uuid);
+
+    const selectAuthor = (authorUuid: string) => setData('author_uuid', authorUuid);
+
+    const selectedTags = data.tag_uuids
+        .map((uuid) => tags.find((tag) => tag.uuid === uuid))
+        .filter((tag: TagResource | undefined): tag is TagResource => tag !== undefined);
+
+    const addTag = (tagUuid: string) =>
+        setData((prev) => (prev.tag_uuids.includes(tagUuid) ? prev : { ...prev, tag_uuids: [...prev.tag_uuids, tagUuid] }));
+
+    const removeTag = (tagUuid: string) => setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((t) => t !== tagUuid) }));
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
@@ -90,47 +103,39 @@ export default function Index({
                         </Button>
                     </div>
 
+                    {!showFilters && (
+                        <div className="flex flex-wrap gap-2">
+                            {selectedAuthor && (
+                                <Pill onClose={() => selectAuthor('')}>
+                                    <User height={18} /> {selectedAuthor.name}
+                                </Pill>
+                            )}
+                            {selectedTags.map((tag: TagResource) => (
+                                <Pill key={tag.uuid} onClose={() => removeTag(tag.uuid)}>
+                                    {tag.label}
+                                </Pill>
+                            ))}
+                        </div>
+                    )}
+
                     {showFilters && (
                         <div className="space-y-4">
                             <div className="grid gap-2">
                                 <Label>Author</Label>
-                                <AuthorSelect
-                                    authors={authors}
-                                    value={data.author_uuid}
-                                    onChange={(value: string) => setData('author_uuid', value)}
-                                />
+                                <AuthorSelect authors={authors} value={data.author_uuid} onChange={selectAuthor} />
                             </div>
                             <div className="grid gap-2">
                                 <Label>Tags</Label>
-                                {data.tag_uuids.length > 0 && (
+                                {selectedTags.length > 0 && (
                                     <div className="flex flex-wrap gap-2">
-                                        {data.tag_uuids
-                                            .map((uuid) => tags.find((tag) => tag.uuid === uuid))
-                                            .filter((tag: TagResource | undefined): tag is TagResource => tag !== undefined)
-                                            .map((tag: TagResource) => (
-                                                <Pill
-                                                    key={tag.uuid}
-                                                    onClose={() =>
-                                                        setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((t) => t !== tag.uuid) }))
-                                                    }
-                                                >
-                                                    {tag.label}
-                                                </Pill>
-                                            ))}
+                                        {selectedTags.map((tag: TagResource) => (
+                                            <Pill key={tag.uuid} onClose={() => removeTag(tag.uuid)}>
+                                                {tag.label}
+                                            </Pill>
+                                        ))}
                                     </div>
                                 )}
-                                <TagMultiselect
-                                    tags={tags}
-                                    selectedTags={data.tag_uuids}
-                                    onValueAdded={(value: string) =>
-                                        setData((prev) =>
-                                            prev.tag_uuids.includes(value) ? prev : { ...prev, tag_uuids: [...prev.tag_uuids, value] },
-                                        )
-                                    }
-                                    onValueRemoved={(value: string) =>
-                                        setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((tag) => tag !== value) }))
-                                    }
-                                />
+                                <TagMultiselect tags={tags} selectedTags={data.tag_uuids} onValueAdded={addTag} onValueRemoved={removeTag} />
                             </div>
                         </div>
                     )}
