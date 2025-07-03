@@ -16,7 +16,7 @@ class RandomCommunityLinkController
             ->wherePublished()
             ->wherePublic()
             ->with(['author', 'user', 'tags'])
-            ->random();
+            ->randomOrFail();
 
         return JsonResource::make(CommunityLinkResource::from($link));
     }

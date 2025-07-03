@@ -16,7 +16,7 @@ class RandomLinkController
         $link = $user->links()
             ->wherePublished()
             ->with(['author', 'tags'])
-            ->random();
+            ->randomOrFail();
 
         return JsonResource::make(LinkResource::from($link));
     }
