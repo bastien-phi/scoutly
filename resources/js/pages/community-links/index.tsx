@@ -10,7 +10,7 @@ import AppLayout from '@/layouts/app-layout';
 import { clearFormData, cn, debounce, fetchJson } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, X } from 'lucide-react';
+import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
 import AuthorResource = App.Data.Resources.AuthorResource;
@@ -64,6 +64,12 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         });
     }, [data]);
 
+    const selectAuthor = (author: string) => setData('author', author);
+
+    const addTag = (tag: string) => setData((prev) => (prev.tags.includes(tag) ? prev : { ...prev, tags: [...prev.tags, tag] }));
+
+    const removeTag = (tag: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }));
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
@@ -80,35 +86,39 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                         </Button>
                     </div>
 
+                    {!showFilters && (
+                        <div className="flex flex-wrap gap-2">
+                            {data.author && (
+                                <Pill onClose={() => selectAuthor('')}>
+                                    <User height={18} /> {data.author}
+                                </Pill>
+                            )}
+                            {data.tags.map((tag: string) => (
+                                <Pill key={tag} onClose={() => removeTag(tag)}>
+                                    {tag}
+                                </Pill>
+                            ))}
+                        </div>
+                    )}
+
                     {showFilters && (
                         <div className="space-y-4">
                             <div className="grid gap-2">
                                 <Label>Author</Label>
-                                <AuthorSearch value={data.author} onChange={(value: string) => setData('author', value)} />
+                                <AuthorSearch value={data.author} onChange={selectAuthor} />
                             </div>
                             <div className="grid gap-2">
                                 <Label>Tags</Label>
                                 {data.tags.length > 0 && (
                                     <div className="flex flex-wrap gap-2">
                                         {data.tags.map((tag: string) => (
-                                            <Pill
-                                                key={tag}
-                                                onClose={() => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }))}
-                                            >
+                                            <Pill key={tag} onClose={() => removeTag(tag)}>
                                                 {tag}
                                             </Pill>
                                         ))}
                                     </div>
                                 )}
-                                <TagSearch
-                                    selectedTags={data.tags}
-                                    onValueAdded={(value: string) =>
-                                        setData((prev) => (prev.tags.includes(value) ? prev : { ...prev, tags: [...prev.tags, value] }))
-                                    }
-                                    onValueRemoved={(value: string) =>
-                                        setData((prev) => ({ ...prev, tags: prev.tags.filter((tag) => tag !== value) }))
-                                    }
-                                />
+                                <TagSearch selectedTags={data.tags} onValueAdded={addTag} onValueRemoved={removeTag} />
                             </div>
                         </div>
                     )}
