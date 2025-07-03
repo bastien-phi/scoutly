@@ -1,4 +1,4 @@
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
@@ -36,6 +36,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         e.preventDefault();
         post(route('login'), {
             onFinish: () => reset('password'),
+            // When the user was logged out but still on the application, prefetching a route can will store the 302 redirect to log in in the cache.
+            // After the user logs in, we want to flush the cache so that the next request will not redirect to the login page.
+            onSuccess: () => router.flushAll(),
         });
     };
 
