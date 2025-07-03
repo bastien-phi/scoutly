@@ -3,6 +3,7 @@ import * as React from "react"
 import { KeyboardEventHandler, KeyboardEvent, useState, useEffect, useRef, ChangeEvent } from 'react';
 import { Input } from '@/components/ui/input';
 import { Pill } from '@/components/ui/pill';
+import { ChevronsUpDown } from 'lucide-react';
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
@@ -14,6 +15,7 @@ function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded
 }) {
     const [inputValue, setInputValue] = useState<string>('');
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [hasFocus, setHasFocus] = useState<boolean>(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(-1);
     const [scrollIndex, setScrollIndex] = useState<number>(-1);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(suggestions);
@@ -21,28 +23,33 @@ function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded
     const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
-        const filteredSuggestions = suggestions.filter(
+        if(!hasFocus) {
+            setShowDropdown(false);
+            setFocusedIndex(-1);
+
+            return;
+        }
+
+        const availableSuggestions = suggestions.filter(
             suggestion => !selectedSuggestions.includes(suggestion)
         )
+        const filteredSuggestions = inputValue
+            ? availableSuggestions.filter(suggestion =>
+                suggestion.toLowerCase().includes(inputValue.toLowerCase())
+            )
+            : availableSuggestions;
 
-        if (inputValue) {
-            const filtered = filteredSuggestions.filter(suggestion =>
-                suggestion.toLowerCase().includes(inputValue?.toLowerCase() ?? '')
-            );
-            setFilteredSuggestions(filtered);
-            if(filtered.length > 1) {
-                setShowDropdown(true);
-            } else if (filtered.length === 1 && filtered[0] !== inputValue) {
-                setShowDropdown(true);
-            } else {
-                setShowDropdown(false);
-            }
+        if(filteredSuggestions.length > 1) {
+            setShowDropdown(true);
+        } else if (filteredSuggestions.length === 1 && filteredSuggestions[0] !== inputValue) {
+            setShowDropdown(true);
         } else {
-            setFilteredSuggestions(filteredSuggestions);
             setShowDropdown(false);
         }
+
+        setFilteredSuggestions(filteredSuggestions);
         setFocusedIndex(-1);
-    }, [inputValue, suggestions, selectedSuggestions, setFilteredSuggestions]);
+    }, [hasFocus, inputValue, suggestions, selectedSuggestions]);
 
     useEffect(() => {
         setScrollIndex((prev) => {
@@ -107,21 +114,27 @@ function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded
                     ))}
                 </div>
             )}
-            <Input
-                {...props}
-                value={inputValue}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-                className={className}
-                onKeyDown={handleKeyDown}
-                onFocus={() => inputValue && setShowDropdown(filteredSuggestions.length > 0)}
-                onBlur={() => {
-                    if (blurTimeoutRef.current) {
-                        clearTimeout(blurTimeoutRef.current);
-                    }
+            <div className="relative">
+                <Input
+                    {...props}
+                    value={inputValue}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                    className={className}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => setHasFocus(true)}
+                    onBlur={() => {
+                        if (blurTimeoutRef.current) {
+                            clearTimeout(blurTimeoutRef.current);
+                        }
 
-                    blurTimeoutRef.current = setTimeout(() => setShowDropdown(false), 200)
-                }}
-            />
+                        blurTimeoutRef.current = setTimeout(() => setHasFocus(false), 200)
+                    }}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 text-muted-foreground pointer-events-none">
+                    <ChevronsUpDown size={16} />
+                </div>
+            </div>
+
             {showDropdown && (
                 <div
                     ref={dropdownRef}
