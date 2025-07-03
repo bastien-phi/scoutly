@@ -42,15 +42,18 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         [],
     );
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
-        debouncedSetSearchData(e.target.value);
-    };
+    const handleSearchChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            setSearch(e.target.value);
+            debouncedSetSearchData(e.target.value);
+        },
+        [debouncedSetSearchData],
+    );
 
-    const resetSearch = () => {
+    const resetSearch = useCallback(() => {
         setSearch('');
         setData('search', '');
-    };
+    }, [setData]);
 
     useEffect(() => {
         if (firstRender.current) {
@@ -64,11 +67,14 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         });
     }, [data]);
 
-    const selectAuthor = (author: string) => setData('author', author);
+    const selectAuthor = useCallback((author: string) => setData('author', author), [setData]);
 
-    const addTag = (tag: string) => setData((prev) => (prev.tags.includes(tag) ? prev : { ...prev, tags: [...prev.tags, tag] }));
+    const addTag = useCallback(
+        (tag: string) => setData((prev) => (prev.tags.includes(tag) ? prev : { ...prev, tags: [...prev.tags, tag] })),
+        [setData],
+    );
 
-    const removeTag = (tag: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) }));
+    const removeTag = useCallback((tag: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) })), [setData]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

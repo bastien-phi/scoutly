@@ -52,15 +52,18 @@ export default function Index({
         [],
     );
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
-        debouncedSetSearchData(e.target.value);
-    };
+    const handleSearchChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            setSearch(e.target.value);
+            debouncedSetSearchData(e.target.value);
+        },
+        [debouncedSetSearchData],
+    );
 
-    const resetSearch = () => {
+    const resetSearch = useCallback(() => {
         setSearch('');
         setData('search', '');
-    };
+    }, [setData]);
 
     useEffect(() => {
         if (firstRender.current) {
@@ -76,16 +79,21 @@ export default function Index({
 
     const selectedAuthor = authors.find((author) => author.uuid === data.author_uuid);
 
-    const selectAuthor = (authorUuid: string) => setData('author_uuid', authorUuid);
+    const selectAuthor = useCallback((authorUuid: string) => setData('author_uuid', authorUuid), [setData]);
 
     const selectedTags = data.tag_uuids
         .map((uuid) => tags.find((tag) => tag.uuid === uuid))
         .filter((tag: TagResource | undefined): tag is TagResource => tag !== undefined);
 
-    const addTag = (tagUuid: string) =>
-        setData((prev) => (prev.tag_uuids.includes(tagUuid) ? prev : { ...prev, tag_uuids: [...prev.tag_uuids, tagUuid] }));
+    const addTag = useCallback(
+        (tagUuid: string) => setData((prev) => (prev.tag_uuids.includes(tagUuid) ? prev : { ...prev, tag_uuids: [...prev.tag_uuids, tagUuid] })),
+        [setData],
+    );
 
-    const removeTag = (tagUuid: string) => setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((t) => t !== tagUuid) }));
+    const removeTag = useCallback(
+        (tagUuid: string) => setData((prev) => ({ ...prev, tag_uuids: prev.tag_uuids.filter((t) => t !== tagUuid) })),
+        [setData],
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
