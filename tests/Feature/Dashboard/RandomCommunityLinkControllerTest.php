@@ -43,3 +43,10 @@ it('returns a random community link', function (): void {
             'tags' => [],
         ]);
 });
+
+it('returns not found if no link exist', function (): void {
+    $this
+        ->actingAs(User::factory()->createOne())
+        ->getJson(route('api.dashboard.random-community-link'))
+        ->assertNotFound();
+});

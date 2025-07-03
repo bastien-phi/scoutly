@@ -7,6 +7,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Vite;
@@ -47,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Builder::macro(
             'random',
-            function () {
+            function (): ?Model {
                 $total = $this->toBase()->getCountForPagination();
 
                 if ($total === 0) {
@@ -56,6 +57,12 @@ class AppServiceProvider extends ServiceProvider
 
                 return $this->offset(random_int(0, $total - 1))->first();
             }
+        );
+
+        Builder::macro(
+            'randomOrFail',
+            fn (): Model => $this->random()
+                ?? throw tap(new ModelNotFoundException)->setModel($this->getModel()::class)
         );
     }
 }

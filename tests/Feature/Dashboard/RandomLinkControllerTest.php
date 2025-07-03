@@ -39,3 +39,10 @@ it('returns a random link', function (): void {
             'tags' => [],
         ]);
 });
+
+it('returns not found if no link was found', function (): void {
+    $this
+        ->actingAs(User::factory()->createOne())
+        ->getJson(route('api.dashboard.random-link'))
+        ->assertNotFound();
+});
