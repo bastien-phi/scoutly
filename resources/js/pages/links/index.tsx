@@ -1,4 +1,5 @@
 import LinkCard from '@/components/link-card';
+import Autocomplete from '@/components/ui/autocomplete';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
@@ -37,7 +38,7 @@ export default function Index({
 }) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
-    const firstRender = useRef(true);
+    const firstRender = useRef<boolean>(true);
     const [search, setSearch] = useState<string>(request.search ?? '');
 
     const { data, setData } = useForm<Required<GetUserLinksRequest>>({
@@ -45,6 +46,20 @@ export default function Index({
         author_uuid: request.author_uuid ?? '',
         tag_uuids: request.tag_uuids ?? [],
     });
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+
+        router.get(route('links.index'), clearFormData(data), {
+            only: ['links'],
+            preserveState: true,
+        });
+    }, [data]);
+
+    /** Text search */
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSetSearchData = useCallback(
@@ -65,21 +80,13 @@ export default function Index({
         setData('search', '');
     }, [setData]);
 
-    useEffect(() => {
-        if (firstRender.current) {
-            firstRender.current = false;
-            return;
-        }
-
-        router.get(route('links.index'), clearFormData(data), {
-            only: ['links'],
-            preserveState: true,
-        });
-    }, [data]);
+    /** Author search */
 
     const selectedAuthor = authors.find((author) => author.uuid === data.author_uuid);
 
     const selectAuthor = useCallback((authorUuid: string) => setData('author_uuid', authorUuid), [setData]);
+
+    /** Tags search */
 
     const selectedTags = data.tag_uuids
         .map((uuid) => tags.find((tag) => tag.uuid === uuid))
@@ -130,7 +137,19 @@ export default function Index({
                         <div className="space-y-4">
                             <div className="grid gap-2">
                                 <Label>Author</Label>
-                                <AuthorSelect authors={authors} value={data.author_uuid} onChange={selectAuthor} />
+                                <div className="flex gap-2">
+                                    <Autocomplete
+                                        value={data.author_uuid}
+                                        options={authors}
+                                        onValueChanged={selectAuthor}
+                                        showUsing={(author: AuthorResource) => author.name}
+                                        getValueUsing={(author: AuthorResource) => author.uuid}
+                                        placeholder="Any author"
+                                    />
+                                    <Button variant="ghost" onClick={() => selectAuthor('')}>
+                                        <X />
+                                    </Button>
+                                </div>
                             </div>
                             <div className="grid gap-2">
                                 <Label>Tags</Label>
@@ -174,49 +193,6 @@ export default function Index({
                 </div>
             </div>
         </AppLayout>
-    );
-}
-
-function AuthorSelect({ authors, value, onChange }: { authors: AuthorResource[]; value: string; onChange: (value: string) => void }) {
-    const [open, setOpen] = useState<boolean>(false);
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <div className="flex gap-2">
-                <PopoverTrigger asChild>
-                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        {value !== '' ? authors.find((author) => author.uuid === value)?.name : 'Any author'}
-                        <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                </PopoverTrigger>
-                <Button variant="ghost" onClick={() => onChange('')}>
-                    <X />
-                </Button>
-            </div>
-            <PopoverContent className="w-96 p-0" align="start">
-                <Command className="w-96">
-                    <CommandInput placeholder="Search author..." className="h-9" />
-                    <CommandList>
-                        <CommandEmpty>No author found.</CommandEmpty>
-                        <CommandGroup>
-                            {authors.map((author: AuthorResource) => (
-                                <CommandItem
-                                    key={author.uuid}
-                                    value={author.name}
-                                    onSelect={() => {
-                                        onChange(author.uuid === value ? '' : author.uuid);
-                                        setOpen(false);
-                                    }}
-                                >
-                                    {author.name}
-                                    <Check className={cn('ml-auto', value === author.uuid ? 'opacity-100' : 'opacity-0')} />
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
     );
 }
 
