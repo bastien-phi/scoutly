@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { KeyboardEventHandler, KeyboardEvent, useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
+import { ChevronsUpDown } from 'lucide-react';
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
@@ -11,6 +12,7 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
     value: string|undefined
 }) {
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [hasFocus, setHasFocus] = useState<boolean>(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(-1);
     const [scrollIndex, setScrollIndex] = useState<number>(-1);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>(suggestions);
@@ -18,24 +20,30 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
     const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
-        if (props.value) {
-            const filtered = suggestions.filter(suggestion =>
+        if(!hasFocus) {
+            setShowDropdown(false);
+            setFocusedIndex(-1);
+
+            return;
+        }
+
+        const filtered = props.value
+            ? suggestions.filter(suggestion =>
                 suggestion.toLowerCase().includes(props.value?.toLowerCase() ?? '')
-            );
-            setFilteredSuggestions(filtered);
-            if(filtered.length > 1) {
-                setShowDropdown(true);
-            } else if (filtered.length === 1 && filtered[0] !== props.value) {
-                setShowDropdown(true);
-            } else {
-                setShowDropdown(false);
-            }
+            )
+            : suggestions;
+
+        if(filtered.length > 1) {
+            setShowDropdown(true);
+        } else if (filtered.length === 1 && filtered[0] !== props.value) {
+            setShowDropdown(true);
         } else {
-            setFilteredSuggestions(suggestions);
             setShowDropdown(false);
         }
-        setFocusedIndex(-1);
-    }, [props.value, setFilteredSuggestions, suggestions]);
+
+        setFilteredSuggestions(filtered)
+        setFocusedIndex(-1)
+    }, [hasFocus, props.value, suggestions]);
 
     useEffect(() => {
         setScrollIndex((prev) => {
@@ -47,7 +55,6 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
             }
             return prev;
         })
-
     }, [focusedIndex]);
 
     useEffect(() => {
@@ -89,15 +96,19 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
                 {...props}
                 className={className}
                 onKeyDown={handleKeyDown}
-                onFocus={() => props.value && setShowDropdown(filteredSuggestions.length > 0)}
+                onFocus={() => setHasFocus(true)}
                 onBlur={() => {
                     if (blurTimeoutRef.current) {
                         clearTimeout(blurTimeoutRef.current);
                     }
 
-                    blurTimeoutRef.current = setTimeout(() => setShowDropdown(false), 200)
+                    blurTimeoutRef.current = setTimeout(() => setHasFocus(false), 200)
                 }}
             />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 text-muted-foreground pointer-events-none">
+                <ChevronsUpDown size={16} />
+            </div>
+
             {showDropdown && (
                 <div
                     ref={dropdownRef}
