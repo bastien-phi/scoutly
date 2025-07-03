@@ -160,9 +160,6 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(rolldown-vite@6.3.21(@types/node@22.16.0)(esbuild@0.25.5)(jiti@2.4.2))(rollup@4.44.1)(typescript@5.8.3)
     optionalDependencies:
-      '@rollup/rollup-linux-x64-gnu':
-        specifier: 4.9.5
-        version: 4.9.5
       '@tailwindcss/oxide-linux-x64-gnu':
         specifier: ^4.1.11
         version: 4.1.11
@@ -1200,11 +1197,6 @@ packages:
 
   '@rollup/rollup-linux-x64-gnu@4.44.1':
     resolution: {integrity: sha512-EtnsrmZGomz9WxK1bR5079zee3+7a+AdFlghyd6VbAjgRJDbTANJ9dcPIPAi76uG05micpEL+gPGmAKYTschQw==}
-    cpu: [x64]
-    os: [linux]
-
-  '@rollup/rollup-linux-x64-gnu@4.9.5':
-    resolution: {integrity: sha512-Dq1bqBdLaZ1Gb/l2e5/+o3B18+8TI9ANlA1SkejZqDgdU/jK/ThYaMPMJpVMMXy2uRHvGKbkz9vheVGdq3cJfA==}
     cpu: [x64]
     os: [linux]
 
@@ -3969,9 +3961,6 @@ snapshots:
     optional: true
 
   '@rollup/rollup-linux-x64-gnu@4.44.1':
-    optional: true
-
-  '@rollup/rollup-linux-x64-gnu@4.9.5':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.44.1':
