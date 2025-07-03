@@ -44,7 +44,7 @@ it('returns a random community link', function (): void {
         ]);
 });
 
-it('returns not found if no link exist', function (): void {
+it('returns not found if no link was found', function (): void {
     $this
         ->actingAs(User::factory()->createOne())
         ->getJson(route('api.dashboard.random-community-link'))
