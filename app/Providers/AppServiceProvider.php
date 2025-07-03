@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDate();
         $this->configureModels();
+        $this->configureVite();
         $this->registerMacros();
     }
 
@@ -34,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(! app()->isProduction());
 
         Relation::enforceMorphMap([]);
+    }
+
+    private function configureVite(): void
+    {
+        Vite::useAggressivePrefetching();
     }
 
     private function registerMacros(): void
