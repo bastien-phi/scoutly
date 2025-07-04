@@ -1,17 +1,16 @@
 import LinkCard from '@/components/link-card';
 import Autocomplete from '@/components/ui/autocomplete';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import MultiAutocomplete from '@/components/ui/multi-autocomplete';
 import { Pill } from '@/components/ui/pill';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { clearFormData, cn, debounce } from '@/lib/utils';
+import { clearFormData, debounce } from '@/lib/utils';
 import { Paginated, type BreadcrumbItem } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { Check, ChevronsUpDown, Filter, Search, User, X } from 'lucide-react';
+import { Filter, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import GetUserLinksRequest = App.Data.Requests.GetUserLinksRequest;
 import LinkResource = App.Data.Resources.LinkResource;
@@ -102,6 +101,8 @@ export default function Index({
         [setData],
     );
 
+    const removeTags = useCallback(() => setData('tag_uuids', []), [setData]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Links" />
@@ -162,7 +163,19 @@ export default function Index({
                                         ))}
                                     </div>
                                 )}
-                                <TagMultiselect tags={tags} selectedTags={data.tag_uuids} onValueAdded={addTag} onValueRemoved={removeTag} />
+                                <div className="flex gap-2">
+                                    <MultiAutocomplete
+                                        selectedValues={data.tag_uuids}
+                                        options={tags}
+                                        onValueAdded={addTag}
+                                        showUsing={(tag: TagResource) => tag.label}
+                                        getValueUsing={(tag: TagResource) => tag.uuid}
+                                        placeholder="Select tags"
+                                    />
+                                    <Button variant="ghost" onClick={removeTags}>
+                                        <X />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -193,62 +206,5 @@ export default function Index({
                 </div>
             </div>
         </AppLayout>
-    );
-}
-
-function TagMultiselect({
-    tags,
-    selectedTags,
-    onValueAdded,
-    onValueRemoved,
-}: {
-    tags: TagResource[];
-    selectedTags: string[];
-    onValueAdded: (tag: string) => void;
-    onValueRemoved: (tag: string) => void;
-}) {
-    const [open, setOpen] = useState<boolean>(false);
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <div className="flex gap-2">
-                <PopoverTrigger asChild>
-                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        Select tags
-                        <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                </PopoverTrigger>
-                <Button variant="ghost" onClick={() => selectedTags.forEach((tag) => onValueRemoved(tag))}>
-                    <X />
-                </Button>
-            </div>
-            <PopoverContent className="w-96 p-0" align="start">
-                <Command className="w-96">
-                    <CommandInput placeholder="Search tag..." className="h-9" />
-                    <CommandList>
-                        <CommandEmpty>No tag found.</CommandEmpty>
-                        <CommandGroup>
-                            {tags.map((tag: TagResource) => (
-                                <CommandItem
-                                    key={tag.uuid}
-                                    value={tag.label}
-                                    onSelect={() => {
-                                        if (selectedTags.includes(tag.uuid)) {
-                                            onValueRemoved(tag.uuid);
-                                        } else {
-                                            onValueAdded(tag.uuid);
-                                        }
-                                        setOpen(false);
-                                    }}
-                                >
-                                    {tag.label}
-                                    <Check className={cn('ml-auto', selectedTags.includes(tag.uuid) ? 'opacity-100' : 'opacity-0')} />
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
     );
 }

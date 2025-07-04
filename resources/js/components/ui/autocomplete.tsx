@@ -6,11 +6,12 @@ import { ChevronsUpDown } from 'lucide-react';
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
-export default function Autocomplete<T>({className, value, options, onValueChanged, showUsing, getValueUsing, ...props }: React.ComponentProps<"input"> & {
+export default function Autocomplete<T>({className, value, options, onValueChanged, showUsing, getValueUsing, resetOnSelected, ...props }: React.ComponentProps<"input"> & {
     options: T[]
     onValueChanged: (value: string) => void
     showUsing: (value: T) => string
     getValueUsing: (value: T) => string
+    resetOnSelected?: boolean
 }) {
     const [inputValue, setInputValue] = useState<string>('');
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -99,7 +100,7 @@ export default function Autocomplete<T>({className, value, options, onValueChang
     };
 
     const handleOptionSelected = (option: T) => {
-        setInputValue(showUsing(option));
+        setInputValue(resetOnSelected ? '' : showUsing(option));
         onValueChanged(getValueUsing(option));
         setShowDropdown(false);
         setFocusedIndex(-1);
