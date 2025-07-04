@@ -1,8 +1,8 @@
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MultiSuggest } from '@/components/ui/multi-suggest';
-import { Suggest } from '@/components/ui/suggest';
+import MultiSuggest from '@/components/ui/multi-suggest';
+import Suggest from '@/components/ui/suggest';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { InertiaFormProps } from '@inertiajs/react';
