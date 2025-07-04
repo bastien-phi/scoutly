@@ -7,7 +7,7 @@ import { ChevronsUpDown } from 'lucide-react';
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
-function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded, onValueRemoved, ...props }: React.ComponentProps<"input"> & {
+export default function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded, onValueRemoved, ...props }: React.ComponentProps<"input"> & {
     suggestions: string[]
     selectedSuggestions: string[]
     onValueAdded: (value: string) => void
@@ -156,5 +156,3 @@ function MultiSuggest({className, suggestions, selectedSuggestions, onValueAdded
         </div>
     );
 }
-
-export { MultiSuggest }
