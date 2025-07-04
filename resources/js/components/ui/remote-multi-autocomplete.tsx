@@ -36,5 +36,3 @@ export default function RemoteMultiAutocomplete<T>({
         />
     );
 }
-
-export { RemoteMultiAutocomplete };

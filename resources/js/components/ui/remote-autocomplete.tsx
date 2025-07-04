@@ -6,6 +6,7 @@ import { ChevronsUpDown, LoaderCircle } from 'lucide-react';
 import { debounce } from "@/lib/utils";
 
 const SUGGESTION_ITEM_HEIGHT = 40;
+const CACHE_INVALIDATION_DURATION_MS = 30000;
 
 export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsing, onValueChanged, showUsing, getValueUsing, resetOnSelected, ...props }: React.ComponentProps<"input"> & {
     fetchOptionsUsing: (value: string) => Promise<void|T[]>
@@ -65,7 +66,7 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
     )
 
     useEffect(() => {
-        const timer = setTimeout(() => emptySearchOptions.current = null, 30000 )
+        const timer = setTimeout(() => emptySearchOptions.current = null, CACHE_INVALIDATION_DURATION_MS)
         return () => clearTimeout(timer);
     }, [emptySearchOptions]);
 
@@ -194,5 +195,3 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
         </div>
     );
 }
-
-export { RemoteAutocomplete }

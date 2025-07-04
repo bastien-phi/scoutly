@@ -6,7 +6,7 @@ import { ChevronsUpDown } from 'lucide-react';
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
-function Suggest({className, suggestions, onSuggestionSelected, ...props }: React.ComponentProps<"input"> & {
+export default function Suggest({className, suggestions, onSuggestionSelected, ...props }: React.ComponentProps<"input"> & {
     suggestions: string[]
     onSuggestionSelected: (value: string) => void
     value: string|undefined
@@ -130,5 +130,3 @@ function Suggest({className, suggestions, onSuggestionSelected, ...props }: Reac
         </div>
     );
 }
-
-export { Suggest }

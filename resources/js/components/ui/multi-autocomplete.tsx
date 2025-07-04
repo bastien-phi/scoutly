@@ -20,5 +20,3 @@ export default function MultiAutocomplete<T>({className, selectedValues, options
         />
     )
 }
-
-export { MultiAutocomplete }

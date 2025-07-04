@@ -151,5 +151,3 @@ export default function Autocomplete<T>({className, value, options, onValueChang
         </div>
     );
 }
-
-export { Autocomplete }
