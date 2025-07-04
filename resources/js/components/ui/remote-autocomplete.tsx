@@ -23,6 +23,7 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
     const [scrollIndex, setScrollIndex] = useState<number>(-1);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const emptySearchOptions = useRef<T[]|null>(null);
 
     useEffect(() => {
         if(hasFocus || !options) {
@@ -44,16 +45,29 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
 
     const fetchOptions = useCallback(
         (search: string) => {
+            if(search === '' && emptySearchOptions.current !== null) {
+                setOptions(emptySearchOptions.current);
+                return;
+            }
+
             setIsLoading(true);
 
             fetchOptionsUsing(search)
                 .then(result => {
                     setOptions(result || [])
+                    if(search === '') {
+                        emptySearchOptions.current = result || null;
+                    }
                 })
                 .finally(() => setIsLoading(false));
         },
-        [fetchOptionsUsing]
+        [fetchOptionsUsing, emptySearchOptions]
     )
+
+    useEffect(() => {
+        const timer = setTimeout(() => emptySearchOptions.current = null, 30000 )
+        return () => clearTimeout(timer);
+    }, [emptySearchOptions]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedFetchOptions = useCallback(
