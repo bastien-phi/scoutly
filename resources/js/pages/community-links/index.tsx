@@ -1,17 +1,16 @@
 import CommunityLinkCard from '@/components/community-link-card';
 import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Pill } from '@/components/ui/pill';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import RemoteAutocomplete from '@/components/ui/remote-autocomplete';
+import RemoteMultiAutocomplete from '@/components/ui/remote-multi-autocomplete';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { clearFormData, cn, debounce, fetchJson } from '@/lib/utils';
+import { clearFormData, debounce, fetchJson } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { Check, ChevronsUpDown, Filter, LoaderCircle, Search, User, X } from 'lucide-react';
+import { Filter, Search, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
 import AuthorResource = App.Data.Resources.AuthorResource;
@@ -84,12 +83,22 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
 
     /** Tag search */
 
+    const fetchTags = useCallback(
+        (search: string): Promise<void | TagResource[]> =>
+            fetchJson<TagResource[]>(route('api.community-tags.index', { search: search }))
+                .then((json) => json.data)
+                .catch((err) => console.error('Failed to fetch tags.', err)),
+        [],
+    );
+
     const addTag = useCallback(
         (tag: string) => setData((prev) => (prev.tags.includes(tag) ? prev : { ...prev, tags: [...prev.tags, tag] })),
         [setData],
     );
 
     const removeTag = useCallback((tag: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) })), [setData]);
+
+    const removeTags = useCallback(() => setData('tags', []), [setData]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -151,7 +160,19 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                                         ))}
                                     </div>
                                 )}
-                                <TagSearch selectedTags={data.tags} onValueAdded={addTag} onValueRemoved={removeTag} />
+                                <div className="flex items-center gap-2">
+                                    <RemoteMultiAutocomplete
+                                        selectedValues={data.tags}
+                                        onValueAdded={addTag}
+                                        showUsing={(tag: TagResource) => tag.label}
+                                        getValueUsing={(tag: TagResource) => tag.label}
+                                        fetchOptionsUsing={fetchTags}
+                                        placeholder="Select tags"
+                                    />
+                                    <Button variant="ghost" onClick={removeTags}>
+                                        <X />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -182,98 +203,5 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                 </div>
             </div>
         </AppLayout>
-    );
-}
-
-function TagSearch({
-    selectedTags,
-    onValueAdded,
-    onValueRemoved,
-}: {
-    selectedTags: string[];
-    onValueAdded: (tag: string) => void;
-    onValueRemoved: (tag: string) => void;
-}) {
-    const [open, setOpen] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [tags, setTags] = useState<TagResource[]>([]);
-    const [searchValue, setSearchValue] = useState<string>('');
-
-    const fetchTags = useCallback((search: string) => {
-        setIsLoading(true);
-        setTags([]);
-
-        fetchJson<TagResource[]>(route('api.community-tags.index', { search: search }))
-            .then((json) => {
-                setTags(json.data);
-            })
-            .catch((err) => console.error('Failed to fetch tags.', err))
-            .finally(() => setIsLoading(false));
-    }, []);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedFetchTags = useCallback(
-        debounce((search: string) => fetchTags(search), 300),
-        [],
-    );
-
-    useEffect(() => {
-        debouncedFetchTags(searchValue);
-    }, [searchValue, debouncedFetchTags]);
-
-    useEffect(() => {
-        fetchTags('');
-    }, [fetchTags]);
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <div className="flex gap-2">
-                <PopoverTrigger asChild>
-                    <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between">
-                        Select tags
-                        <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                </PopoverTrigger>
-                <Button variant="ghost" onClick={() => selectedTags.forEach((tag) => onValueRemoved(tag))}>
-                    <X />
-                </Button>
-            </div>
-            <PopoverContent className="w-96 p-0" align="start">
-                <Command className="w-96" shouldFilter={false}>
-                    <CommandInput placeholder="Search tag..." className="h-9" value={searchValue} onValueChange={setSearchValue} />
-                    <CommandList>
-                        <CommandEmpty>
-                            {isLoading ? (
-                                <div className="flex justify-center">
-                                    <LoaderCircle className="h-4 w-4 animate-spin" />
-                                </div>
-                            ) : (
-                                'No tag found.'
-                            )}
-                        </CommandEmpty>
-                        <CommandGroup>
-                            {tags.map((tag: TagResource) => (
-                                <CommandItem
-                                    key={tag.uuid}
-                                    value={tag.label}
-                                    onSelect={() => {
-                                        if (selectedTags.includes(tag.label)) {
-                                            onValueRemoved(tag.label);
-                                        } else {
-                                            onValueAdded(tag.label);
-                                        }
-                                        setSearchValue('');
-                                        setOpen(false);
-                                    }}
-                                >
-                                    {tag.label}
-                                    <Check className={cn('ml-auto', selectedTags.includes(tag.label) ? 'opacity-100' : 'opacity-0')} />
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
     );
 }
