@@ -7,11 +7,12 @@ import { debounce } from "@/lib/utils";
 
 const SUGGESTION_ITEM_HEIGHT = 40;
 
-export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsing, onValueChanged, showUsing, getValueUsing, ...props }: React.ComponentProps<"input"> & {
+export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsing, onValueChanged, showUsing, getValueUsing, resetOnSelected, ...props }: React.ComponentProps<"input"> & {
     fetchOptionsUsing: (value: string) => Promise<void|T[]>
     onValueChanged: (value: string) => void
     showUsing: (value: T) => string
     getValueUsing: (value: T) => string
+    resetOnSelected?: boolean
 }) {
     const [inputValue, setInputValue] = useState<string>('');
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -57,12 +58,17 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedFetchOptions = useCallback(
         debounce((search: string) => fetchOptions(search), 300),
-        [],
+        [fetchOptions],
     );
 
     useEffect(() => {
-        debouncedFetchOptions(inputValue);
-    }, [inputValue, debouncedFetchOptions]);
+        if(inputValue === '') {
+            debouncedFetchOptions.cancel();
+            fetchOptions('');
+        } else {
+            debouncedFetchOptions(inputValue);
+        }
+    }, [inputValue, fetchOptions, debouncedFetchOptions]);
 
     useEffect(() => {
         if(!hasFocus) {
@@ -123,7 +129,7 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
     };
 
     const handleOptionSelected = (option: T) => {
-        setInputValue(showUsing(option));
+        setInputValue(resetOnSelected ? '' : showUsing(option));
         onValueChanged(getValueUsing(option));
         setShowDropdown(false);
         setFocusedIndex(-1);

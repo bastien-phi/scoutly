@@ -12,13 +12,17 @@ export function routeMatches<T extends ValidRouteName>(page: Page, name: T, para
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function debounce<F extends (...params: any[]) => ReturnType<F>>(fn: F, delay: number): F {
+export function debounce<F extends (...params: any[]) => ReturnType<F>>(fn: F, delay: number): F & { cancel: () => void } {
     let timeoutID: NodeJS.Timeout;
-    return function (...args: unknown[]) {
+    const debounced = function (...args: unknown[]) {
         clearTimeout(timeoutID);
         // @ts-expect-error - TypeScript doesn't know `this` type
         timeoutID = setTimeout(() => fn.apply(this, args), delay);
-    } as F;
+    };
+
+    debounced.cancel = () => clearTimeout(timeoutID);
+
+    return debounced as F & { cancel: () => void };
 }
 
 export function clearFormData<T extends Record<string, unknown>>(input: Required<T>, sentinelValues: unknown[] = [null, '', 0]): T {
