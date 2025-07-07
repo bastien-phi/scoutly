@@ -1,4 +1,5 @@
 import DeleteLinkButton from '@/components/delete-link-button';
+import LinkMetaDataCard from '@/components/link-metadata-card';
 import TextLink from '@/components/text-link';
 import { Datetime } from '@/components/ui/datetime';
 import { Pill } from '@/components/ui/pill';
@@ -43,6 +44,8 @@ export default function Show({ link }: { link: LinkResource }) {
                         {link.url}
                     </a>
                     {link.description && <pre className="font-sans whitespace-pre-wrap">{link.description}</pre>}
+
+                    {link.metadata && <LinkMetaDataCard metadata={link.metadata} url={link.url} />}
 
                     {link.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Resources;
 
+use App\Data\LinkMetaData;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Resource;
@@ -22,6 +23,7 @@ class CommunityLinkResource extends Resource
         public ?string $title,
         public ?string $description,
         public ?CarbonImmutable $published_at,
+        public ?LinkMetaData $metadata,
         public UserResource $user,
         public ?AuthorResource $author,
         #[LiteralTypeScriptType('App.Data.Resources.TagResource[]')]

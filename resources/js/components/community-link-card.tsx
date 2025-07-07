@@ -1,3 +1,4 @@
+import LinkMetaDataCard from '@/components/link-metadata-card';
 import TextLink from '@/components/text-link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
@@ -26,6 +27,9 @@ export default function CommunityLinkCard({ link, className }: { link: Community
                         {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
                     </pre>
                 )}
+
+                {link.metadata && <LinkMetaDataCard metadata={link.metadata} url={link.url} />}
+
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
