@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\Requests\StoreDraftRequest;
+use App\Events\LinkCreated;
 use App\Models\Link;
 use App\Models\User;
 
@@ -29,6 +30,8 @@ class StoreDraft
         ]);
 
         $link->tags()->sync($tags);
+
+        LinkCreated::dispatch($link);
 
         return $link;
     }
