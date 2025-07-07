@@ -103,15 +103,15 @@ namespace IdeHelper\App\Models
      * @method $this whereMetadata(\App\Data\LinkMetaData|string|null $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L99
+     * @see project://app/Models/Link.php L101
      *
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Link.php L108
+     * @see project://app/Models/Link.php L110
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L117
+     * @see project://app/Models/Link.php L119
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
