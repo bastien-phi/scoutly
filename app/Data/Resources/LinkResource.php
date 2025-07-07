@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data\Resources;
 
+use App\Data\LinkMetaData;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Resource;
@@ -23,6 +24,7 @@ class LinkResource extends Resource
         public ?string $description,
         public ?CarbonImmutable $published_at,
         public bool $is_public,
+        public ?LinkMetaData $metadata,
         public CarbonImmutable $created_at,
         public CarbonImmutable $updated_at,
         public ?AuthorResource $author,

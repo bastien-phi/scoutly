@@ -1,3 +1,4 @@
+import LinkMetaDataCard from '@/components/link-metadata-card';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Datetime } from '@/components/ui/datetime';
 import { Pill } from '@/components/ui/pill';
@@ -24,6 +25,9 @@ export default function LinkCard({ link, className }: { link: LinkResource; clas
                         {link.description.length > 256 ? link.description.substring(0, 255) + '...' : link.description}
                     </pre>
                 )}
+
+                {link.metadata && <LinkMetaDataCard metadata={link.metadata} url={link.url} />}
+
                 {link.tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                         {link.tags.map((tag) => (
