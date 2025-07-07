@@ -70,6 +70,8 @@ namespace IdeHelper\App\Models
      * @property \Carbon\CarbonImmutable $updated_at
      * @property bool $is_public
      * @property string $uuid
+     * @property bool $fetching_metadata
+     * @property \App\Data\LinkMetaData|null $metadata
      * @property-read \App\Models\Author|null $author
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
      * @property-read \App\Models\User $user
@@ -97,17 +99,19 @@ namespace IdeHelper\App\Models
      * @method $this whereUpdatedAt(\Carbon\CarbonImmutable|string $value)
      * @method $this whereIsPublic(bool|string $value)
      * @method $this whereUuid(string $value)
+     * @method $this whereFetchingMetadata(bool|string $value)
+     * @method $this whereMetadata(\App\Data\LinkMetaData|string|null $value)
      * @method $this whereDraft()
      *
-     * @see project://app/Models/Link.php L97
+     * @see project://app/Models/Link.php L99
      *
      * @method $this wherePublic()
      *
-     * @see project://app/Models/Link.php L106
+     * @see project://app/Models/Link.php L108
      *
      * @method $this wherePublished()
      *
-     * @see project://app/Models/Link.php L115
+     * @see project://app/Models/Link.php L117
      *
      * @method \App\Models\Link create(array $attributes = [])
      * @method \Illuminate\Database\Eloquent\Collection<int, \App\Models\Link>|\App\Models\Link|null find($id, array $columns = ['*'])
