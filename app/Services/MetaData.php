@@ -56,7 +56,13 @@ class MetaData
         $data = collect();
 
         try {
-            $response = Http::get($this->url);
+            $request = Http::createPendingRequest();
+
+            if (Uri::of($this->url)->host() === 'x.com') {
+                $request = $request->withHeader('User-Agent', 'Twitterbot');
+            }
+
+            $response = $request->get($this->url);
 
             if ($response->ok() && $response->body() !== '') {
                 $data = $this->parse(
@@ -159,7 +165,7 @@ class MetaData
                     ->map(fn (string $name): string => $meta->getAttribute($name))
                     ->filter(fn (string $attribute): bool => in_array(explode(':', $attribute)[0], $interested_in, true))
                     ->each(function (string $attribute) use ($data, $allowed, $meta): void {
-                        $key = explode(':', $attribute)[1];
+                        $key = explode(':', $attribute, 2)[1];
                         if (! $data->has($key) && in_array($key, $allowed, true)) {
                             $data->put($key, $meta->getAttribute('content'));
                         }
@@ -185,17 +191,6 @@ class MetaData
 
         if ($data->has('image')) {
             $isSuitable = $this->checkExistsAndSize((string) $data->get('image'));
-        }
-
-        if ($data->has('site_name') && $data->get('site_name') === 'X (formerly Twitter)') {
-            $response = Http::withHeader('User-Agent', 'Twitterbot')->get($this->url);
-
-            if ($response->ok() && $response->body() !== '') {
-                $data = $this->parseContent($response->body());
-                if ($data->has('image')) {
-                    $isSuitable = $this->checkExistsAndSize((string) $data->get('image'));
-                }
-            }
         }
 
         if (! $isSuitable) {
