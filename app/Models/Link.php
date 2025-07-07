@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Data\LinkMetaData;
 use App\Models\Concerns\RoutedByUuid;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +27,8 @@ use Laravel\Scout\Searchable;
  * @property \Carbon\CarbonImmutable $updated_at
  * @property bool $is_public
  * @property string $uuid
+ * @property bool $fetching_metadata
+ * @property \App\Data\LinkMetaData|null $metadata
  * @property-read \App\Models\Author|null $author
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read \App\Models\User $user
@@ -47,6 +50,7 @@ class Link extends Model
     {
         return [
             'published_at' => 'datetime',
+            'metadata' => LinkMetaData::class,
         ];
     }
 
