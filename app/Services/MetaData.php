@@ -104,8 +104,8 @@ class MetaData
         }
 
         $dimensions = @getimagesize($image);
-        $min_width = self::CARD_WIDTH / 0.66;
-        $min_height = self::CARD_HEIGHT / 0.66;
+        $min_width = self::CARD_WIDTH;
+        $min_height = self::CARD_HEIGHT;
 
         return ! (is_array($dimensions) && ($dimensions[0] < $min_width || $dimensions[1] < $min_height));
     }
