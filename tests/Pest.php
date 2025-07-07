@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 use Soyhuce\Testing\Concerns\MocksActions;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -33,6 +35,9 @@ pest()->extend(Tests\TestCase::class)
             ModelNotFoundException::class,
             ValidationException::class,
         ]);
+
+        Event::fake();
+        Http::preventStrayRequests();
 
         $this->withoutVite();
     })

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Data\Requests\StoreLinkRequest;
+use App\Events\LinkCreated;
 use App\Models\Link;
 use App\Models\User;
 
@@ -30,6 +31,8 @@ class StoreLink
         ]);
 
         $link->tags()->sync($tags);
+
+        LinkCreated::dispatch($link);
 
         return $link;
     }

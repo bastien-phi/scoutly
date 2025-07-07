@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Data\Requests\StoreDraftRequest;
 use App\Data\Requests\StoreLinkRequest;
+use App\Events\LinkUpdated;
 use App\Models\Link;
 
 class UpdateLink
@@ -29,5 +30,7 @@ class UpdateLink
         ]);
 
         $link->tags()->sync($tags);
+
+        LinkUpdated::dispatch($link);
     }
 }

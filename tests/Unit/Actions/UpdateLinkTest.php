@@ -7,10 +7,12 @@ use App\Actions\FindOrCreateTags;
 use App\Actions\UpdateLink;
 use App\Data\Requests\StoreDraftRequest;
 use App\Data\Requests\StoreLinkRequest;
+use App\Events\LinkUpdated;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Event;
 
 it('updates a link with the given data', function (): void {
     $link = Link::factory()
@@ -52,6 +54,8 @@ it('updates a link with the given data', function (): void {
         'link_id' => $link->id,
         'tag_id' => $tags->first()->id,
     ]);
+
+    Event::assertDispatched(fn (LinkUpdated $event): bool => $event->link->is($link));
 });
 
 it('updates a link with the draft data', function (): void {

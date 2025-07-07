@@ -6,11 +6,13 @@ use App\Actions\FindOrCreateAuthor;
 use App\Actions\FindOrCreateTags;
 use App\Actions\StoreDraft;
 use App\Data\Requests\StoreDraftRequest;
+use App\Events\LinkCreated;
 use App\Models\Author;
 use App\Models\Link;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Event;
 
 it('creates a draft link with the given data', function (): void {
     $user = User::factory()->createOne();
@@ -50,6 +52,8 @@ it('creates a draft link with the given data', function (): void {
         'link_id' => $link->id,
         'tag_id' => $tags->first()->id,
     ]);
+
+    Event::assertDispatched(fn (LinkCreated $event): bool => $event->link->is($link));
 });
 
 it('creates a draft link with minimal data', function (): void {
