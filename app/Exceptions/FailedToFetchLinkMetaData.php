@@ -10,6 +10,9 @@ use Illuminate\Support\Collection;
 
 class FailedToFetchLinkMetaData extends Exception
 {
+    /**
+     * @param  Collection<string, non-empty-string>  $metadata
+     */
     public function __construct(
         Link $link,
         Collection $metadata

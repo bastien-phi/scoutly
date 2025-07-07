@@ -81,7 +81,7 @@ class MetaData
         @$doc->loadHTML($value);
         $iframe = $doc->getElementsByTagName('iframe')->item(0);
 
-        if ($iframe) {
+        if ($iframe !== null) {
             $iframe->setAttribute('width', (string) self::CARD_WIDTH);
             $iframe->setAttribute('height', (string) self::CARD_HEIGHT);
 
@@ -101,7 +101,7 @@ class MetaData
         $min_width = self::CARD_WIDTH / 0.66;
         $min_height = self::CARD_HEIGHT / 0.66;
 
-        return ! ($dimensions && ($dimensions[0] < $min_width || $dimensions[1] < $min_height));
+        return ! (is_array($dimensions) && ($dimensions[0] < $min_width || $dimensions[1] < $min_height));
     }
 
     /**
@@ -157,7 +157,7 @@ class MetaData
 
                 collect(['name', 'property'])
                     ->map(fn (string $name): string => $meta->getAttribute($name))
-                    ->filter(fn (string $attribute): bool => in_array(explode(':', $attribute)[0], $interested_in))
+                    ->filter(fn (string $attribute): bool => in_array(explode(':', $attribute)[0], $interested_in, true))
                     ->each(function (string $attribute) use ($data, $allowed, $meta): void {
                         $key = explode(':', $attribute)[1];
                         if (! $data->has($key) && in_array($key, $allowed, true)) {
@@ -179,7 +179,6 @@ class MetaData
      */
     private function parse(string $html): Collection
     {
-
         $data = $this->parseContent($html);
 
         $isSuitable = true;
@@ -214,7 +213,7 @@ class MetaData
             if ($vimeo->isNotEmpty()) {
                 foreach ($vimeo as $key => $value) {
                     $value = $key === 'html'
-                        ? $this->ensureCorrectSize((string) $value)
+                        ? $this->ensureCorrectSize($value)
                         : $value;
 
                     if ($value !== '') {

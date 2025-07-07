@@ -30,6 +30,7 @@ it('returns a random link', function (): void {
             'description' => $link->description,
             'published_at' => $link->published_at?->toIso8601String(),
             'is_public' => $link->is_public,
+            'metadata' => null,
             'created_at' => $link->created_at->toIso8601String(),
             'updated_at' => $link->updated_at->toIso8601String(),
             'author' => [
