@@ -32,6 +32,7 @@ it('returns a random community link', function (): void {
             'title' => $link->title,
             'description' => $link->description,
             'published_at' => $link->published_at?->toIso8601String(),
+            'metadata' => null,
             'user' => [
                 'uuid' => $link->user->uuid,
                 'username' => $link->user->username,

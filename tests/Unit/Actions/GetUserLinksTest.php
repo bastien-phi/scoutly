@@ -60,7 +60,11 @@ it('filters by search', function (): void {
         'title' => 'High way to hell',
         'description' => null,
     ]);
-    $third = Link::factory()->for($user)->published()->createOne(['title' => 'Foo Fighters', 'description' => null]);
+    $third = Link::factory()->for($user)->published()->createOne([
+        'title' => 'Foo Fighters',
+        'description' => null,
+        'url' => 'https://foo-fighters.com',
+    ]);
 
     $links = app(GetUserLinks::class)->execute(
         $user,
