@@ -68,7 +68,7 @@ describe('update', function (): void {
 });
 
 describe('destroy', function (): void {
-    it('destroy the author and redirects back', function (): void {
+    it('destroys the author and redirects back', function (): void {
         $user = User::factory()->createOne();
         $author = Author::factory()->for($user)->createOne();
 

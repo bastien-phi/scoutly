@@ -68,7 +68,7 @@ describe('update', function (): void {
 });
 
 describe('destroy', function (): void {
-    it('destroy the tag and redirects back', function (): void {
+    it('destroys the tag and redirects back', function (): void {
         $user = User::factory()->createOne();
         $tag = Tag::factory()->for($user)->createOne();
 
