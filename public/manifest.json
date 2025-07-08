@@ -1,0 +1,32 @@
+{
+  "id": "scoutly",
+  "background_color": "#ffffff",
+  "description": "Your tech intelligence companion.",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Scoutly",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "Scoutly",
+  "start_url": "/",
+  "theme_color": "#22817EFF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "categories": [
+    "social"
+  ]
+}
