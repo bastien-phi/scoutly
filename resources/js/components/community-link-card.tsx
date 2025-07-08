@@ -5,7 +5,7 @@ import { Datetime } from '@/components/ui/datetime';
 import { Pill } from '@/components/ui/pill';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
-import { ArrowUpRight, User } from 'lucide-react';
+import { ArrowUpRight, SquareUser, User } from 'lucide-react';
 import CommunityLinkResource = App.Data.Resources.CommunityLinkResource;
 
 export default function CommunityLinkCard({ link, className }: { link: CommunityLinkResource; className?: string }) {
@@ -18,7 +18,14 @@ export default function CommunityLinkCard({ link, className }: { link: Community
                         <ArrowUpRight></ArrowUpRight>
                     </a>
                 </div>
-                <CardDescription>By {link.user.username}</CardDescription>
+                <CardDescription>
+                    <Link href={route('community-links.index', { user: link.user.uuid })}>
+                        <div className="flex items-center space-x-1">
+                            <SquareUser size={16} />
+                            <span> {link.user.username}</span>
+                        </div>
+                    </Link>
+                </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4">

@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Data\Requests\GetCommunityLinksRequest;
 use App\Models\Link;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -22,6 +23,7 @@ class GetCommunityLinks
             ->tap($this->search($data->search))
             ->tap($this->filterAuthor($data->author))
             ->tap($this->filterTags($data->tags))
+            ->tap($this->filterUser($data->user))
             ->latest('published_at')
             ->latest('id')
             ->with(['author', 'user', 'tags'])
@@ -76,6 +78,22 @@ class GetCommunityLinks
                 '=',
                 count($tags)
             );
+        };
+    }
+
+    private function filterUser(?string $user): callable
+    {
+        if ($user === null) {
+            return function (Builder $query): void {};
+        }
+
+        $user = User::query()->where('uuid', $user)->first();
+        if ($user === null) {
+            return function (Builder $query): void {};
+        }
+
+        return function (Builder $query) use ($user): void {
+            $query->where('user_id', $user->id);
         };
     }
 }
