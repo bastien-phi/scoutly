@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\CommunityAuthorController;
 use App\Http\Controllers\CommunityTagController;
+use App\Http\Controllers\CommunityUserController;
 use App\Http\Controllers\Dashboard\CommunityLinkCountController;
 use App\Http\Controllers\Dashboard\CommunityTrendingTagsController;
 use App\Http\Controllers\Dashboard\FavoriteTagsController;
@@ -18,6 +19,9 @@ Route::middleware(['auth', 'verified'])->name('api.')->group(function (): void {
 
     Route::get('tags', [CommunityTagController::class, 'index'])
         ->name('community-tags.index');
+
+    Route::get('users', [CommunityUserController::class, 'index'])
+        ->name('community-users.index');
 
     Route::name('dashboard.')
         ->prefix('dashboard')
