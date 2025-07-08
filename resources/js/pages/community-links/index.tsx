@@ -10,12 +10,13 @@ import AppLayout from '@/layouts/app-layout';
 import { clearFormData, debounce, fetchJson } from '@/lib/utils';
 import { BreadcrumbItem, Paginated } from '@/types';
 import { Head, router, useForm, WhenVisible } from '@inertiajs/react';
-import { Filter, Search, User, X } from 'lucide-react';
+import { Filter, Search, SquareUser, User, X } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import GetCommunityLinksRequest = App.Data.Requests.GetCommunityLinksRequest;
 import AuthorResource = App.Data.Resources.AuthorResource;
 import TagResource = App.Data.Resources.TagResource;
 import CommunityLinkResource = App.Data.Resources.CommunityLinkResource;
+import UserResource = App.Data.Resources.UserResource;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,7 +25,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ links, request }: { links: Paginated<CommunityLinkResource>; request: GetCommunityLinksRequest }) {
+export default function Index({
+    links,
+    request,
+    user,
+}: {
+    links: Paginated<CommunityLinkResource>;
+    request: GetCommunityLinksRequest;
+    user?: UserResource;
+}) {
     const [page, setPage] = useState<number>(links.current_page);
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const firstRender = useRef(true);
@@ -34,6 +43,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         search: request.search ?? '',
         author: request.author ?? '',
         tags: request.tags ?? [],
+        user: request.user ?? '',
     });
 
     useEffect(() => {
@@ -43,7 +53,6 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         }
 
         router.get(route('community-links.index'), clearFormData(data), {
-            only: ['links'],
             preserveState: true,
         });
     }, [data]);
@@ -79,9 +88,11 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
         [],
     );
 
-    const selectAuthor = useCallback((author: string) => setData('author', author), [setData]);
+    const selectAuthor = useCallback((author: AuthorResource | null) => setData('author', author?.name ?? ''), [setData]);
 
     /** Tag search */
+
+    const [selectedUser, setSelectedUser] = useState<string>(user?.username ?? '');
 
     const fetchTags = useCallback(
         (search: string): Promise<void | TagResource[]> =>
@@ -92,13 +103,31 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
     );
 
     const addTag = useCallback(
-        (tag: string) => setData((prev) => (prev.tags.includes(tag) ? prev : { ...prev, tags: [...prev.tags, tag] })),
+        (tag: TagResource) => setData((prev) => (prev.tags.includes(tag.label) ? prev : { ...prev, tags: [...prev.tags, tag.label] })),
         [setData],
     );
 
     const removeTag = useCallback((tag: string) => setData((prev) => ({ ...prev, tags: prev.tags.filter((t) => t !== tag) })), [setData]);
 
     const removeTags = useCallback(() => setData('tags', []), [setData]);
+
+    /** User search */
+
+    const fetchUsers = useCallback(
+        (search: string): Promise<void | UserResource[]> =>
+            fetchJson<UserResource[]>(route('api.community-users.index', { search: search }))
+                .then((json) => json.data)
+                .catch((err) => console.error('Failed to fetch authors.', err)),
+        [],
+    );
+
+    const selectUser = useCallback(
+        (user: UserResource | null) => {
+            setSelectedUser(user?.username ?? '');
+            setData('user', user?.uuid ?? '');
+        },
+        [setSelectedUser, setData],
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -119,8 +148,11 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                     {!showFilters && (
                         <div className="flex flex-wrap gap-2">
                             {data.author && (
-                                <Pill onClose={() => selectAuthor('')}>
-                                    <User height={18} /> {data.author}
+                                <Pill onClose={() => selectAuthor(null)}>
+                                    <div className="flex items-center space-x-1">
+                                        <User height={16} />
+                                        <span>{data.author}</span>
+                                    </div>
                                 </Pill>
                             )}
                             {data.tags.map((tag: string) => (
@@ -128,6 +160,14 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                                     {tag}
                                 </Pill>
                             ))}
+                            {selectedUser && (
+                                <Pill onClose={() => selectUser(null)}>
+                                    <div className="flex items-center space-x-1">
+                                        <SquareUser size={16} />
+                                        <span>{selectedUser}</span>
+                                    </div>
+                                </Pill>
+                            )}
                         </div>
                     )}
 
@@ -144,7 +184,7 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                                         fetchOptionsUsing={fetchAuthors}
                                         placeholder="Search authors..."
                                     />
-                                    <Button variant="ghost" onClick={() => selectAuthor('')}>
+                                    <Button variant="ghost" onClick={() => selectAuthor(null)}>
                                         <X />
                                     </Button>
                                 </div>
@@ -170,6 +210,22 @@ export default function Index({ links, request }: { links: Paginated<CommunityLi
                                         placeholder="Select tags"
                                     />
                                     <Button variant="ghost" onClick={removeTags}>
+                                        <X />
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>User</Label>
+                                <div className="flex items-center gap-2">
+                                    <RemoteAutocomplete
+                                        value={selectedUser}
+                                        onValueChanged={selectUser}
+                                        showUsing={(user: UserResource) => user.username}
+                                        getValueUsing={(user: UserResource) => user.uuid}
+                                        fetchOptionsUsing={fetchUsers}
+                                        placeholder="Search users..."
+                                    />
+                                    <Button variant="ghost" onClick={() => selectUser(null)}>
                                         <X />
                                     </Button>
                                 </div>

@@ -13,7 +13,7 @@ use Inertia\Testing\AssertableInertia;
 describe('index', function (): void {
     it('returns links', function (): void {
         $this->mockAction(GetCommunityLinks::class)
-            ->with(new GetCommunityLinksRequest(search: null, author: null, tags: null))
+            ->with(new GetCommunityLinksRequest(search: null, author: null, tags: null, user: null))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->isPublic()->published()->create()->load(['author', 'user', 'tags']),
                 total: 2,
@@ -31,12 +31,15 @@ describe('index', function (): void {
                     ->where('links.data.0.uuid', $links->first()->uuid)
                     ->where('links.data.1.uuid', $links->last()->uuid)
                     ->where('request', [])
+                    ->where('user', null)
             );
     });
 
     it('returns links with search', function (): void {
+        $user = User::factory()->createOne();
+
         $this->mockAction(GetCommunityLinks::class)
-            ->with(new GetCommunityLinksRequest(search: 'Hello world', author: 'John Doe', tags: ['PHP', 'Laravel']))
+            ->with(new GetCommunityLinksRequest(search: 'Hello world', author: 'John Doe', tags: ['PHP', 'Laravel'], user: $user->uuid))
             ->returns(fn (): LengthAwarePaginator => new LengthAwarePaginator(
                 Link::factory(2)->create()->load(['author', 'user', 'tags']),
                 total: 2,
@@ -49,6 +52,7 @@ describe('index', function (): void {
                 'search' => 'Hello world',
                 'author' => 'John Doe',
                 'tags' => ['PHP', 'Laravel'],
+                'user' => $user->uuid,
             ]))
             ->assertOk()
             ->assertInertia(
@@ -61,6 +65,11 @@ describe('index', function (): void {
                         'author' => 'John Doe',
                         'search' => 'Hello world',
                         'tags' => ['PHP', 'Laravel'],
+                        'user' => $user->uuid,
+                    ])
+                    ->where('user', [
+                        'uuid' => $user->uuid,
+                        'username' => $user->username,
                     ])
             );
     });

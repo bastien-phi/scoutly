@@ -6,6 +6,7 @@ use App\Actions\GetCommunityLinks;
 use App\Data\Requests\GetCommunityLinksRequest;
 use App\Models\Link;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\Date;
 
 it('returns links sorted by published_at and id', function (): void {
@@ -16,7 +17,7 @@ it('returns links sorted by published_at and id', function (): void {
     $third = Link::factory()->published(now()->subDays(2))->isPublic()->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: null, author: null, tags: null)
+        new GetCommunityLinksRequest(search: null, author: null, tags: null, user: null)
     );
 
     expect($links->collect())
@@ -27,7 +28,7 @@ it('returns only public links', function (): void {
     Link::factory(2)->isPrivate()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: null, author: null, tags: null)
+        new GetCommunityLinksRequest(search: null, author: null, tags: null, user: null)
     );
 
     expect($links)->toBeEmpty();
@@ -37,7 +38,7 @@ it('returns only published links', function (): void {
     Link::factory()->draft()->isPublic()->create();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: null, author: null, tags: null)
+        new GetCommunityLinksRequest(search: null, author: null, tags: null, user: null)
     );
 
     expect($links)->toBeEmpty();
@@ -52,7 +53,7 @@ it('filters by search', function (): void {
     $third = Link::factory()->published()->isPublic()->createOne(['title' => 'Foo Fighters', 'description' => null]);
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: 'Hell', author: null, tags: null)
+        new GetCommunityLinksRequest(search: 'Hell', author: null, tags: null, user: null)
     );
 
     expect($links->collect())
@@ -77,7 +78,7 @@ it('filters by author', function (): void {
         ->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: null, author: 'John DOE', tags: null)
+        new GetCommunityLinksRequest(search: null, author: 'John DOE', tags: null, user: null)
     );
 
     expect($links->collect())
@@ -93,7 +94,23 @@ it('filters by tags', function (): void {
     $third = Link::factory()->hasAttached($laravel)->published()->isPublic()->createOne();
 
     $links = app(GetCommunityLinks::class)->execute(
-        new GetCommunityLinksRequest(search: null, author: null, tags: ['php', 'laravel'])
+        new GetCommunityLinksRequest(search: null, author: null, tags: ['php', 'laravel'], user: null)
+    );
+
+    expect($links->collect())
+        ->toBeCollectionCanonicalizing([$second]);
+});
+
+it('filters by user', function (): void {
+    $john = User::factory()->createOne();
+    $jane = User::factory()->createOne();
+
+    $first = Link::factory()->for($jane)->published()->isPublic()->createOne();
+    $second = Link::factory()->for($john)->published()->isPublic()->createOne();
+    $third = Link::factory()->published()->isPublic()->createOne();
+
+    $links = app(GetCommunityLinks::class)->execute(
+        new GetCommunityLinksRequest(search: null, author: null, tags: null, user: $john->uuid)
     );
 
     expect($links->collect())

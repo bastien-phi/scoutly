@@ -23,7 +23,8 @@ class GetCommunityLinksRequest extends Data
         public ?string $search,
         public ?string $author,
         #[LiteralTypeScriptType('string[]')]
-        public ?array $tags
+        public ?array $tags,
+        public ?string $user,
     ) {}
 
     /**
@@ -35,6 +36,7 @@ class GetCommunityLinksRequest extends Data
             'search' => ['max:255'],
             'author' => ['max:255'],
             'tags.*' => ['required', 'string', 'max:255'],
+            'user' => ['uuid'],
         ];
     }
 }
