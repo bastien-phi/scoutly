@@ -240,7 +240,7 @@ describe('update', function (): void {
 });
 
 describe('destroy', function (): void {
-    it('destroy the link and redirects to link index', function (): void {
+    it('destroys the link and redirects to link index', function (): void {
         $user = User::factory()->createOne();
         $link = Link::factory()->for($user)->published()->createOne();
 
