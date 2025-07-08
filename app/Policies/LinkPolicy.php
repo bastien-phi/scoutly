@@ -10,11 +10,6 @@ use Illuminate\Auth\Access\Response;
 
 class LinkPolicy
 {
-    public function viewAny(User $user): bool
-    {
-        return false;
-    }
-
     public function view(User $user, Link $link): Response
     {
         if ($link->published_at === null) {
@@ -26,11 +21,6 @@ class LinkPolicy
         }
 
         return Response::allow();
-    }
-
-    public function create(User $user): bool
-    {
-        return false;
     }
 
     public function update(User $user, Link $link): Response
