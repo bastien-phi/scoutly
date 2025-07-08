@@ -117,7 +117,7 @@ export default function Index({
         (search: string): Promise<void | UserResource[]> =>
             fetchJson<UserResource[]>(route('api.community-users.index', { search: search }))
                 .then((json) => json.data)
-                .catch((err) => console.error('Failed to fetch authors.', err)),
+                .catch((err) => console.error('Failed to fetch users.', err)),
         [],
     );
 
