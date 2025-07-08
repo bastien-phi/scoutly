@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Settings\AuthorController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\TagController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,6 +31,19 @@ Route::middleware('auth')->group(function (): void {
                 ->name('update');
             Route::delete('{author}', 'destroy')
                 ->can('delete', 'author')
+                ->name('destroy');
+        });
+
+    Route::controller(TagController::class)
+        ->prefix('settings/tags')
+        ->name('settings.tags.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+            Route::put('{tag}', 'update')
+                ->can('update', 'tag')
+                ->name('update');
+            Route::delete('{tag}', 'destroy')
+                ->can('delete', 'tag')
                 ->name('destroy');
         });
 });

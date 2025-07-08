@@ -27,6 +27,11 @@ const sidebarNavItems: NavItem[] = [
         href: '/settings/authors',
         icon: null,
     },
+    {
+        title: 'Tags',
+        href: '/settings/tags',
+        icon: null,
+    },
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
