@@ -8,7 +8,7 @@
   "orientation": "portrait",
   "scope": "/",
   "short_name": "Scoutly",
-  "start_url": "/",
+  "start_url": "/dashboard",
   "theme_color": "#22817E",
   "icons": [
     {
