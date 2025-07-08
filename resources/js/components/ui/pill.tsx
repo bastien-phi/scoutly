@@ -22,8 +22,8 @@ function Pill({
         >
             {children}
            { onClose && (
-                <span onClick={onClose} className="cursor-pointer">
-                    <X height={18} width={18}/>
+                <span onClick={onClose} className="cursor-pointer text-muted-foreground hover:text-foreground">
+                    <X size={16} />
                 </span>
            )}
         </span>

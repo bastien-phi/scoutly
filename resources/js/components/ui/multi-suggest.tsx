@@ -138,14 +138,14 @@ export default function MultiSuggest({className, suggestions, selectedSuggestion
             {showDropdown && (
                 <div
                     ref={dropdownRef}
-                    className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    className="absolute z-10 w-full mt-1 bg-background border text-foreground rounded-lg shadow-lg max-h-60 overflow-y-auto"
                 >
                     {filteredSuggestions.map((suggestion, index) => (
                         <button
                             key={suggestion}
                             onClick={() => handleSuggestionSelect(suggestion)}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 ${
-                                index === focusedIndex ? 'bg-primary/5 text-primary' : 'text-gray-700'
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:text-background ${
+                                index === focusedIndex ? 'bg-primary/5 text-primary dark:bg-primary/40' : 'text-foreground'
                             }`}
                         >
                             {suggestion}

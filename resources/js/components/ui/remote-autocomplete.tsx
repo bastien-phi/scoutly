@@ -10,7 +10,7 @@ const CACHE_INVALIDATION_DURATION_MS = 30000;
 
 export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsing, onValueChanged, showUsing, getValueUsing, resetOnSelected, ...props }: React.ComponentProps<"input"> & {
     fetchOptionsUsing: (value: string) => Promise<void|T[]>
-    onValueChanged: (value: string) => void
+    onValueChanged: (value: T) => void
     showUsing: (value: T) => string
     getValueUsing: (value: T) => string
     resetOnSelected?: boolean
@@ -145,7 +145,7 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
 
     const handleOptionSelected = (option: T) => {
         setInputValue(resetOnSelected ? '' : showUsing(option));
-        onValueChanged(getValueUsing(option));
+        onValueChanged(option);
         setShowDropdown(false);
         setFocusedIndex(-1);
     };
@@ -177,14 +177,14 @@ export default function RemoteAutocomplete<T>({className, value, fetchOptionsUsi
             {showDropdown && (
                 <div
                     ref={dropdownRef}
-                    className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    className="absolute z-10 w-full mt-1 bg-background border text-foreground rounded-lg shadow-lg max-h-60 overflow-y-auto"
                 >
                     {options.map((option, index) => (
                         <button
                             key={getValueUsing(option)}
                             onClick={() => handleOptionSelected(option)}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-50 ${
-                                index === focusedIndex ? 'bg-primary/5 text-primary' : 'text-gray-700'
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-50  dark:hover:text-background ${
+                                index === focusedIndex ? 'bg-primary/5 text-primary dark:bg-primary/40' : 'text-foreground'
                             }`}
                         >
                             {showUsing(option)}

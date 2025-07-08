@@ -12,7 +12,7 @@ export default function RemoteMultiAutocomplete<T>({
                                                    }: React.ComponentProps<'input'> & {
     selectedValues: string[]
     fetchOptionsUsing: (value: string) => Promise<void | T[]>
-    onValueAdded: (value: string) => void
+    onValueAdded: (value: T) => void
     showUsing: (value: T) => string
     getValueUsing: (value: T) => string
 }) {
