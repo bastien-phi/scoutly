@@ -9,11 +9,12 @@
   "scope": "/",
   "short_name": "Scoutly",
   "start_url": "/",
-  "theme_color": "#22817EFF",
+  "theme_color": "#22817E",
   "icons": [
     {
       "src": "/favicon.svg",
-      "type": "image/x-icon"
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
       "src": "/favicon-192.png",
