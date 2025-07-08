@@ -11,10 +11,10 @@ use App\Data\Resources\UserResource;
 
 class CommunityUserController
 {
-    public function index(SearchRequest $data, GetCommunityUsers $getCommunityAuthors): JsonResource
+    public function index(SearchRequest $data, GetCommunityUsers $getCommunityUsers): JsonResource
     {
         return JsonResource::collection(
-            $getCommunityAuthors->execute($data->search),
+            $getCommunityUsers->execute($data->search),
             UserResource::class
         );
     }

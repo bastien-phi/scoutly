@@ -81,13 +81,13 @@ class GetCommunityLinks
         };
     }
 
-    private function filterUser(?string $user): callable
+    private function filterUser(?string $userUuid): callable
     {
-        if ($user === null) {
+        if ($userUuid === null) {
             return function (Builder $query): void {};
         }
 
-        $user = User::query()->where('uuid', $user)->first();
+        $user = User::query()->where('uuid', $userUuid)->first();
         if ($user === null) {
             return function (Builder $query): void {};
         }
