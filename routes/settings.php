@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Settings\AuthorController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +19,17 @@ Route::middleware('auth')->group(function (): void {
     Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::get('settings/appearance', fn () => Inertia::render('settings/appearance'))->name('appearance');
+
+    Route::controller(AuthorController::class)
+        ->prefix('settings/authors')
+        ->name('settings.authors.')
+        ->group(function (): void {
+            Route::get('/', 'index')->name('index');
+            Route::put('{author}', 'update')
+                ->can('update', 'author')
+                ->name('update');
+            Route::delete('{author}', 'destroy')
+                ->can('delete', 'author')
+                ->name('destroy');
+        });
 });
